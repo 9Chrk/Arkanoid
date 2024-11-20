@@ -26,6 +26,7 @@ const int    windowHeight     = 500;
 const double refreshPerSecond = 60;
 
 const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
+const ALLEGRO_COLOR BLACK   = al_map_rgb(0, 0, 0);
 const ALLEGRO_COLOR ORANGE  = al_map_rgb(255, 165, 0);  
 const ALLEGRO_COLOR CYAN    = al_map_rgb(0, 255, 255);  
 const ALLEGRO_COLOR GREEN   = al_map_rgb(0, 255, 0);    
@@ -57,8 +58,8 @@ class Rectangle {
 
  public:
   Rectangle(Point center, float w, float h, 
-            ALLEGRO_COLOR frameColor = COLOR_BLACK,
-            ALLEGRO_COLOR fillColor = COLOR_WHITE);
+            ALLEGRO_COLOR frameColor = BLACK,
+            ALLEGRO_COLOR fillColor = WHITE);
 
   void draw();
   void setFillColor(ALLEGRO_COLOR newFillColor);
@@ -100,14 +101,20 @@ void Rectangle::setFrameColor(ALLEGRO_COLOR newFrameColor){
 
 class Cell {
   Rectangle r;
+  int scores;
+
  public:
-  Cell(Point center, float w, float h);
+  Cell(Point center, float w, float h, 
+       ALLEGRO_COLOR frameColor, 
+       ALLEGRO_COLOR fillColor, 
+       int scores);
+
   void draw();
   void mouseMove(Point mouseLoc);
-  void keySpace(int keyCode);
+  void keyDown(int keycode);
 };
 
-Cell::Cell(Point center, float w, float h) : r(center, w, h, COLOR_BLACK, COLOR_WHITE) {}
+Cell::Cell(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) : r(center, w, h, frameColor, fillColor), scores(scores) {}
 
 void Cell::draw() {
   r.draw();
@@ -116,7 +123,7 @@ void Cell::draw() {
 void Cell::mouseMove(Point mouseLoc) {
 }
 
-void Cell::keySpace(int keyCode) {
+void Cell::keyDown(int keycode) {
 }
 
 
@@ -129,17 +136,18 @@ class Canvas {
   Canvas();
   void draw();
   void mouseMove(Point mouseLoc);
-  void keySpace(int keycode);
+  void keyDown(int keycode);
 };
 
-Canvas::Canvas() {
-  const int dim = 10;
+Canvas::Canvas() {                        // CHANGER FONCTION DRAW POUR LA FORME CHOISIE 
+  const int dim_x = 8;
+  const int dim_y = 14;
   const int size = 40;
   const int margin = 10;
   const int offset = size + margin;
 
-  for (int i=0; i < dim; ++i) {
-    for (int j=0; j < dim; ++j) {
+  for (int i=0; i < dim_x; ++i) {
+    for (int j=0; j < dim_y; ++j) {
       cells.push_back(Cell({offset*i + offset/2, offset*j + offset/2}, size, size));
     }
   }
@@ -154,7 +162,7 @@ void Canvas::draw() {
 void Canvas::mouseMove(Point mouseLoc) {
 }
 
-void Canvas::keySpace(int keycode){
+void Canvas::keyDown(int keycode){
 }
 
 
@@ -218,7 +226,7 @@ int main(int /* argc */, char** /* argv */) {
     al_wait_for_event(queue, &event);
     switch (event.type) {
       case ALLEGRO_KEY_SPACE:
-        canvas.keySpace(event.keyboard.keycode);
+        canvas.keyDown(event.keyboard.keycode);
         break;
       case ALLEGRO_EVENT_MOUSE_AXES:
         canvas.mouseMove({static_cast<float>(event.mouse.x),
