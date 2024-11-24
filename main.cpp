@@ -26,6 +26,7 @@ const int    windowHeight     = 500;
 const double refreshPerSecond = 60;
 
 const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
+const ALLEGRO_COLOR GREY    = al_map_rgb(128, 128, 128);
 const ALLEGRO_COLOR BLACK   = al_map_rgb(0, 0, 0);
 const ALLEGRO_COLOR ORANGE  = al_map_rgb(255, 165, 0);  
 const ALLEGRO_COLOR CYAN    = al_map_rgb(0, 255, 255);  
@@ -37,7 +38,7 @@ const ALLEGRO_COLOR YELLOW  = al_map_rgb(255, 255, 0);
 
 // NIVEAU 1
 vector<int> scores = {50, 90, 120, 100, 110, 80};
-vector<ALLEGRO_COLOR> colors = {WHITE, RED, YELLOW, BLUE, MAGENTA, GREEN};
+vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
 
 // ---------------------------------------------------------------------------------------------------------
 
@@ -48,13 +49,13 @@ struct Point {
 // ---- Création des Rectangles ----
 
 class Rectangle {
-  private:
-    Point center;
-    float w;
-    float h;
-    ALLEGRO_COLOR frameColor;
-    ALLEGRO_COLOR fillColor;
-    pair<Point, Point> diag_coor();
+ private:
+  Point center;
+  float w;
+  float h;
+  ALLEGRO_COLOR frameColor;
+  ALLEGRO_COLOR fillColor;
+  pair<Point, Point> diag_coor();
 
  public:
   Rectangle(Point center, float w, float h, 
@@ -99,72 +100,66 @@ void Rectangle::setFrameColor(ALLEGRO_COLOR newFrameColor){
 
 // ---- Fonctionnalités liées aux rectangles ----
 
-class Cell {
+class Brick {   // devoir utiliser heritage
+ private:
   Rectangle r;
   int scores;
 
  public:
-  Cell(Point center, float w, float h, 
+  Brick(Point center, float w, float h, 
        ALLEGRO_COLOR frameColor, 
        ALLEGRO_COLOR fillColor, 
        int scores);
 
   void draw();
-  void mouseMove(Point mouseLoc);
-  void keyDown(int keycode);
 };
 
-Cell::Cell(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) : r(center, w, h, frameColor, fillColor), scores(scores) {}
+Brick::Brick(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) 
+    : r(center, w, h, frameColor, fillColor), scores(scores) {}
 
-void Cell::draw() {
+void Brick::draw() {
   r.draw();
-}
-
-void Cell::mouseMove(Point mouseLoc) {
-}
-
-void Cell::keyDown(int keycode) {
 }
 
 
 // ---- Création du grillage de rectangle ----
 
-class Canvas {
-  vector<Cell> cells{};
+class Games {
+  vector<Brick> bricks{};
 
  public:
-  Canvas();
+  Games();
   void draw();
-  void mouseMove(Point mouseLoc);
-  void keyDown(int keycode);
 };
 
-Canvas::Canvas() {                        // CHANGER FONCTION DRAW POUR LA FORME CHOISIE 
-  const int dim_x = 8;
-  const int dim_y = 14;
-  const int size = 40;
-  const int margin = 10;
-  const int offset = size + margin;
+Games::Games() {
+  const int dim_x = 13;
+  const int dim_y = 6;
+  const int width = 30;
+  const int height = 15;
+  const int margin = 3;
 
-  for (int i=0; i < dim_x; ++i) {
-    for (int j=0; j < dim_y; ++j) {
-      cells.push_back(Cell({offset*i + offset/2, offset*j + offset/2}, size, size));
-    }
+  const int offset_x = width + margin;
+  const int offset_y = height + margin;
+  const int total_width = dim_x * width + (dim_x - 1) * margin;
+  const int offset_start_x = (500 - total_width) / 2;
+  const int offset_start_y = 0;
+
+  for (int i = 0; i < dim_x; ++i) {
+      for (int j = 0; j < dim_y; ++j) {
+          bricks.push_back(Brick(
+              {offset_start_x + offset_x * i + offset_x / 2, 
+              offset_start_y + offset_y * j + offset_y / 2},
+              width, height, BLACK, colors.at(j), scores.at(j)));
+      }
   }
 }
 
-void Canvas::draw() {
-  for (auto& cell : cells) {
-    cell.draw();
+void Games::draw() {
+  for (auto& brick : bricks) {
+    brick.draw();
   }
 }
-
-void Canvas::mouseMove(Point mouseLoc) {
-}
-
-void Canvas::keyDown(int keycode){
-}
-
 
 
 // ---- fonctions de test ----
@@ -219,25 +214,25 @@ int main(int /* argc */, char** /* argv */) {
   
   bool          done = false;
   ALLEGRO_EVENT event;
-  Canvas        canvas;
+  Games        game;
 
   al_start_timer(timer);
   while (!done) {
     al_wait_for_event(queue, &event);
     switch (event.type) {
-      case ALLEGRO_KEY_SPACE:
-        canvas.keyDown(event.keyboard.keycode);
+      case ALLEGRO_EVENT_KEY_DOWN:
+        //game.keyDown(event.keyboard.keycode);
         break;
       case ALLEGRO_EVENT_MOUSE_AXES:
-        canvas.mouseMove({static_cast<float>(event.mouse.x),
-                          static_cast<float>(event.mouse.y)});
+        //game.mouseMove({static_cast<float>(event.mouse.x),
+        //                  static_cast<float>(event.mouse.y)});
         break;
       case ALLEGRO_EVENT_DISPLAY_CLOSE:
         done = true;
         break;
       case ALLEGRO_EVENT_TIMER:
         al_clear_to_color(al_map_rgb(255, 255, 255));
-        canvas.draw();
+        game.draw();
         al_flip_display();
         break;
       default: {}
