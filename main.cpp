@@ -43,10 +43,11 @@ struct Point {
   float x = 0, y = 0;
 };
 
+// --------------
 
 class Rectangle {
  private:
-  Point center;
+  Point position;
   float w;
   float h;
   ALLEGRO_COLOR frameColor;
@@ -54,24 +55,24 @@ class Rectangle {
   pair<Point, Point> diag_coor();
 
  public:
-  Rectangle(Point center, float w, float h, 
+  Rectangle(Point position, float w, float h, 
             ALLEGRO_COLOR frameColor = BLACK,
             ALLEGRO_COLOR fillColor = WHITE);
 
   void draw();
-  void setFillColor(ALLEGRO_COLOR newFillColor);
-  void setFrameColor(ALLEGRO_COLOR newFrameColor);
+  void setPosition(Point newPosition);
+  Point getPosition();
   bool contains(Point p);
 };
 
-Rectangle::Rectangle(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor)
-    : center(center), w(w), h(h), frameColor(frameColor), fillColor(fillColor) {}
+Rectangle::Rectangle(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor)
+    : position(position), w(w), h(h), frameColor(frameColor), fillColor(fillColor) {}
 
 pair<Point, Point> Rectangle::diag_coor(){
-  Point up_left = {center.x - w/2, center.y - h/2};
-  Point down_right = {center.x + w/2, center.y + h/2};
+  Point up_left = {position.x - w/2, position.y - h/2};
+  Point down_right = {position.x + w/2, position.y + h/2};
   return make_pair(up_left, down_right);
-}
+};
 
 void Rectangle::draw() {
   pair<Point, Point> coord = diag_coor();
@@ -85,14 +86,15 @@ bool Rectangle::contains(Point p) {
             coord.first.y <= p.y && p.y <= coord.second.y);
 }
 
-void Rectangle::setFillColor(ALLEGRO_COLOR newFillColor){
-  fillColor = newFillColor;
+void Rectangle::setPosition(Point newPosition) {
+  position = newPosition;
 }
 
-void Rectangle::setFrameColor(ALLEGRO_COLOR newFrameColor){
-  frameColor = newFrameColor;
+Point Rectangle::getPosition() {
+  return position;
 }
 
+// --------------
 
 class Brick : public Rectangle {
  private:
@@ -100,7 +102,7 @@ class Brick : public Rectangle {
   bool destroyed;
   
  public:
-  Brick(Point center, float w, float h, 
+  Brick(Point position, float w, float h, 
        ALLEGRO_COLOR frameColor, 
        ALLEGRO_COLOR fillColor, 
        int scores);
@@ -108,8 +110,77 @@ class Brick : public Rectangle {
   int destroy() {destroyed = true; return scores;};
 };
 
-Brick::Brick(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) 
-    : Rectangle(center, w, h, frameColor, fillColor), scores(scores), destroyed(false) {}
+Brick::Brick(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) 
+    : Rectangle(position, w, h, frameColor, fillColor), scores(scores), destroyed(false) {}
+
+// --------------
+
+class Ball {
+ private:
+  Point position;
+  int rayon;
+  int vitesse;
+  ALLEGRO_COLOR color;
+
+  Point reset_pos;
+  bool inMouvement;
+
+ public:
+  Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color);
+  void draw();
+  void move();
+  void bounce();
+  void reset();
+};
+
+Ball::Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color)
+    : position(position), reset_pos(position), rayon(rayon), vitesse(vitesse), color(color), inMouvement(false) {}
+
+void Ball::draw() {
+  al_draw_circle(position.x, position.y, rayon, color, rayon*2);
+}
+
+void Ball::move() {
+// A COMPLETER
+}
+
+void Ball::bounce() {
+// A COMPLETER
+}
+
+void Ball::reset() {
+  inMouvement = false;
+  position = reset_pos;
+}
+
+// --------------
+
+class Spaceship : public Rectangle {
+ private:
+  int health;
+  Point reset_pos;
+ 
+ public:
+  Spaceship(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int health);
+  void move(int direction);
+  void damage() {health--; }
+  void reset() {setPosition(reset_pos);}
+  bool isDeath() {return health <= 0;}
+};
+
+Spaceship::Spaceship(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int health) 
+    : Rectangle(position, w, h, frameColor, fillColor), health(health), reset_pos(position) {}
+
+void Spaceship::move(int direction) {
+  Point pos = getPosition();
+  if (direction == 0) {        // sur la gauche
+    pos.x -= 1;
+  } 
+  else if (direction == 1) {   // sur la droite
+    pos.x += 1;
+  }
+  setPosition(pos);
+}
 
 
 // --------- classe principale ---------
@@ -117,21 +188,26 @@ Brick::Brick(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_C
 class Games {
  private:
   vector<Brick> bricks{};
+  Ball ball;           // Ajout de l'objet Ball comme membre
+  Spaceship spaceship; // Ajout de l'objet Spaceship comme membre
 
  public:
   Games();
   void draw();
 };
 
-Games::Games() {
-  // NIVEAU 1
+Games::Games() 
+    : ball({250, 450}, 5, 3, BLACK), 
+      spaceship({250, 470}, 100, 15, BLACK, BLACK, 3) {
+
+  // Initialisation des briques
   vector<int> scores = {50, 90, 120, 100, 110, 80};
   vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
   const int dim_x = 13;
   const int dim_y = 6;
 
-  // brick spec
-  const int width = 30;
+  // Spécifications des briques
+  const int width = 35;
   const int height = 15;
   const int margin = 3;
 
@@ -155,6 +231,9 @@ void Games::draw() {
   for (auto& brick : bricks) {
     brick.draw();
   }
+
+  ball.draw();
+  spaceship.draw();
 }
 
 
