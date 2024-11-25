@@ -195,7 +195,7 @@ class Games {
 };
 
 Games::Games() 
-    : ball({250, 450}, 5, 3, BLACK), 
+    : ball({250, 453}, 5, 3, BLACK), 
       spaceship({250, 470}, 100, 15, 10, 3, BLACK, BLACK) {
 
   // Initialisation des briques
