@@ -36,9 +36,6 @@ const ALLEGRO_COLOR BLUE    = al_map_rgb(0, 0, 255);
 const ALLEGRO_COLOR MAGENTA = al_map_rgb(255, 0, 255);  
 const ALLEGRO_COLOR YELLOW  = al_map_rgb(255, 255, 0);  
 
-// NIVEAU 1
-vector<int> scores = {50, 90, 120, 100, 110, 80};
-vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
 
 // ---------------------------------------------------------------------------------------------------------
 
@@ -100,31 +97,28 @@ void Rectangle::setFrameColor(ALLEGRO_COLOR newFrameColor){
 
 // ---- Fonctionnalités liées aux rectangles ----
 
-class Brick {   // devoir utiliser heritage
+class Brick : public Rectangle {
  private:
-  Rectangle r;
   int scores;
-
+  bool destroyed;
+  
  public:
   Brick(Point center, float w, float h, 
        ALLEGRO_COLOR frameColor, 
        ALLEGRO_COLOR fillColor, 
        int scores);
-
-  void draw();
+  
+  int destroy() {destroyed = true; return scores;};
 };
 
 Brick::Brick(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) 
-    : r(center, w, h, frameColor, fillColor), scores(scores) {}
-
-void Brick::draw() {
-  r.draw();
-}
+    : Rectangle(center, w, h, frameColor, fillColor), scores(scores), destroyed(false) {}
 
 
-// ---- Création du grillage de rectangle ----
+// ---- Création du grillage de brique ----
 
 class Games {
+ private:
   vector<Brick> bricks{};
 
  public:
@@ -133,8 +127,14 @@ class Games {
 };
 
 Games::Games() {
+
+  // NIVEAU 1
+  vector<int> scores = {50, 90, 120, 100, 110, 80};
+  vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
   const int dim_x = 13;
   const int dim_y = 6;
+
+  // brick spec
   const int width = 30;
   const int height = 15;
   const int margin = 3;
