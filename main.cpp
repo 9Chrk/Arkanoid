@@ -43,7 +43,6 @@ struct Point {
   float x = 0, y = 0;
 };
 
-// ---- Création des Rectangles ----
 
 class Rectangle {
  private:
@@ -95,8 +94,6 @@ void Rectangle::setFrameColor(ALLEGRO_COLOR newFrameColor){
 }
 
 
-// ---- Fonctionnalités liées aux rectangles ----
-
 class Brick : public Rectangle {
  private:
   int scores;
@@ -115,7 +112,7 @@ Brick::Brick(Point center, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_C
     : Rectangle(center, w, h, frameColor, fillColor), scores(scores), destroyed(false) {}
 
 
-// ---- Création du grillage de brique ----
+// --------- classe principale ---------
 
 class Games {
  private:
@@ -127,7 +124,6 @@ class Games {
 };
 
 Games::Games() {
-
   // NIVEAU 1
   vector<int> scores = {50, 90, 120, 100, 110, 80};
   vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
