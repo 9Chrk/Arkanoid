@@ -72,7 +72,7 @@ pair<Point, Point> Rectangle::diag_coor(){
   Point up_left = {position.x - w/2, position.y - h/2};
   Point down_right = {position.x + w/2, position.y + h/2};
   return make_pair(up_left, down_right);
-};
+}
 
 void Rectangle::draw() {
   pair<Point, Point> coord = diag_coor();
@@ -107,7 +107,8 @@ class Brick : public Rectangle {
        ALLEGRO_COLOR fillColor, 
        int scores);
   
-  int destroy() {destroyed = true; return scores;};
+  int destroy() {destroyed = true; return scores;}
+  bool isDestroyed() {return destroyed;}
 };
 
 Brick::Brick(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) 
@@ -158,27 +159,24 @@ void Ball::reset() {
 class Spaceship : public Rectangle {
  private:
   int health;
+  int vitesse;
   Point reset_pos;
  
  public:
-  Spaceship(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int health);
+  Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
   void move(int direction);
-  void damage() {health--; }
-  void reset() {setPosition(reset_pos);}
+  void damage() {health--;}
   bool isDeath() {return health <= 0;}
+  void reset() {setPosition(reset_pos);}
 };
 
-Spaceship::Spaceship(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int health) 
-    : Rectangle(position, w, h, frameColor, fillColor), health(health), reset_pos(position) {}
+Spaceship::Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor) 
+    : Rectangle(position, w, h, frameColor, fillColor), health(health), reset_pos(position), vitesse(vitesse) {}
 
 void Spaceship::move(int direction) {
   Point pos = getPosition();
-  if (direction == 0) {        // sur la gauche
-    pos.x -= 1;
-  } 
-  else if (direction == 1) {   // sur la droite
-    pos.x += 1;
-  }
+  if (direction == 0) {pos.x -= vitesse;}        // sur la gauche
+  else if (direction == 1) {pos.x += vitesse;}   // sur la droite
   setPosition(pos);
 }
 
@@ -188,17 +186,17 @@ void Spaceship::move(int direction) {
 class Games {
  private:
   vector<Brick> bricks{};
-  Ball ball;           // Ajout de l'objet Ball comme membre
-  Spaceship spaceship; // Ajout de l'objet Spaceship comme membre
 
  public:
+  Ball ball;           
+  Spaceship spaceship;
   Games();
   void draw();
 };
 
 Games::Games() 
     : ball({250, 450}, 5, 3, BLACK), 
-      spaceship({250, 470}, 100, 15, BLACK, BLACK, 3) {
+      spaceship({250, 470}, 100, 15, 10, 3, BLACK, BLACK) {
 
   // Initialisation des briques
   vector<int> scores = {50, 90, 120, 100, 110, 80};
@@ -229,9 +227,8 @@ Games::Games()
 
 void Games::draw() {
   for (auto& brick : bricks) {
-    brick.draw();
+    if (!brick.isDestroyed()) {brick.draw();}
   }
-
   ball.draw();
   spaceship.draw();
 }
@@ -296,7 +293,12 @@ int main(int /* argc */, char** /* argv */) {
     al_wait_for_event(queue, &event);
     switch (event.type) {
       case ALLEGRO_EVENT_KEY_DOWN:
-        //game.keyDown(event.keyboard.keycode);
+        if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+          game.spaceship.move(0); // Gauche
+        } 
+        else if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+          game.spaceship.move(1); // Droite
+        }
         break;
       case ALLEGRO_EVENT_MOUSE_AXES:
         //game.mouseMove({static_cast<float>(event.mouse.x),
