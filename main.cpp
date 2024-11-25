@@ -165,6 +165,7 @@ class Spaceship : public Rectangle {
  public:
   Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
   void move(int direction);
+  void move(Point mousePosition);
   void damage() {health--;}
   bool isDeath() {return health <= 0;}
   void reset() {setPosition(reset_pos);}
@@ -177,6 +178,12 @@ void Spaceship::move(int direction) {
   Point pos = getPosition();
   if (direction == 0) {pos.x -= vitesse;}        // sur la gauche
   else if (direction == 1) {pos.x += vitesse;}   // sur la droite
+  setPosition(pos);
+}
+
+void Spaceship::move(Point mousePosition) {
+  Point pos = getPosition();
+  pos.x = mousePosition.x;
   setPosition(pos);
 }
 
@@ -196,7 +203,7 @@ class Games {
 
 Games::Games() 
     : ball({250, 453}, 5, 3, BLACK), 
-      spaceship({250, 470}, 100, 15, 10, 3, BLACK, BLACK) {
+      spaceship({250, 470}, 100, 15, 50, 3, BLACK, BLACK) {
 
   // Initialisation des briques
   vector<int> scores = {50, 90, 120, 100, 110, 80};
@@ -286,7 +293,7 @@ int main(int /* argc */, char** /* argv */) {
   
   bool          done = false;
   ALLEGRO_EVENT event;
-  Games        game;
+  Games         game;
 
   al_start_timer(timer);
   while (!done) {
@@ -301,8 +308,8 @@ int main(int /* argc */, char** /* argv */) {
         }
         break;
       case ALLEGRO_EVENT_MOUSE_AXES:
-        //game.mouseMove({static_cast<float>(event.mouse.x),
-        //                  static_cast<float>(event.mouse.y)});
+        game.spaceship.move({static_cast<float>(event.mouse.x),
+                             static_cast<float>(event.mouse.y)});
         break;
       case ALLEGRO_EVENT_DISPLAY_CLOSE:
         done = true;
