@@ -46,7 +46,7 @@ struct Point {
 // --------------
 
 class Rectangle {
- private:
+ protected:
   Point position;
   float w;
   float h;
@@ -60,8 +60,6 @@ class Rectangle {
             ALLEGRO_COLOR fillColor = WHITE);
 
   void draw();
-  void setPosition(Point newPosition);
-  Point getPosition();
   bool contains(Point p);
 };
 
@@ -86,17 +84,9 @@ bool Rectangle::contains(Point p) {
             coord.first.y <= p.y && p.y <= coord.second.y);
 }
 
-void Rectangle::setPosition(Point newPosition) {
-  position = newPosition;
-}
-
-Point Rectangle::getPosition() {
-  return position;
-}
-
 // --------------
 
-class Brick : public Rectangle {
+class Brick : public Rectangle { // rajout des bonus plus tard
  private:
   int scores;
   bool destroyed;
@@ -166,25 +156,35 @@ class Spaceship : public Rectangle {
   Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
   void move(int direction);
   void move(Point mousePosition);
+  bool validPosition(Point position);
   void damage() {health--;}
   bool isDeath() {return health <= 0;}
-  void reset() {setPosition(reset_pos);}
+  void reset() {position = reset_pos;}
 };
 
 Spaceship::Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor) 
     : Rectangle(position, w, h, frameColor, fillColor), health(health), reset_pos(position), vitesse(vitesse) {}
 
 void Spaceship::move(int direction) {
-  Point pos = getPosition();
-  if (direction == 0) {pos.x -= vitesse;}        // sur la gauche
-  else if (direction == 1) {pos.x += vitesse;}   // sur la droite
-  setPosition(pos);
+  Point newPos = position;
+  newPos.x += (direction == 0 ? -vitesse : vitesse);
+
+  if (validPosition(newPos)) {
+    position = newPos;
+  } else {
+    // ATTENTION : fonction proposé par chatGPT pour limiter newPos a une plage de valeur
+    position.x = clamp(newPos.x, w / 2.0f, windowWidth - w / 2.0f);
+  }
 }
 
 void Spaceship::move(Point mousePosition) {
-  Point pos = getPosition();
-  pos.x = mousePosition.x;
-  setPosition(pos);
+  Point newPos = position;
+  newPos.x = mousePosition.x;
+  if (validPosition(newPos) && mousePosition.y >= windowHeight*2/3) {position = newPos;}
+}
+
+bool Spaceship::validPosition(Point newPos) {
+  return (newPos.x - w/2 >= 0) && (newPos.x + w/2 <= windowWidth);
 }
 
 
@@ -203,7 +203,7 @@ class Games {
 
 Games::Games() 
     : ball({250, 453}, 5, 3, BLACK), 
-      spaceship({250, 470}, 100, 15, 50, 3, BLACK, BLACK) {
+      spaceship({250, 470}, 100, 15, 75, 3, BLACK, BLACK) {
 
   // Initialisation des briques
   vector<int> scores = {50, 90, 120, 100, 110, 80};
@@ -315,7 +315,7 @@ int main(int /* argc */, char** /* argv */) {
         done = true;
         break;
       case ALLEGRO_EVENT_TIMER:
-        al_clear_to_color(al_map_rgb(255, 255, 255));
+        al_clear_to_color(WHITE);
         game.draw();
         al_flip_display();
         break;
