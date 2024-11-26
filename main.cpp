@@ -116,9 +116,13 @@ class Ball {
   void draw();
   void move(Point spaceship);
   void move(Point spaceship, float w, float h);
-  void bounce(Point spaceship, float w, float h);
+  Point getPosition() {return position;}
+  Point getDirection() {return d;}
+  Point setDirection(Point newDirection) {d = newDirection;}
+  int getRayon() {return rayon;}
+  void checkCollisions(Point spaceship, float w, float h);
+  void checkFall();
   void reset();
-  void fall();
   bool inMouvement, isFalling;
 };
 
@@ -132,8 +136,8 @@ void Ball::draw() {
 void Ball::move(Point spaceship, float w, float h) {
   position.x += d.x * vitesse;
   position.y += d.y * vitesse;
-  bounce(spaceship, w, h);       // vérification collision
-  fall();                        // vérification chute
+  checkCollisions(spaceship, w, h);
+  checkFall();
 }
 
 void Ball::move(Point spaceship) {
@@ -141,20 +145,37 @@ void Ball::move(Point spaceship) {
   position.y = spaceship.y - rayon*3.5;
 }
 
-void Ball::bounce(Point spaceship, float w, float h) {
-  // rebond avec les murs
-  if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) {d.x *= -1;};
-  if (position.y - rayon <= 0) {d.y *= -1;};
+void Ball::checkCollisions(Point spaceship, float w, float h) {
+  // Rebond avec les murs
+  if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) {d.x *= -1;}
+  if (position.y - rayon <= 0) {d.y *= -1;}
 
-  // rebond avec la raquette
-  if (position.y + rayon >= spaceship.y - h/2 &&
-      position.x >= spaceship.x - w/2 &&
-      position.x <= spaceship.x + w/2) {
-    d.y *= -1;
+  // Rebond avec la raquette
+  if (position.y + rayon >= spaceship.y - h / 2 &&
+      position.x >= spaceship.x - w / 2 &&
+      position.x <= spaceship.x + w / 2) {
+
+    // Calcul position relative (-1 <= x_rel <= 1)
+    float x_rel = (position.x - spaceship.x) / (w / 2);
+    // Limitation de la position relative dans la plage [-1, 1]
+    x_rel = clamp(x_rel, -1.0f, 1.0f);
+    // Calcul de l'angle en degrés
+    float alpha = 30 + 120 * (1 - x_rel);
+    // Limitation de l'angle dans la plage [30, 150]
+    alpha = std::clamp(alpha, 30.0f, 150.0f);
+    // Conversion en radians
+    float theta = alpha * M_PI / 180.0f;
+    // Mise à jour de d.x et d.y
+    d.x = cos(theta);
+    d.y = -sin(theta);
+    // Normalisation du vecteur direction
+    float norm = sqrt(d.x * d.x + d.y * d.y);
+    d.x /= norm;
+    d.y /= norm;
   }
 }
 
-void Ball::fall() {
+void Ball::checkFall() {
   isFalling = (position.y - rayon > windowHeight) ? true : false;
 }
 
@@ -224,6 +245,7 @@ class Games {
   void draw();
   bool win();
   bool loose();
+  void checkCollisions();
 };
 
 Games::Games() 
@@ -263,6 +285,33 @@ void Games::draw() {
   }
   ball.draw();
   spaceship.draw();
+}
+
+void Games::checkCollisions() {
+  // Points de collision de la balle
+  Point pos = ball.getPosition();
+  vector<Point> collisionPoints = {
+    {pos.x, pos.y - ball.getRayon()}, // Haut
+    {pos.x, pos.y + ball.getRayon()}, // Bas
+    {pos.x - ball.getRayon(), pos.y}, // Gauche
+    {pos.x + ball.getRayon(), pos.y}, // Droite
+    {pos.x - ball.getRayon() / sqrt(2), pos.y - ball.getRayon() / sqrt(2)}, // Haut-Gauche
+    {pos.x + ball.getRayon() / sqrt(2), pos.y - ball.getRayon() / sqrt(2)}, // Haut-Droite
+    {pos.x - ball.getRayon() / sqrt(2), pos.y + ball.getRayon() / sqrt(2)}, // Bas-Gauche
+    {pos.x + ball.getRayon() / sqrt(2), pos.y + ball.getRayon() / sqrt(2)}  // Bas-Droite
+  };
+  // Détecte un contact entre la balle et les briques
+  for (auto& brick : bricks) {
+      for (auto& point : collisionPoints) {
+        if (!brick.isDestroyed() && brick.contains(point)) {
+          brick.destroy();
+          Point direction = ball.getDirection();
+          direction.y *= -1;
+          ball.setDirection(direction);
+          return;
+        }
+      }
+  }
 }
 
 bool Games::loose() {
@@ -361,6 +410,8 @@ int main(int /* argc */, char** /* argv */) {
         done = true;
         break;
       case ALLEGRO_EVENT_TIMER:
+        // Verifie si collision entre la balle et les briques
+        game.checkCollisions();
         // Verifie si la balle est tombé
         if (game.ball.isFalling) {
           game.spaceship.damage();
