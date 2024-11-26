@@ -134,8 +134,6 @@ void Ball::draw() {
 }
 
 void Ball::move(Point spaceship, float w, float h) {
-  position.x += d.x * vitesse;
-  position.y += d.y * vitesse;
   checkCollisions(spaceship, w, h);
   checkFall();
 }
@@ -145,34 +143,34 @@ void Ball::move(Point spaceship) {
   position.y = spaceship.y - rayon*3.5;
 }
 
-void Ball::checkCollisions(Point spaceship, float w, float h) {
-  // Rebond avec les murs
-  if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) {d.x *= -1;}
-  if (position.y - rayon <= 0) {d.y *= -1;}
+void Ball::checkCollisions(Point spaceship, float w, float h) {     // Système de raycasting 
+  // Sauvegarde de la position actuelle avant le déplacement 
+  Point oldPos = position;
+  // Calcul de la nouvelle position après déplacement
+  Point newPos = {position.x + d.x * vitesse, position.y + d.y * vitesse};
 
-  // Rebond avec la raquette
-  if (position.y + rayon >= spaceship.y - h / 2 &&
-      position.x >= spaceship.x - w / 2 &&
-      position.x <= spaceship.x + w / 2) {
+  // Détection de collision avec les murs
+  if (newPos.x - rayon <= 0 || newPos.x + rayon >= windowWidth) {d.x *= -1;}
+  if (newPos.y - rayon <= 0) {d.y *= -1;}
 
-    // Calcul position relative (-1 <= x_rel <= 1)
-    float x_rel = (position.x - spaceship.x) / (w / 2);
-    // Limitation de la position relative dans la plage [-1, 1]
-    x_rel = clamp(x_rel, -1.0f, 1.0f);
-    // Calcul de l'angle en degrés
-    float alpha = 30 + 120 * (1 - x_rel);
-    // Limitation de l'angle dans la plage [30, 150]
-    alpha = std::clamp(alpha, 30.0f, 150.0f);
-    // Conversion en radians
-    float theta = alpha * M_PI / 180.0f;
-    // Mise à jour de d.x et d.y
-    d.x = cos(theta);
-    d.y = -sin(theta);
-    // Normalisation du vecteur direction
-    float norm = sqrt(d.x * d.x + d.y * d.y);
-    d.x /= norm;
-    d.y /= norm;
+  // Détection de collision avec la raquette
+  if (newPos.y + rayon >= spaceship.y - h / 2 &&
+      newPos.x >= spaceship.x - w / 2 &&
+      newPos.x <= spaceship.x + w / 2) {
+
+      // Position relative de la balle par rapport à la raquette
+      float x_rel = (newPos.x - spaceship.x) / (w / 2);
+      x_rel = std::clamp(x_rel, -1.0f, 1.0f);
+
+      // Calcul de l'angle de rebond
+      float alpha = 30 + 120 * (1 - x_rel);         // Angle en degrés
+      alpha = std::clamp(alpha, 30.0f, 150.0f);     // Limite dans [30°, 150°]
+      float theta = alpha * M_PI / 180.0f;          // Conversion en radians
+
+      d.x = cos(theta);
+      d.y = -sin(theta);
   }
+  position = newPos;
 }
 
 void Ball::checkFall() {
