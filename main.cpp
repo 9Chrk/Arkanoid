@@ -114,9 +114,9 @@ class Ball {
   Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color);
 
   void draw();
-  void move();
-  void move(Point position);
-  void bounce();
+  void move(Point spaceship);
+  void move(Point spaceship, float w, float h);
+  void bounce(Point spaceship, float w, float h);
   void reset();
   void fall();
   bool inMouvement, isFalling;
@@ -129,22 +129,29 @@ void Ball::draw() {
   al_draw_circle(position.x, position.y, rayon, color, rayon*2);
 }
 
-void Ball::move() {
+void Ball::move(Point spaceship, float w, float h) {
   position.x += d.x * vitesse;
   position.y += d.y * vitesse;
-  bounce();    // vérification collision
-  fall();      // vérification chute
+  bounce(spaceship, w, h);       // vérification collision
+  fall();                        // vérification chute
 }
 
-void Ball::move(Point Spaceship_Pos) {
-  position.x = Spaceship_Pos.x;
-  position.y = Spaceship_Pos.y - rayon*3.5;
+void Ball::move(Point spaceship) {
+  position.x = spaceship.x;
+  position.y = spaceship.y - rayon*3.5;
 }
 
-void Ball::bounce() {
+void Ball::bounce(Point spaceship, float w, float h) {
   // rebond avec les murs
   if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) {d.x *= -1;};
   if (position.y - rayon <= 0) {d.y *= -1;};
+
+  // rebond avec la raquette
+  if (position.y + rayon >= spaceship.y - h/2 &&
+      position.x >= spaceship.x - w/2 &&
+      position.x <= spaceship.x + w/2) {
+    d.y *= -1;
+  }
 }
 
 void Ball::fall() {
@@ -170,6 +177,9 @@ class Spaceship : public Rectangle {
   void move(Point mousePosition);
   bool validPosition(Point position);
   Point getPosition() {return position;}
+  float getWidth() {return w;}
+  float getHeight() {return h;}
+  int getHealth() {return health;}
   void damage() {health--;}
   bool isDeath() {return health <= 0;}
   void reset() {position = reset_pos;}
@@ -360,7 +370,9 @@ int main(int /* argc */, char** /* argv */) {
         } 
         else {
           // Met la balle en mouvement (lancement/lancée)
-          if (game.ball.inMouvement) {game.ball.move();}
+          if (game.ball.inMouvement) {game.ball.move(game.spaceship.getPosition(), 
+                                                     game.spaceship.getWidth(),
+                                                     game.spaceship.getHeight());}
           else {game.ball.move(game.spaceship.getPosition());}
         }
         // Verification Fin de partie (Win/Loose)
