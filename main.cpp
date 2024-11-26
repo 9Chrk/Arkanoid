@@ -48,10 +48,8 @@ struct Point {
 class Rectangle {
  protected:
   Point position;
-  float w;
-  float h;
-  ALLEGRO_COLOR frameColor;
-  ALLEGRO_COLOR fillColor;
+  float w, h;
+  ALLEGRO_COLOR frameColor, fillColor;
   pair<Point, Point> diag_coor();
 
  public:
@@ -108,11 +106,9 @@ Brick::Brick(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO
 
 class Ball {
  private:
-  Point position;
-  int rayon;
-  int vitesse;
+  int rayon, vitesse;
   ALLEGRO_COLOR color;
-  Point reset_pos;
+  Point position, reset_pos, d;
 
  public:
   Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color);
@@ -126,14 +122,16 @@ class Ball {
 };
 
 Ball::Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color)
-    : position(position), reset_pos(position), rayon(rayon), vitesse(vitesse), color(color), inMouvement(false) {}
+    : position(position), reset_pos(position), rayon(rayon), vitesse(vitesse), color(color), inMouvement(false), d({0, -1}) {}
 
 void Ball::draw() {
   al_draw_circle(position.x, position.y, rayon, color, rayon*2);
 }
 
 void Ball::move() {
-  position.y -= vitesse;
+  position.x += d.x * vitesse;
+  position.y += d.y * vitesse;
+  bounce(); // rebond
 }
 
 void Ball::move(Point Spaceship_Pos) {
@@ -142,10 +140,13 @@ void Ball::move(Point Spaceship_Pos) {
 }
 
 void Ball::bounce() {
-// A COMPLETER
+  // rebond avec les murs
+  if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) d.x *= -1;
+  if (position.y - rayon <= 0 || position.y + rayon >= windowHeight) d.y *= -1;
 }
 
 void Ball::reset() {
+  d = {0, -1};
   inMouvement = false;
   position = reset_pos;
 }
@@ -154,8 +155,7 @@ void Ball::reset() {
 
 class Spaceship : public Rectangle {
  private:
-  int health;
-  int vitesse;
+  int health, vitesse;
   Point reset_pos;
  
  public:
@@ -228,7 +228,7 @@ Games::Games()
   const int offset_y = height + margin;
   const int total_width = dim_x * width + (dim_x - 1) * margin;
   const int offset_start_x = (500 - total_width) / 2;
-  const int offset_start_y = 0;
+  const int offset_start_y = 20;
 
   for (int i = 0; i < dim_x; ++i) {
       for (int j = 0; j < dim_y; ++j) {
