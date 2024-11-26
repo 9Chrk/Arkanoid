@@ -108,7 +108,7 @@ class Ball {
  private:
   int rayon, vitesse;
   ALLEGRO_COLOR color;
-  Point position, reset_pos, d;
+  Point position, d;
 
  public:
   Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color);
@@ -118,11 +118,12 @@ class Ball {
   void move(Point position);
   void bounce();
   void reset();
-  bool inMouvement;
+  void fall();
+  bool inMouvement, isFalling;
 };
 
 Ball::Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color)
-    : position(position), reset_pos(position), rayon(rayon), vitesse(vitesse), color(color), inMouvement(false), d({0, -1}) {}
+    : position(position), rayon(rayon), vitesse(vitesse), color(color), inMouvement(false), isFalling(false), d({0, -1}) {}
 
 void Ball::draw() {
   al_draw_circle(position.x, position.y, rayon, color, rayon*2);
@@ -131,7 +132,8 @@ void Ball::draw() {
 void Ball::move() {
   position.x += d.x * vitesse;
   position.y += d.y * vitesse;
-  bounce(); // rebond
+  bounce();    // vérification collision
+  fall();      // vérification chute
 }
 
 void Ball::move(Point Spaceship_Pos) {
@@ -141,14 +143,17 @@ void Ball::move(Point Spaceship_Pos) {
 
 void Ball::bounce() {
   // rebond avec les murs
-  if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) d.x *= -1;
-  if (position.y - rayon <= 0 || position.y + rayon >= windowHeight) d.y *= -1;
+  if (position.x - rayon <= 0 || position.x + rayon >= windowWidth) {d.x *= -1;};
+  if (position.y - rayon <= 0) {d.y *= -1;};
+}
+
+void Ball::fall() {
+  isFalling = (position.y - rayon > windowHeight) ? true : false;
 }
 
 void Ball::reset() {
   d = {0, -1};
   inMouvement = false;
-  position = reset_pos;
 }
 
 // --------------
@@ -207,6 +212,8 @@ class Games {
   Spaceship spaceship;
   Games();
   void draw();
+  bool win();
+  bool loose();
 };
 
 Games::Games() 
@@ -246,6 +253,17 @@ void Games::draw() {
   }
   ball.draw();
   spaceship.draw();
+}
+
+bool Games::loose() {
+  return spaceship.isDeath();
+}
+
+bool Games::win() {
+  for (auto& brick : bricks) {
+    if (!brick.isDestroyed()) {return false;}
+  }
+  return true;
 }
 
 
@@ -321,6 +339,9 @@ int main(int /* argc */, char** /* argv */) {
           game.spaceship.reset();
           game.ball.reset();
         }
+        else if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+          done = true;
+        }
         break;
       case ALLEGRO_EVENT_MOUSE_AXES:
         game.spaceship.move({static_cast<float>(event.mouse.x),
@@ -330,8 +351,23 @@ int main(int /* argc */, char** /* argv */) {
         done = true;
         break;
       case ALLEGRO_EVENT_TIMER:
-        if (game.ball.inMouvement) {game.ball.move();}
-        else {game.ball.move(game.spaceship.getPosition());}
+        // Verifie si la balle est tombé
+        if (game.ball.isFalling) {
+          game.spaceship.damage();
+          game.spaceship.reset();
+          game.ball.reset();
+          game.ball.isFalling = false;
+        } 
+        else {
+          // Met la balle en mouvement (lancement/lancée)
+          if (game.ball.inMouvement) {game.ball.move();}
+          else {game.ball.move(game.spaceship.getPosition());}
+        }
+        // Verification Fin de partie (Win/Loose)
+        if (game.loose() || game.win()) {
+          cout << "Fin de la Partie..." << endl;
+          done = true;
+        }
         // Affichage
         al_clear_to_color(WHITE);
         game.draw();
