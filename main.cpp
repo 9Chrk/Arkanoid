@@ -112,16 +112,17 @@ class Ball {
   int rayon;
   int vitesse;
   ALLEGRO_COLOR color;
-
   Point reset_pos;
-  bool inMouvement;
 
  public:
   Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color);
+
   void draw();
   void move();
+  void move(Point position);
   void bounce();
   void reset();
+  bool inMouvement;
 };
 
 Ball::Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color)
@@ -132,7 +133,12 @@ void Ball::draw() {
 }
 
 void Ball::move() {
-// A COMPLETER
+  position.y -= vitesse;
+}
+
+void Ball::move(Point Spaceship_Pos) {
+  position.x = Spaceship_Pos.x;
+  position.y = Spaceship_Pos.y - rayon*3.5;
 }
 
 void Ball::bounce() {
@@ -154,9 +160,11 @@ class Spaceship : public Rectangle {
  
  public:
   Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
+
   void move(int direction);
   void move(Point mousePosition);
   bool validPosition(Point position);
+  Point getPosition() {return position;}
   void damage() {health--;}
   bool isDeath() {return health <= 0;}
   void reset() {position = reset_pos;}
@@ -202,7 +210,7 @@ class Games {
 };
 
 Games::Games() 
-    : ball({250, 453}, 5, 3, BLACK), 
+    : ball({250, 453}, 5, 10, BLACK), 
       spaceship({250, 470}, 100, 15, 75, 3, BLACK, BLACK) {
 
   // Initialisation des briques
@@ -306,6 +314,13 @@ int main(int /* argc */, char** /* argv */) {
         else if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
           game.spaceship.move(1); // Droite
         }
+        else if (event.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+          game.ball.inMouvement = true;
+        }
+        else if (event.keyboard.keycode == ALLEGRO_KEY_R) {
+          game.spaceship.reset();
+          game.ball.reset();
+        }
         break;
       case ALLEGRO_EVENT_MOUSE_AXES:
         game.spaceship.move({static_cast<float>(event.mouse.x),
@@ -315,6 +330,9 @@ int main(int /* argc */, char** /* argv */) {
         done = true;
         break;
       case ALLEGRO_EVENT_TIMER:
+        if (game.ball.inMouvement) {game.ball.move();}
+        else {game.ball.move(game.spaceship.getPosition());}
+        // Affichage
         al_clear_to_color(WHITE);
         game.draw();
         al_flip_display();
