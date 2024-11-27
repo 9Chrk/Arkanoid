@@ -383,10 +383,14 @@ int main(int /* argc */, char** /* argv */) {
     al_wait_for_event(queue, &event);
     switch (event.type) {
       case ALLEGRO_EVENT_KEY_DOWN:
-        if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+        if (event.keyboard.keycode == ALLEGRO_KEY_LEFT
+         || event.keyboard.keycode == ALLEGRO_KEY_A
+         || event.keyboard.keycode == ALLEGRO_KEY_Q) {
           game.spaceship.move(0); // Gauche
         } 
-        else if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        else if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT
+              || event.keyboard.keycode == ALLEGRO_KEY_D
+              || event.keyboard.keycode == ALLEGRO_KEY_P) {
           game.spaceship.move(1); // Droite
         }
         else if (event.keyboard.keycode == ALLEGRO_KEY_SPACE) {
