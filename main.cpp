@@ -178,9 +178,10 @@ void Ball::checkCollisions(Point spaceship, float w, float h) {     // Système 
   if (newPos.y - rayon <= 0) {d.y *= -1;}
 
   // Détection de collision avec la raquette
-  if (newPos.y + rayon >= spaceship.y - h / 2 &&
-      newPos.x >= spaceship.x - w / 2 &&
-      newPos.x <= spaceship.x + w / 2) {
+  if (newPos.y + rayon >= spaceship.y - h/2 &&
+      newPos.y + rayon <= spaceship.y + h/2 + vitesse &&
+      newPos.x >= spaceship.x - w/2 &&
+      newPos.x <= spaceship.x + w/2) {
 
       // Position relative de la balle par rapport à la raquette
       float x_rel = (newPos.x - spaceship.x) / (w / 2);
