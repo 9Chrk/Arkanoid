@@ -111,6 +111,7 @@ class Brick : public Rectangle { // rajout des bonus plus tard
  private:
   int scores;
   bool destroyed;
+  Vecteur vec;
   
  public:
   Brick(Point position, float w, float h, 
@@ -123,7 +124,7 @@ class Brick : public Rectangle { // rajout des bonus plus tard
 };
 
 Brick::Brick(Point position, float w, float h, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor, int scores) 
-    : Rectangle(position, w, h, frameColor, fillColor), scores(scores), destroyed(false) {}
+    : Rectangle(position, w, h, frameColor, fillColor), scores(scores), destroyed(false), vec(position, w, h) {}
 
 // --------------
 
