@@ -84,6 +84,29 @@ bool Rectangle::contains(Point p) {
 
 // --------------
 
+class Vecteur {
+ private:
+  Point position;
+  int w, h;
+  // Coordonnées
+  Point top_left = {position.x - w/2, position.y - h/2};
+  Point top_right = {position.x + w/2, position.y - h/2};
+  Point bottom_left = {position.x - w/2, position.y + h/2};
+  Point bottom_right = {position.x + w/2, position.y + h/2};
+  // Vecteur
+  pair<Point, Point> top_edge = make_pair(top_left, top_right);
+  pair<Point, Point> bottom_edge = make_pair(bottom_left, bottom_right);
+  pair<Point, Point> left_edge = make_pair(top_left, bottom_left);
+  pair<Point, Point> right_edge = make_pair(top_right, bottom_right);
+
+ public:
+  Vecteur(Point position, int w, int h);
+};
+
+Vecteur::Vecteur(Point position, int w, int h) : w(w), h(h), position(position) {}
+
+// --------------
+
 class Brick : public Rectangle { // rajout des bonus plus tard
  private:
   int scores;
@@ -160,11 +183,11 @@ void Ball::checkCollisions(Point spaceship, float w, float h) {     // Système 
 
       // Position relative de la balle par rapport à la raquette
       float x_rel = (newPos.x - spaceship.x) / (w / 2);
-      x_rel = std::clamp(x_rel, -1.0f, 1.0f);
+      x_rel = clamp(x_rel, -1.0f, 1.0f);
 
       // Calcul de l'angle de rebond
       float alpha = 30 + 120 * (1 - x_rel);         // Angle en degrés
-      alpha = std::clamp(alpha, 30.0f, 150.0f);     // Limite dans [30°, 150°]
+      alpha = clamp(alpha, 30.0f, 150.0f);     // Limite dans [30°, 150°]
       float theta = alpha * M_PI / 180.0f;          // Conversion en radians
 
       d.x = cos(theta);
