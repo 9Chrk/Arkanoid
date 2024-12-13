@@ -8,6 +8,7 @@ int Brick::destroy() {
   return scores;
 }
 
+[[gnu::pure]]
 bool Brick::isDestroyed() {
   return destroyed;
 }

@@ -9,7 +9,7 @@ CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wduplicated-cond -Weffc++ -Wextra-semi -Wfloat-equal \
             -Wformat-signedness -Wformat=2 -Winit-self -Wlogical-op \
             -Wmismatched-tags -Wnoexcept -Wnon-virtual-dtor -Wnull-dereference \
-            -Wold-style-cast -Woverloaded-virtual -Wredundant-tags -Wshadow \
+            -Wold-style-cast -Woverloaded-virtual -Wredundant-tags \
             -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel \
             -Wsuggest-attribute=cold -Wsuggest-attribute=const \
             -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure \

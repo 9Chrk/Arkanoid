@@ -7,12 +7,12 @@
 
 class Ball {
  private:
-   int rayon, vitesse;
+   float rayon, vitesse;
    ALLEGRO_COLOR color;
    Point position, d;
 
  public:
-  Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color);
+  Ball(Point position, float rayon, float vitesse, ALLEGRO_COLOR color);
   bool inMouvement, isFalling;
   void draw();
   void move(Point spaceship);
@@ -20,7 +20,7 @@ class Ball {
   Point getPosition();
   Point getDirection();
   void setDirection(Point newDirection);
-  int getRayon();
+  float getRayon();
   void checkCollisions(Point spaceship, float w, float h);
   void checkFall();
   void reset();

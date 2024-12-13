@@ -1,7 +1,7 @@
 #include "ball.hpp"
 
-Ball::Ball(Point position, int rayon, int vitesse, ALLEGRO_COLOR color)
-    : position(position), rayon(rayon), vitesse(vitesse), color(color), inMouvement(false), isFalling(false), d({0, -1}) {}
+Ball::Ball(Point position, float rayon, float vitesse, ALLEGRO_COLOR color)
+    : rayon(rayon), vitesse(vitesse), color(color), position(position), d({0, -1}), inMouvement(false), isFalling(false) {}
 
 void Ball::draw() {
   al_draw_circle(position.x, position.y, rayon, color, rayon * 2);
@@ -9,7 +9,7 @@ void Ball::draw() {
 
 void Ball::move(Point spaceship) {
   position.x = spaceship.x;
-  position.y = spaceship.y - rayon * 3.5;
+  position.y = spaceship.y - rayon * 3.5f;
 }
 
 void Ball::move(Point spaceship, float w, float h) {
@@ -17,10 +17,11 @@ void Ball::move(Point spaceship, float w, float h) {
   checkFall();
 }
 
-Point Ball::getPosition() { return position; }
-Point Ball::getDirection() { return d; }
+[[gnu::pure]] Point Ball::getPosition() { return position; }
+[[gnu::pure]] Point Ball::getDirection() { return d; }
+[[gnu::pure]] float Ball::getRayon() { return rayon; }
+
 void Ball::setDirection(Point newDirection) { d = newDirection; }
-int Ball::getRayon() { return rayon; }
 
 void Ball::checkCollisions(Point spaceship, float w, float h) {
   Point newPos = {position.x + d.x * vitesse, position.y + d.y * vitesse};
@@ -38,7 +39,7 @@ void Ball::checkCollisions(Point spaceship, float w, float h) {
   
     float alpha = 30 + 120 * (1 - x_rel);
     alpha = clamp(alpha, 30.0f, 150.0f);
-    float theta = alpha * M_PI / 180.0f;
+    float theta = alpha * static_cast<float>(M_PI) / 180.0f;
   
     d.x = cos(theta);
     d.y = -sin(theta);

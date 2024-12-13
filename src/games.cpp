@@ -3,7 +3,10 @@
 Games::Games()
      : ball({250, 453}, 5, 10, BLACK),
        spaceship({250, 470}, 100, 15, 75, 3, BLACK, BLACK) {
+       initializeBricks();
+}
 
+void Games::initializeBricks() {
   vector<int> scores = {50, 90, 120, 100, 110, 80};
   vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
   const int dim_x = 13;
@@ -19,12 +22,12 @@ Games::Games()
   const int offset_start_x = (500 - total_width) / 2;
   const int offset_start_y = 20;
   
-  for (int i = 0; i < dim_x; ++i) {
-    for (int j = 0; j < dim_y; ++j) {
+  for (unsigned long i = 0; i < dim_x; ++i) {
+    for (unsigned long j = 0; j < dim_y; ++j) {
       bricks.emplace_back(
-        Point{offset_start_x + offset_x * i + offset_x / 2,
-              offset_start_y + offset_y * j + offset_y / 2},
-              width, height, BLACK, colors[j], scores[j]);
+        Point{offset_start_x + offset_x * static_cast<float>(i) + offset_x / 2.0f,
+              offset_start_y + offset_y * static_cast<float>(j) + offset_y / 2.0f},
+              width, height, BLACK, colors.at(j), scores.at(j));
     }
   }
 }
@@ -44,6 +47,9 @@ void Games::checkCollisions() {
   vector<Point> collisionPoints = {
     {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
     {pos.x - ball.getRayon(), pos.y}, {pos.x + ball.getRayon(), pos.y},
+    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
+    {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
+    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite
   };
   
   for (auto& brick : bricks) {

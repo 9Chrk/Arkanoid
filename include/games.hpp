@@ -10,6 +10,7 @@
 class Games {
  private:
   vector<Brick> bricks;
+  void initializeBricks();
 
  public:
   Ball ball;
