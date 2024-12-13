@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SPACESHIP_HPP
 #define SPACESHIP_HPP
 
@@ -5,22 +6,22 @@
 #include "rectangle.hpp"
 
 class Spaceship : public Rectangle {
-private:
-    int health, vitesse;
-    Point reset_pos;
+ private:
+  int health, vitesse;
+  Point reset_pos;
 
-public:
-    Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
-    void move(int direction);
-    void move(Point mousePosition);
-    bool validPosition(Point position);
-    Point getPosition();
-    float getWidth();
-    float getHeight();
-    int getHealth();
-    void damage();
-    bool isDeath();
-    void reset();
+ public:
+  Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
+  void move(int direction);
+  void move(Point mousePosition);
+  bool validPosition(Point position);
+  Point getPosition();
+  float getWidth();
+  float getHeight();
+  int getHealth();
+  void damage();
+  bool isDeath();
+  void reset();
 };
 
 #endif

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef GAMES_HPP
 #define GAMES_HPP
 
@@ -7,17 +8,17 @@
 #include "spaceship.hpp"
 
 class Games {
-private:
-    vector<Brick> bricks;
+ private:
+  vector<Brick> bricks;
 
-public:
-    Ball ball;
-    Spaceship spaceship;
-    Games();
-    void draw();
-    bool win();
-    bool loose();
-    void checkCollisions();
+ public:
+  Ball ball;
+  Spaceship spaceship;
+  Games();
+  void draw();
+  bool win();
+  bool loose();
+  void checkCollisions();
 };
 
 #endif
