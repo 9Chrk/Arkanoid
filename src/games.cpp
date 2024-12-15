@@ -21,28 +21,36 @@ void Games::initializeSpaceship() {
 }
 
 void Games::initializeBricks() {
-  vector<int> scores = {50, 90, 120, 100, 110, 80};
-  vector<ALLEGRO_COLOR> colors = {GREY, RED, YELLOW, BLUE, MAGENTA, GREEN};
-  const int dim_x = 13;
-  const int dim_y = 6;
-  
-  const int width = 35;
-  const int height = 15;
-  const int margin = 3;
-  
-  const int offset_x = width + margin;
-  const int offset_y = height + margin;
-  const int total_width = dim_x * width + (dim_x - 1) * margin;
-  const int offset_start_x = (500 - total_width) / 2;
-  const int offset_start_y = 20;
-  
-  for (unsigned long i = 0; i < dim_x; ++i) {
-    for (unsigned long j = 0; j < dim_y; ++j) {
+  json level = openJsonFile("./data/level_1.json");
+  json settings = openJsonFile("./data/settings.json");
+
+  vector<string> bricks_data = level["bricks"].get<vector<string>>();
+  auto bricks_colors = settings["brick_colors"].get<map<string, string>>();
+
+  const int dim_x = level["dim_x"].get<int>();
+
+  const int width = settings["brick"]["width"].get<int>();
+  const int height = settings["brick"]["height"].get<int>();
+  const int margin = settings["brick"]["margin"].get<int>();
+
+  const int _offset_start_x = settings["display_offset"]["offset_start_x"].get<int>();
+  const int _offset_start_y = settings["display_offset"]["offset_start_y"].get<int>();
+
+  const float offset_x = static_cast<float>(width + margin);
+  const float offset_y = static_cast<float>(height + margin);
+  const float total_width = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
+  const float offset_start_x = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (500 - total_width) / 2.0f;
+  const float offset_start_y = static_cast<float>(_offset_start_y);
+
+  for (size_t index = 0; index < bricks_data.size(); ++index) {
+      size_t i = index / static_cast<size_t>(dim_x);
+      size_t j = index % static_cast<size_t>(dim_x);
       bricks.emplace_back(
-        Point{offset_start_x + offset_x * static_cast<float>(i) + offset_x / 2.0f,
-              offset_start_y + offset_y * static_cast<float>(j) + offset_y / 2.0f},
-              width, height, BLACK, colors.at(j), scores.at(j));
-    }
+          Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x / 2.0f,
+                offset_start_y + offset_y * static_cast<float>(i) + offset_y / 2.0f}),
+          width, height, BLACK, getColor(bricks_colors.at(bricks_data.at(index))),
+          stoi(bricks_data.at(index))
+      );
   }
 }
 
