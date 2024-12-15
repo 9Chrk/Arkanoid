@@ -12,7 +12,9 @@ class Ball {
    Point position, d;
 
  public:
+  Ball();
   Ball(Point position, float rayon, float vitesse, ALLEGRO_COLOR color);
+
   bool inMouvement, isFalling;
   void draw();
   void move(Point spaceship);

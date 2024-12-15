@@ -11,7 +11,9 @@ class Spaceship : public Rectangle {
   Point reset_pos;
 
  public:
+  Spaceship();
   Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
+
   void move(int direction);
   void move(Point mousePosition);
   bool validPosition(Point position);

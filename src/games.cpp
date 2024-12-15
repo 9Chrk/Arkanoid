@@ -1,9 +1,23 @@
 #include "games.hpp"
 
-Games::Games()
-     : ball({250, 453}, 5, 10, BLACK),
-       spaceship({250, 470}, 100, 15, 75, 3, BLACK, BLACK) {
-       initializeBricks();
+Games::Games() {
+  initializeBall();
+  initializeSpaceship();
+  initializeBricks();
+}
+
+void Games::initializeBall() {
+  json _ball = readJsonFile("./data/settings.json", "ball");
+  ball = Ball({_ball["position.x"].get<float>(), _ball["position.y"].get<float>()},
+               _ball["rayon"].get<float>(), _ball["vitesse"].get<float>(), getColor(_ball["color"].get<string>()));
+}
+
+void Games::initializeSpaceship() {
+  json _spaceship = readJsonFile("./data/settings.json", "spaceship");
+  spaceship = Spaceship({_spaceship["position.x"].get<float>(), _spaceship["position.y"].get<float>()},
+                         _spaceship["width"].get<float>(), _spaceship["height"].get<float>(),
+                         _spaceship["vitesse"].get<int>(), _spaceship["health"].get<int>(),
+                         getColor(_spaceship["frameColor"].get<string>()), getColor(_spaceship["fillColor"].get<string>()));
 }
 
 void Games::initializeBricks() {

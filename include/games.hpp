@@ -10,12 +10,14 @@
 class Games {
  private:
   vector<Brick> bricks;
+  void initializeBall();
+  void initializeSpaceship();
   void initializeBricks();
 
  public:
+  Games();
   Ball ball;
   Spaceship spaceship;
-  Games();
   void draw();
   bool win();
   bool loose();

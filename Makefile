@@ -4,6 +4,7 @@ CXXFLAGS += -std=c++20
 CXXFLAGS += -pedantic -Wall -Wextra
 CXXFLAGS += -O2
 CXXFLAGS += -Iinclude # Inclure les fichiers d'en-tête
+CXXFLAGS += -Ilibs    # Inclure la librairie lié à Json
 CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wctor-dtor-privacy -Wdeprecated-copy-dtor -Wduplicated-branches \
             -Wduplicated-cond -Weffc++ -Wextra-semi -Wfloat-equal \
@@ -24,6 +25,7 @@ LDLIBS += $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 --lib
 # Dossiers
 SRC_DIR = ./src
 INCLUDE_DIR = ./include
+LIBS_DIR = ./libs
 OBJ_DIR = ./obj
 MAIN = main.cpp
 
@@ -32,7 +34,7 @@ SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(MAIN)
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(notdir $(SRCS)))
 
 # Règle par défaut
-all: $(OBJ_DIR) $(OBJS)
+all: clean $(OBJ_DIR) $(OBJS)
 	$(CXX) $(OBJS) -o main $(LDLIBS)
 
 # Compilation des fichiers objets

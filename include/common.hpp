@@ -4,10 +4,12 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <ranges>
 #include <vector>
 #include <utility>
+#include "../libs/json.hpp"
 
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h>
@@ -24,6 +26,7 @@
 #include <allegro5/timer.h>
 
 using namespace std;
+using json = nlohmann::json;
 
 static const int    windowWidth      = 500;
 static const int    windowHeight     = 500;
@@ -39,5 +42,13 @@ static const ALLEGRO_COLOR RED     = al_map_rgb(255, 0, 0);
 static const ALLEGRO_COLOR BLUE    = al_map_rgb(0, 0, 255);    
 static const ALLEGRO_COLOR MAGENTA = al_map_rgb(255, 0, 255);  
 static const ALLEGRO_COLOR YELLOW  = al_map_rgb(255, 255, 0);
+static const ALLEGRO_COLOR SILVER  = al_map_rgb(192, 192, 192);
+static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
+
+
+ALLEGRO_COLOR getColor(string colorName);
+json openJsonFile(string fileName);
+json readJsonFile(string fileName, string key);
+void writeJsonFile(string fileName, string key, json value);
 
 #endif

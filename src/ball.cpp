@@ -1,5 +1,7 @@
 #include "ball.hpp"
 
+Ball::Ball() : rayon(0), vitesse(0), color(BLACK), position({0, 0}), d({0, -1}), inMouvement(false), isFalling(false) {}
+
 Ball::Ball(Point position, float rayon, float vitesse, ALLEGRO_COLOR color)
     : rayon(rayon), vitesse(vitesse), color(color), position(position), d({0, -1}), inMouvement(false), isFalling(false) {}
 

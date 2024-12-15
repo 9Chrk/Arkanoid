@@ -1,4 +1,6 @@
 #include "spaceship.hpp"
+ 
+Spaceship::Spaceship() : Rectangle({0.0f, 0.0f}, 0, 0, BLACK, BLACK), health(0), vitesse(0), reset_pos({0.0f, 0.0f}) {}
 
 Spaceship::Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor)
          : Rectangle(position, w, h, frameColor, fillColor), health(health), vitesse(vitesse), reset_pos(position) {}
