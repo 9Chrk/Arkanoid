@@ -28,7 +28,13 @@
     "offset_start_x": 0,
     "offset_start_y": 50
   },
-  "highscore": 2140,
+  "display_score": {
+    "highscore.x": 350,
+    "highscore.y": 24,
+    "score.x": 140,
+    "score.y": 24
+  },
+  "highscore": 0,
   "spaceship": {
     "fillColor": "WHITE",
     "frameColor": "BLACK",
