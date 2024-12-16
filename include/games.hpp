@@ -24,6 +24,7 @@ class Games {
   bool win();
   bool loose();
   void checkCollisions();
+  int getScore();
   void saveHighScore();
   void resetHighScore();
 };

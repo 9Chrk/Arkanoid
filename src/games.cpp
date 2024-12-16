@@ -119,3 +119,6 @@ bool Games::win() {
   }
   return true;
 }
+
+[[gnu::pure]]
+int Games::getScore() { return score; }

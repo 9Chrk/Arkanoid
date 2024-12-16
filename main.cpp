@@ -141,9 +141,13 @@ int main(int /* argc */, char** /* argv */) {
       // Vérification Fin de partie (Win/Loose)
       if (game.loose()) {
         display_image(lose_png);
+        cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
+        cout << "Score atteint : " << game.getScore() << "\n" << endl;
         done = true;
       } else if (game.win()) {
         display_image(win_png);
+        cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << endl;
+        cout << "Score atteint : " << game.getScore() << "\n" << endl;
         done = true;
       } else {
         // Affichage
