@@ -26,6 +26,7 @@
 #include <allegro5/system.h>
 #include <allegro5/timer.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
 
 using namespace std;
 using json = nlohmann::json;

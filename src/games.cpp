@@ -107,6 +107,10 @@ void Games::saveHighScore() {
   }
 }
 
+int Games::getHighScore() {
+  return readJsonFile("./data/settings.json", "highscore").get<int>();
+}
+
 void Games::resetHighScore() {
   writeJsonFile("./data/settings.json", "highscore", 0);
 }
