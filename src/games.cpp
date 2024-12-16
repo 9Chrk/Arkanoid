@@ -8,16 +8,27 @@ Games::Games() : score(0) {
 
 void Games::initializeBall() {
   json _ball = readJsonFile("./data/settings.json", "ball");
-  ball = Ball({_ball["position.x"].get<float>(), _ball["position.y"].get<float>()},
-               _ball["rayon"].get<float>(), _ball["vitesse"].get<float>(), getColor(_ball["color"].get<string>()));
+  float position_x = _ball["position.x"].get<float>();
+  float position_y = _ball["position.y"].get<float>();
+  float rayon = _ball["rayon"].get<float>();
+  float vitesse = _ball["vitesse"].get<float>();
+  ALLEGRO_COLOR color = getColor(_ball["color"].get<string>());
+  
+  ball = Ball({position_x, position_y}, rayon, vitesse, color);
 }
 
 void Games::initializeSpaceship() {
   json _spaceship = readJsonFile("./data/settings.json", "spaceship");
-  spaceship = Spaceship({_spaceship["position.x"].get<float>(), _spaceship["position.y"].get<float>()},
-                         _spaceship["width"].get<float>(), _spaceship["height"].get<float>(),
-                         _spaceship["vitesse"].get<int>(), _spaceship["health"].get<int>(),
-                         getColor(_spaceship["frameColor"].get<string>()), getColor(_spaceship["fillColor"].get<string>()));
+  float position_x = _spaceship["position.x"].get<float>();
+  float position_y = _spaceship["position.y"].get<float>();
+  float width = _spaceship["width"].get<float>();
+  float height = _spaceship["height"].get<float>();
+  int vitesse = _spaceship["vitesse"].get<int>();
+  int health = _spaceship["health"].get<int>();
+  ALLEGRO_COLOR frameColor = getColor(_spaceship["frameColor"].get<string>());
+  ALLEGRO_COLOR fillColor = getColor(_spaceship["fillColor"].get<string>());
+  
+  spaceship = Spaceship({position_x, position_y}, width, height, vitesse, health, frameColor, fillColor);
 }
 
 void Games::initializeBricks() {
@@ -94,6 +105,10 @@ void Games::saveHighScore() {
   if (score >= highscore) { 
     writeJsonFile("./data/settings.json", "highscore", score);
   }
+}
+
+void Games::resetHighScore() {
+  writeJsonFile("./data/settings.json", "highscore", 0);
 }
 
 bool Games::loose() { return spaceship.isDeath(); }

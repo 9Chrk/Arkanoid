@@ -35,16 +35,17 @@ static const int    windowHeight     = 500;
 static const double refreshPerSecond = 60;
 
 static const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
-static const ALLEGRO_COLOR GREY    = al_map_rgb(128, 128, 128);
-static const ALLEGRO_COLOR BLACK   = al_map_rgb(0, 0, 0);
-static const ALLEGRO_COLOR ORANGE  = al_map_rgb(255, 165, 0);  
-static const ALLEGRO_COLOR CYAN    = al_map_rgb(0, 255, 255);  
-static const ALLEGRO_COLOR GREEN   = al_map_rgb(0, 255, 0);    
-static const ALLEGRO_COLOR RED     = al_map_rgb(255, 0, 0);    
-static const ALLEGRO_COLOR BLUE    = al_map_rgb(0, 0, 255);    
-static const ALLEGRO_COLOR MAGENTA = al_map_rgb(255, 0, 255);  
-static const ALLEGRO_COLOR YELLOW  = al_map_rgb(255, 255, 0);
-static const ALLEGRO_COLOR SILVER  = al_map_rgb(192, 192, 192);
+static const ALLEGRO_COLOR GREY    = al_map_rgb(192, 192, 192);
+static const ALLEGRO_COLOR BLACK   = al_map_rgb(50, 50, 50);
+static const ALLEGRO_COLOR YELLOW  = al_map_rgb(255, 223, 56);
+static const ALLEGRO_COLOR PINK    = al_map_rgb(255, 114, 192);
+static const ALLEGRO_COLOR BLUE    = al_map_rgb(122, 170, 255);
+static const ALLEGRO_COLOR GREEN   = al_map_rgb(136, 196, 38);
+static const ALLEGRO_COLOR ORANGE  = al_map_rgb(252, 104, 64);
+static const ALLEGRO_COLOR RED     = al_map_rgb(255, 7, 69);
+static const ALLEGRO_COLOR CYAN    = al_map_rgb(71, 255, 191);
+static const ALLEGRO_COLOR MAGENTA = al_map_rgb(235, 37, 174);
+static const ALLEGRO_COLOR SILVER  = al_map_rgb(224, 224, 224);
 static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 
 
