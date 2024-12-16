@@ -24,6 +24,22 @@
     "80": "GREEN",
     "90": "RED"
   },
+  "display_button": {
+    "button_exit": {
+      "color": "WHITE",
+      "height": 32,
+      "position.x": 275,
+      "position.y": 370,
+      "width": 100
+    },
+    "button_play": {
+      "color": "WHITE",
+      "height": 40,
+      "position.x": 275,
+      "position.y": 315,
+      "width": 340
+    }
+  },
   "display_offset": {
     "offset_start_x": 0,
     "offset_start_y": 50
@@ -34,7 +50,7 @@
     "score.x": 140,
     "score.y": 24
   },
-  "highscore": 0,
+  "highscore": 530,
   "spaceship": {
     "fillColor": "WHITE",
     "frameColor": "BLACK",

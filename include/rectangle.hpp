@@ -14,7 +14,6 @@ class Rectangle {
   Point position;
   float w, h;
   ALLEGRO_COLOR frameColor, fillColor;
-  pair<Point, Point> diag_coor();
 
  public:
   Rectangle(Point position, float w, float h,
@@ -23,6 +22,7 @@ class Rectangle {
             
   void draw();
   bool contains(Point p);
+  pair<Point, Point> diag_coor();
 };
 
 #endif

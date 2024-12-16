@@ -2,11 +2,12 @@
 #include "include/games.hpp"
 
 
+// ---- fonctions ----
+
 void display_image(ALLEGRO_BITMAP* image_name) {
   al_clear_to_color(WHITE);
   al_draw_bitmap(image_name, 0, 0, 0);
   al_flip_display();
-  al_rest(2.0);
 }
 
 void display_info_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png, ALLEGRO_BITMAP* heart_png, ALLEGRO_FONT* font, Games game,
@@ -31,6 +32,50 @@ ALLEGRO_BITMAP* choose_heartFile(ALLEGRO_BITMAP* heart_1_png, ALLEGRO_BITMAP* he
   else if (health == 2) { return heart_2_png; }
   else { return heart_3_png; }
 }
+
+void menu_button(ALLEGRO_BITMAP* start_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, bool &done, Rectangle button_on, Rectangle button_off) {
+  bool click_on_button = false;
+  bool hover_play = false;
+  bool hover_exit = false;
+  Point click_pos;
+
+  display_image(start_png);
+  al_flip_display();
+
+  while (!click_on_button) {
+    al_flush_event_queue(queue);
+    al_wait_for_event(queue, &event);
+    if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
+      Point mouse_pos = {static_cast<float>(event.mouse.x), static_cast<float>(event.mouse.y)};
+      bool new_hover_play = button_on.contains(mouse_pos);
+      bool new_hover_exit = button_off.contains(mouse_pos);
+
+      if (new_hover_play != hover_play || new_hover_exit != hover_exit) {
+        hover_play = new_hover_play;
+        hover_exit = new_hover_exit;
+
+        display_image(start_png);
+        if (hover_play) {
+          pair<Point, Point> temp = button_on.diag_coor();
+          al_draw_rectangle(temp.first.x, temp.first.y, temp.second.x, temp.second.y, WHITE, 1);
+        }
+        if (hover_exit) {
+          pair<Point, Point> temp = button_off.diag_coor();
+          al_draw_rectangle(temp.first.x, temp.first.y, temp.second.x, temp.second.y, WHITE, 1);
+        }
+        al_flip_display();
+      }
+    }
+    if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+      click_pos = {static_cast<float>(event.mouse.x), static_cast<float>(event.mouse.y)};
+      if (button_on.contains(click_pos) || button_off.contains(click_pos)) {
+        click_on_button = true;
+        done = (button_on.contains(click_pos)) ? false : true;
+      }
+    }
+  }
+}
+
 
 // ---- fonctions de test ----
 
@@ -84,6 +129,8 @@ int main(int /* argc */, char** /* argv */) {
   al_register_event_source(queue, al_get_mouse_event_source());
   al_register_event_source(queue, al_get_timer_event_source(timer));
 
+  al_start_timer(timer);
+
   ALLEGRO_BITMAP* start_png = al_load_bitmap("./image/start.png");
   ALLEGRO_BITMAP* background_png = al_load_bitmap("./image/background.png");
   ALLEGRO_BITMAP* lose_png = al_load_bitmap("./image/lose.png");
@@ -95,18 +142,49 @@ int main(int /* argc */, char** /* argv */) {
   ALLEGRO_BITMAP* score_png = al_load_bitmap("./image/score.png");
   ALLEGRO_BITMAP* highScore_png = al_load_bitmap("./image/high_score.png");
 
-  //// GESTION DU CODE ////
 
+  //// INITIALISATION VARIABLES ////
+
+  // json //
   json display_score = readJsonFile("./data/settings.json", "display_score");
-  Point score_pos({display_score["score.x"].get<float>(), display_score["score.y"].get<float>()});
-  Point highscore_pos({display_score["highscore.x"].get<float>(), display_score["highscore.y"].get<float>()});
-  
-  bool          done = false;
+  json button = readJsonFile("./data/settings.json", "display_button");
+  //
+  float score_x = display_score["score.x"].get<float>();
+  float score_y = display_score["score.y"].get<float>();
+  float highscore_x = display_score["highscore.x"].get<float>();
+  float highscore_y = display_score["highscore.y"].get<float>();
+  //
+  float button_play_position_x = button["button_play"]["position.x"].get<float>();
+  float button_play_position_y = button["button_play"]["position.y"].get<float>();
+  float button_play_width = button["button_play"]["width"].get<float>();
+  float button_play_height = button["button_play"]["height"].get<float>();
+  ALLEGRO_COLOR button_play_color = getColor(button["button_play"]["color"].get<string>());
+  //
+  float button_exit_position_x = button["button_exit"]["position.x"].get<float>();
+  float button_exit_position_y = button["button_exit"]["position.y"].get<float>();
+  float button_exit_width = button["button_exit"]["width"].get<float>();
+  float button_exit_height = button["button_exit"]["height"].get<float>();
+  ALLEGRO_COLOR button_exit_color = getColor(button["button_exit"]["color"].get<string>());
+  //////////
+
+  bool          done;
   ALLEGRO_EVENT event;
   Games         game;
 
-  al_start_timer(timer);
-  display_image(start_png);
+  Point score_pos({score_x, score_y});
+  Point highscore_pos({highscore_x, highscore_y});
+
+  Rectangle button_play = Rectangle({button_play_position_x, button_play_position_y},
+                                     button_play_width, button_play_height, 
+                                     button_play_color, button_play_color);
+  Rectangle button_exit = Rectangle({button_exit_position_x, button_exit_position_y},
+                                     button_exit_width, button_exit_height, 
+                                     button_exit_color, button_exit_color);
+
+
+  /////////////////   GAME   /////////////////
+
+  menu_button(start_png, event, queue, done, button_play, button_exit);
 
   while (!done) {
     al_wait_for_event(queue, &event);
@@ -165,11 +243,13 @@ int main(int /* argc */, char** /* argv */) {
           cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
           cout << "Score atteint : " << game.getScore() << "\n" << endl;
           done = true;
+          al_rest(2.0);
         } else if (game.win()) {
           display_image(win_png);
           cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << endl;
           cout << "Score atteint : " << game.getScore() << "\n" << endl;
           done = true;
+          al_rest(2.0);
         } else {
           // Affichage
           al_clear_to_color(WHITE);
@@ -187,7 +267,6 @@ int main(int /* argc */, char** /* argv */) {
       }
     }
   }
-  // retient le meilleur score
   game.saveHighScore();
   // les ressources allouées dynamiquement sont détruites
   al_destroy_font(font);
