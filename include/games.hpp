@@ -10,6 +10,7 @@
 class Games {
  private:
   vector<Brick> bricks;
+  int scores;
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
