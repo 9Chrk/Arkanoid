@@ -1,6 +1,6 @@
 #include "games.hpp"
 
-Games::Games() {
+Games::Games() : score(0) {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -78,6 +78,7 @@ void Games::checkCollisions() {
     for (auto& point : collisionPoints) {
       if (!brick.isDestroyed() && brick.contains(point)) {
         brick.destroy();
+        score += brick.getScore();
         Point direction = ball.getDirection();
         direction.y *= -1;
         ball.setDirection(direction);
@@ -86,6 +87,8 @@ void Games::checkCollisions() {
     }
   }
 }
+
+int Games::getScoreGame() {return score;}
 
 bool Games::loose() { return spaceship.isDeath(); }
 

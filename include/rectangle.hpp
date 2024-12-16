@@ -20,6 +20,7 @@ class Rectangle {
   Rectangle(Point position, float w, float h,
             ALLEGRO_COLOR frameColor = BLACK,
             ALLEGRO_COLOR fillColor = WHITE);
+            
   void draw();
   bool contains(Point p);
 };

@@ -10,19 +10,21 @@
 class Games {
  private:
   vector<Brick> bricks;
-  int scores;
+  int score;
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
 
  public:
   Games();
+
   Ball ball;
   Spaceship spaceship;
   void draw();
   bool win();
   bool loose();
   void checkCollisions();
+  int getScoreGame();
 };
 
 #endif

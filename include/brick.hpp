@@ -8,7 +8,7 @@
 
 class Brick : public Rectangle {
  private:
-  int scores;
+  int score;
   bool destroyed;
   Vecteur vec;
 
@@ -16,9 +16,11 @@ class Brick : public Rectangle {
   Brick(Point position, float w, float h, 
         ALLEGRO_COLOR frameColor, 
         ALLEGRO_COLOR fillColor, 
-        int scores);
+        int score);
+
   int destroy();
   bool isDestroyed();
+  int getScore();
 };
 
 #endif
