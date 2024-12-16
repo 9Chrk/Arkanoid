@@ -19,8 +19,8 @@ CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wzero-as-null-pointer-constant
 
 # Gestion des dépendances Allegro
-CXXFLAGS += $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 --cflags)
-LDLIBS += $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 --libs)
+CXXFLAGS += $(shell pkg-config --cflags allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5)
+LDLIBS += $(shell pkg-config --libs allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5)
 
 # Dossiers
 SRC_DIR = ./src

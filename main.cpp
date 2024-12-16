@@ -2,6 +2,14 @@
 #include "include/games.hpp"
 
 
+void display_image(ALLEGRO_BITMAP* image_name, int x, int y) {
+  al_clear_to_color(WHITE);
+  al_draw_bitmap(image_name, x, y, 0);
+  al_flip_display();
+  al_rest(2.0);
+}
+
+
 // ---- fonctions de test ----
 
 void must_init(bool test, const char* description) {
@@ -26,6 +34,7 @@ int main(int /* argc */, char** /* argv */) {
   must_init(al_init(), "allegro");
   must_init(al_install_keyboard(), "keyboard");
   must_init(al_install_mouse(), "mouse");
+  must_init(al_init_image_addon(), "image");
 
   ALLEGRO_TIMER* timer = al_create_timer(1.0 / refreshPerSecond);
   must_init(timer, "timer");
@@ -50,6 +59,11 @@ int main(int /* argc */, char** /* argv */) {
   al_register_event_source(queue, al_get_mouse_event_source());
   al_register_event_source(queue, al_get_timer_event_source(timer));
 
+  ALLEGRO_BITMAP* start = al_load_bitmap("./image/start.png");
+  ALLEGRO_BITMAP* background = al_load_bitmap("./image/background.png");
+  ALLEGRO_BITMAP* lose = al_load_bitmap("./image/lose.png");
+  ALLEGRO_BITMAP* win = al_load_bitmap("./image/win.png");
+
   //// GESTION DU CODE ////
   
   bool          done = false;
@@ -57,6 +71,9 @@ int main(int /* argc */, char** /* argv */) {
   Games         game;
 
   al_start_timer(timer);
+
+  display_image(start, 0, 0);
+
   while (!done) {
     al_wait_for_event(queue, &event);
     switch (event.type) {
@@ -105,23 +122,33 @@ int main(int /* argc */, char** /* argv */) {
           else {game.ball.move(game.spaceship.getPosition());}
         }
         // Verification Fin de partie (Win/Loose)
-        if (game.loose() || game.win()) {
-          cout << "Fin de la Partie..." << endl;
+        if (game.loose()) {
+          display_image(lose, 0 ,0);
           done = true;
+        } else if (game.win()) {
+          display_image(win, 0, 0);
+          done = true;;
         }
         // Affichage
         al_clear_to_color(WHITE);
+        al_draw_bitmap(background, 0, 0, 0);
         game.draw();
         al_flip_display();
         break;
       default: {}
     }
   }
+  // retient le meilleur score
+  game.saveHighScore();
   // les ressources allouées dynamiquement sont détruites
   al_destroy_font(font);
   al_destroy_display(disp);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
+  al_destroy_bitmap(start);
+  al_destroy_bitmap(background);
+  al_destroy_bitmap(win);
+  al_destroy_bitmap(lose);
 
   return 0;
 }

@@ -88,7 +88,13 @@ void Games::checkCollisions() {
   }
 }
 
-int Games::getScoreGame() {return score;}
+void Games::saveHighScore() {
+  json settings = openJsonFile("./data/settings.json");
+  int highscore = settings["highscore"].get<int>();
+  if (score >= highscore) { 
+    writeJsonFile("./data/settings.json", "highscore", score);
+  }
+}
 
 bool Games::loose() { return spaceship.isDeath(); }
 

@@ -1,47 +1,42 @@
 {
-  "highscore": 0,
-
+  "ball": {
+    "color": "WHITE",
+    "position.x": 250,
+    "position.y": 453,
+    "rayon": 5,
+    "vitesse": 10
+  },
+  "brick": {
+    "height": 15,
+    "margin": 3,
+    "width": 35
+  },
   "brick_colors": {
-    "0" : "GOLD",
-    "1" : "GREY",
-    "50" : "WHITE",
-    "60" : "ORANGE",
-    "70" : "CYAN",
-    "80" : "GREEN",
-    "90" : "RED",
-    "100" : "BLUE",
-    "110" : "MAGENTA",
-    "120" : "YELLOW",
-    "200" : "SILVER"
+    "0": "GOLD",
+    "1": "GREY",
+    "100": "BLUE",
+    "110": "MAGENTA",
+    "120": "YELLOW",
+    "200": "SILVER",
+    "50": "WHITE",
+    "60": "ORANGE",
+    "70": "CYAN",
+    "80": "GREEN",
+    "90": "RED"
   },
-
-  "ball" : {
-    "position.x" : 250,
-    "position.y" : 453,
-    "rayon" : 5,
-    "vitesse" : 10, 
-    "color" : "BLACK"
+  "display_offset": {
+    "offset_start_x": 0,
+    "offset_start_y": 20
   },
-
-  "spaceship" : {
-    "position.x" : 250,
-    "position.y" : 470,
-    "width" : 100,
-    "height" : 15,
-    "vitesse" : 75,
-    "health" : 3,
-    "frameColor" : "BLACK",
-    "fillColor" : "BLACK"
-  },
-
-  "brick" : {
-    "width" : 35,
-    "height" : 15,
-    "margin" : 3
-  },
-
-  "display_offset" : {
-   "offset_start_x" : 0,
-   "offset_start_y" : 20
+  "highscore": 0,
+  "spaceship": {
+    "fillColor": "WHITE",
+    "frameColor": "BLACK",
+    "health": 3,
+    "height": 15,
+    "position.x": 250,
+    "position.y": 470,
+    "vitesse": 75,
+    "width": 100
   }
 }
