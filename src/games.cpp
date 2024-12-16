@@ -88,8 +88,11 @@ void Games::checkCollisions() {
   for (auto& brick : bricks) {
     for (auto& point : collisionPoints) {
       if (!brick.isDestroyed() && brick.contains(point)) {
-        if (brick.getScore() != 0) brick.destroy();
-        score += brick.getScore();
+        if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {
+          if (brick.getScore() != 0) brick.destroy();
+          score += brick.getScore();
+        } else { brick.setSecondLife(false); }
+        
         Point direction = ball.getDirection();
         direction.y *= -1;
         ball.setDirection(direction);
