@@ -8,7 +8,6 @@
 class Spaceship : public Rectangle {
  private:
   int health, vitesse;
-  Point reset_pos;
 
  public:
   Spaceship();
@@ -23,7 +22,6 @@ class Spaceship : public Rectangle {
   int getHealth();
   void damage();
   bool isDeath();
-  void reset();
 };
 
 #endif

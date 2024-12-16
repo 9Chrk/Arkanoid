@@ -75,7 +75,6 @@ int main(int /* argc */, char** /* argv */) {
           game.ball.inMouvement = true;
         }
         else if (event.keyboard.keycode == ALLEGRO_KEY_R) {
-          game.spaceship.reset();
           game.ball.reset();
         }
         else if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
@@ -95,7 +94,6 @@ int main(int /* argc */, char** /* argv */) {
         // Verifie si la balle est tombé
         if (game.ball.isFalling) {
           game.spaceship.damage();
-          game.spaceship.reset();
           game.ball.reset();
           game.ball.isFalling = false;
         } 
