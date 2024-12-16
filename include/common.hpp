@@ -28,7 +28,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-static const int    windowWidth      = 500;
+static const int    windowWidth      = 550;
 static const int    windowHeight     = 500;
 static const double refreshPerSecond = 60;
 

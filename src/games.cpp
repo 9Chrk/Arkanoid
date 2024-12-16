@@ -39,7 +39,7 @@ void Games::initializeBricks() {
   const float offset_x = static_cast<float>(width + margin);
   const float offset_y = static_cast<float>(height + margin);
   const float total_width = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
-  const float offset_start_x = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (500 - total_width) / 2.0f;
+  const float offset_start_x = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (windowWidth - total_width) / 2.0f;
   const float offset_start_y = static_cast<float>(_offset_start_y);
 
   for (size_t index = 0; index < bricks_data.size(); ++index) {
@@ -47,7 +47,7 @@ void Games::initializeBricks() {
       size_t j = index % static_cast<size_t>(dim_x);
       bricks.emplace_back(
           Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x / 2.0f,
-                offset_start_y + offset_y * static_cast<float>(i) + offset_y / 2.0f}),
+                 offset_start_y + offset_y * static_cast<float>(i) + offset_y / 2.0f}),
           width, height, BLACK, getColor(bricks_colors.at(bricks_data.at(index))),
           stoi(bricks_data.at(index))
       );
