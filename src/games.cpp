@@ -56,12 +56,14 @@ void Games::initializeBricks() {
   for (size_t index = 0; index < bricks_data.size(); ++index) {
       size_t i = index / static_cast<size_t>(dim_x);
       size_t j = index % static_cast<size_t>(dim_x);
+    int score = stoi(bricks_data.at(index));
+    if (score != -1) {
       bricks.emplace_back(
-          Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x / 2.0f,
-                 offset_start_y + offset_y * static_cast<float>(i) + offset_y / 2.0f}),
-          width, height, BLACK, getColor(bricks_colors.at(bricks_data.at(index))),
-          stoi(bricks_data.at(index))
+        Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x / 2.0f,
+               offset_start_y + offset_y * static_cast<float>(i) + offset_y / 2.0f}),
+        width, height, BLACK, getColor(bricks_colors.at(bricks_data.at(index))), score
       );
+    }
   }
 }
 
