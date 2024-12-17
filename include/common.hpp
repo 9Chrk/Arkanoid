@@ -9,6 +9,8 @@
 #include <ranges>
 #include <vector>
 #include <utility>
+#include <cstdio>
+#include <memory>
 #include "../libs/json.hpp"
 
 #include <allegro5/allegro5.h>
@@ -56,5 +58,8 @@ ALLEGRO_COLOR getColor(string colorName);
 json openJsonFile(string fileName);
 json readJsonFile(string fileName, string key);
 void writeJsonFile(string fileName, string key, json value);
+void writeJsonFile(string fileName, json data);
+void copyJsonFile(string sourceFileName, string destinationFileName);
+vector<string> executeCommand(string command);
 
 #endif
