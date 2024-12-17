@@ -14,7 +14,7 @@ void Spaceship::move(int direction) {
 void Spaceship::move(Point mousePosition) {
   Point newPos = position;
   newPos.x = mousePosition.x;
-  if (validPosition(newPos) && mousePosition.y >= windowHeight * 2 / 3) {
+  if (validPosition(newPos) && mousePosition.y >= windowHeight * 1 / 3) {
     position = newPos;
   }
 }

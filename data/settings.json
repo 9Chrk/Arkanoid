@@ -34,10 +34,10 @@
     },
     "button_no": {
       "color": "WHITE",
-      "height": 40,
-      "position.x": 275,
-      "position.y": 315,
-      "width": 340
+      "height": 27,
+      "position.x": 325,
+      "position.y": 290,
+      "width": 52
     },
     "button_play": {
       "color": "WHITE",
@@ -48,10 +48,10 @@
     },
     "button_yes": {
       "color": "WHITE",
-      "height": 32,
-      "position.x": 275,
-      "position.y": 370,
-      "width": 100
+      "height": 29,
+      "position.x": 232,
+      "position.y": 290,
+      "width": 72
     }
   },
   "display_offset": {
@@ -64,7 +64,7 @@
     "score.x": 140,
     "score.y": 24
   },
-  "highscore": 6433,
+  "highscore": 0,
   "spaceship": {
     "fillColor": "WHITE",
     "frameColor": "BLACK",

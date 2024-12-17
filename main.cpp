@@ -41,14 +41,33 @@ bool check_direction_changed (Point current_direction, Point &temp_direction) {
   return false;
 }
 
-void menu_button(ALLEGRO_BITMAP* start_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sample, ALLEGRO_SAMPLE* sound_menu,
+void menu_lose(ALLEGRO_BITMAP* lose_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font) {
+  bool press_any_button = false;
+
+  display_image(lose_png);
+  al_rest(4.0);
+  float font_height = static_cast<float>(al_get_font_line_height(font));
+  al_draw_text(font, WHITE, windowWidth * 1/3, windowHeight - font_height, ALLEGRO_ALIGN_CENTER, "Press any key to continue...");
+  al_flip_display();
+
+  ALLEGRO_SAMPLE_ID sound_menu_id;
+  al_play_sample(sound_menu, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &sound_menu_id);
+  
+  while (!press_any_button) { 
+    al_flush_event_queue(queue);
+    al_wait_for_event(queue, &event);
+    if (event.type == ALLEGRO_EVENT_KEY_DOWN) { press_any_button = true; }
+  }
+}
+
+void menu_button(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sample, ALLEGRO_SAMPLE* sound_menu,
                  bool &done, Rectangle button_on, Rectangle button_off) {    
   bool click_on_button = false;
   bool hover_play = false;
   bool hover_exit = false;
   Point click_pos;
 
-  display_image(start_png);
+  display_image(image_png);
   al_flip_display();
 
   ALLEGRO_SAMPLE_ID sound_menu_id;
@@ -66,7 +85,7 @@ void menu_button(ALLEGRO_BITMAP* start_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_Q
         hover_play = new_hover_play;
         hover_exit = new_hover_exit;
 
-        display_image(start_png);
+        display_image(image_png);
         if (hover_play) {
           pair<Point, Point> temp = button_on.diag_coor();
           al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
@@ -84,7 +103,7 @@ void menu_button(ALLEGRO_BITMAP* start_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_Q
       click_pos = {static_cast<float>(event.mouse.x), static_cast<float>(event.mouse.y)};
       if (button_on.contains(click_pos) || button_off.contains(click_pos)) {
         click_on_button = true;
-        done = (button_on.contains(click_pos)) ? false : true;
+        done = (button_on.contains(click_pos)) ? true : false;
       }
     }
   }
@@ -132,6 +151,7 @@ int main(int /* argc */, char** /* argv */) {
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
+  al_set_new_display_flags(ALLEGRO_WINDOWED);
   al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
 
   ALLEGRO_DISPLAY* disp = al_create_display(windowWidth, windowHeight);
@@ -208,14 +228,10 @@ int main(int /* argc */, char** /* argv */) {
   ALLEGRO_COLOR button_no_color = getColor(button["button_no"]["color"].get<string>());
   //////////
 
-  bool           done;
-  bool    restartGame; 
   ALLEGRO_EVENT event;
-  Games          game;
 
   Point score_pos({score_x, score_y});
   Point highscore_pos({highscore_x, highscore_y});
-  Point temp_direction = game.ball.getDirection();
 
   Rectangle button_play = Rectangle({button_play_position_x, button_play_position_y},
                                      button_play_width, button_play_height, 
@@ -235,104 +251,116 @@ int main(int /* argc */, char** /* argv */) {
 
 
   /////////////////   GAME   /////////////////
+  
+  bool showMenu = true; 
 
-  menu_button(start_png, event, queue, button_wav, menu_wav, done, button_play, button_exit);
+  while (true) {
+    bool done = false; 
+    bool restartGame = false;
 
-  ALLEGRO_SAMPLE_ID sound_game_id;
-  al_play_sample(Street_Fighter_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &sound_game_id);
+    if (showMenu) {
+      menu_button(start_png, event, queue, button_wav, menu_wav, done, button_exit, button_play);
+      if (done) break;
+      showMenu = false;
+    }
 
-  while (!done) {
-    al_wait_for_event(queue, &event);
-    switch (event.type) {
-      case ALLEGRO_EVENT_KEY_DOWN:
-        if (event.keyboard.keycode == ALLEGRO_KEY_LEFT
-         || event.keyboard.keycode == ALLEGRO_KEY_A
-         || event.keyboard.keycode == ALLEGRO_KEY_Q) {
-          game.spaceship.move(0); // Gauche
-        } 
-        else if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT
-              || event.keyboard.keycode == ALLEGRO_KEY_D
-              || event.keyboard.keycode == ALLEGRO_KEY_P) {
-          game.spaceship.move(1); // Droite
-        }
-        else if (event.keyboard.keycode == ALLEGRO_KEY_SPACE) {
-          game.ball.setMouvement(true);
-        }
-        else if (event.keyboard.keycode == ALLEGRO_KEY_R) {
-          game.ball.reset();
-          game.resetHighScore();
-        }
-        else if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-          done = true;
-        }
-        break;
-      case ALLEGRO_EVENT_MOUSE_AXES: {
-        game.spaceship.move({static_cast<float>(event.mouse.x),
-                             static_cast<float>(event.mouse.y)});
-        break;
-      }
-      case ALLEGRO_EVENT_DISPLAY_CLOSE:
-        done = true;
-        break;
-      case ALLEGRO_EVENT_TIMER: {
-        // Vérifie si collision
-        if (check_direction_changed(game.ball.getDirection(), temp_direction)) {
-          al_play_sample(bip_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-        };
-        game.checkCollisions(); // entre la balle et les briques
-        // Vérifie si la balle est tombée
-        if (game.ball.isFalling()) {
-          game.spaceship.damage();
-          game.ball.reset();
-          game.ball.setFalling(false);
-          if (game.spaceship.getHealth() > 0) {
-            al_play_sample(fall_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    Games game;
+    Point temp_direction = game.ball.getDirection();
+
+    ALLEGRO_SAMPLE_ID sound_game_id;
+    al_play_sample(Street_Fighter_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &sound_game_id);
+
+    while (!done) {
+      al_wait_for_event(queue, &event);
+      switch (event.type) {
+        case ALLEGRO_EVENT_KEY_DOWN:
+          if (event.keyboard.keycode == ALLEGRO_KEY_LEFT
+           || event.keyboard.keycode == ALLEGRO_KEY_A
+           || event.keyboard.keycode == ALLEGRO_KEY_Q) {
+            game.spaceship.move(0); // Gauche
+          } 
+          else if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT
+                || event.keyboard.keycode == ALLEGRO_KEY_D
+                || event.keyboard.keycode == ALLEGRO_KEY_P) {
+            game.spaceship.move(1); // Droite
           }
-        } else {
-          // Met la balle en mouvement (lancement/lancée)
-          if (game.ball.inMouvement()) {
-            game.ball.move(game.spaceship.getPosition(),
-                           game.spaceship.getWidth(),
-                           game.spaceship.getHeight());
-          } else {
-            game.ball.move(game.spaceship.getPosition());
+          else if (event.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+            game.ball.setMouvement(true);
           }
-        }
-        // Vérification Fin de partie (Win/Loose)
-        if (game.loose()) {
-          display_image(lose_png);
-          al_stop_sample(&sound_game_id);
-          al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-          cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
-          cout << "Score atteint : " << game.getScore() << "\n" << endl;
-          done = true;
-          al_rest(5.0);
-        } else if (game.win()) {
-          display_image(win_png);
-          al_stop_sample(&sound_game_id);
-          al_play_sample(win_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-          cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << endl;
-          cout << "Score atteint : " << game.getScore() << "\n" << endl;
-          done = true;
-          al_rest(5.0);
-        } else {
-          // Affichage
-          al_clear_to_color(WHITE);
-          al_draw_bitmap(background_png, 0, 0, 0);
-          ALLEGRO_BITMAP* heart_png = choose_heartFile(heart_1_png, heart_2_png, heart_3_png, game);
-          display_info_game(score_png, highScore_png, heart_png, font, game, score_pos, highscore_pos); 
-          game.draw();
-          display_spaceship(spaceship_png, game);
-          al_flip_display();
+          else if (event.keyboard.keycode == ALLEGRO_KEY_R) {
+            game.ball.reset();
+            game.resetHighScore();
+          }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+            done = true;
+          }
+          break;
+        case ALLEGRO_EVENT_MOUSE_AXES: {
+          game.spaceship.move({static_cast<float>(event.mouse.x),
+                               static_cast<float>(event.mouse.y)});
           break;
         }
-      }
-      default: {
-        break;
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+          done = true;
+          break;
+        case ALLEGRO_EVENT_TIMER: {
+          if (check_direction_changed(game.ball.getDirection(), temp_direction)) {
+              al_play_sample(bip_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+          }
+          game.checkCollisions();
+
+          if (game.ball.isFalling()) {
+            game.spaceship.damage();
+            game.ball.reset();
+            game.ball.setFalling(false);
+            if (game.spaceship.getHealth() > 0) {
+              al_play_sample(fall_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+            }
+          } else {
+            if (game.ball.inMouvement()) {
+              game.ball.move(game.spaceship.getPosition(),
+                             game.spaceship.getWidth(),
+                             game.spaceship.getHeight());
+            } else {
+              game.ball.move(game.spaceship.getPosition());
+            }
+          }
+
+          if (game.loose()) {
+            al_stop_sample(&sound_game_id);
+            al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+            std::cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << std::endl;
+            std::cout << "Score atteint : " << game.getScore() << "\n" << std::endl;
+            menu_button(lose_png, event, queue, button_wav, menu_wav, restartGame, button_yes, button_no);
+            done = true;
+          } else if (game.win()) {
+            al_stop_sample(&sound_game_id);
+            al_play_sample(win_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+            std::cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << std::endl;
+            std::cout << "Score atteint : " << game.getScore() << "\n" << std::endl;
+            menu_lose(win_png, event, queue, menu_wav, font);
+            restartGame = true;
+            done = restartGame;
+          } else {
+            al_clear_to_color(WHITE);
+            al_draw_bitmap(background_png, 0, 0, 0);
+            ALLEGRO_BITMAP* heart_png = choose_heartFile(heart_1_png, heart_2_png, heart_3_png, game);
+            display_info_game(score_png, highScore_png, heart_png, font, game, score_pos, highscore_pos);
+            game.draw();
+            display_spaceship(spaceship_png, game);
+            al_flip_display();
+          }
+          break;
+        }
+        default:
+          break;
       }
     }
+    game.saveHighScore();
+    al_stop_sample(&sound_game_id);
+    if (!restartGame) break;
   }
-  game.saveHighScore();
+
   // les ressources allouées dynamiquement sont détruites
   al_destroy_font(font);
   al_destroy_display(disp);
