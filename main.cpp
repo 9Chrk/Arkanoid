@@ -323,7 +323,8 @@ int main(int /* argc */, char** /* argv */) {
                              game.spaceship.getWidth(),
                              game.spaceship.getHeight());
             } else {
-              game.ball.move(game.spaceship.getPosition());
+              game.ball.move(game.spaceship.getPosition(), 
+                             game.spaceship.getHeight());
             }
           }
 

@@ -9,9 +9,9 @@ void Ball::draw() {
   al_draw_circle(position.x, position.y, rayon, color, rayon * 2);
 }
 
-void Ball::move(Point spaceship) {
+void Ball::move(Point spaceship, int spaceship_height) {
   position.x = spaceship.x;
-  position.y = spaceship.y - rayon * 3.5f;
+  position.y = spaceship.y - spaceship_height - rayon;
 }
 
 void Ball::move(Point spaceship, float w, float h) {

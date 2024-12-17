@@ -17,7 +17,7 @@ class Ball {
   Ball(float rayon, float vitesse, ALLEGRO_COLOR color);
 
   void draw();
-  void move(Point spaceship);
+  void move(Point spaceship, int spaceship_height);
   void move(Point spaceship, float w, float h);
   Point getPosition();
   Point getDirection();
