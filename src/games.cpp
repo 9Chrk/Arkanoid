@@ -1,6 +1,6 @@
 #include "games.hpp"
 
-Games::Games() : score(0) {
+Games::Games(string levelFile, int score) : score(score), levelFile(levelFile) {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -30,7 +30,7 @@ void Games::initializeSpaceship() {
 }
 
 void Games::initializeBricks() {
-  json level = openJsonFile("./data/level_1.json");
+  json level = openJsonFile("./data/" + levelFile);
   json settings = openJsonFile("./data/settings.json");
 
   vector<string> bricks_data = level["bricks"].get<vector<string>>();

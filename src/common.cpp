@@ -51,11 +51,6 @@ void writeJsonFile(string fileName, json data) {
   newFile.close();
 }
 
-void copyJsonFile(string sourceFileName, string destinationFileName) {
-  json data = openJsonFile(sourceFileName);
-  writeJsonFile(destinationFileName, data);
-}
-
 vector<string> executeCommand(string command) { // donnée par chatGPT
   vector<string> output;
   unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);

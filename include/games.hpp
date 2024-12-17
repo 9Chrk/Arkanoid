@@ -11,12 +11,13 @@ class Games {
  private:
   vector<Brick> bricks;
   int score;
+  string levelFile;
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
 
  public:
-  Games();
+  Games(string levelFile, int score);
 
   Ball ball;
   Spaceship spaceship;

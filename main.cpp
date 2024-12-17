@@ -253,7 +253,13 @@ int main(int /* argc */, char** /* argv */) {
 
   /////////////////   GAME   /////////////////
   
-  bool showMenu = true; 
+  int index, game_score = 0;
+  bool finish_all_lvl = false;
+  bool showMenu = true;
+  vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
+
+  Games game = Games(game_levels.at(index), game_score);
+  Point temp_direction = game.ball.getDirection();
 
   while (true) {
     bool done = false; 
@@ -264,9 +270,13 @@ int main(int /* argc */, char** /* argv */) {
       if (done) break;
       showMenu = false;
     }
+    
 
-    Games game;
-    Point temp_direction = game.ball.getDirection();
+    if (index < game_levels.size()) {
+      game = Games(game_levels.at(index), game_score);
+      temp_direction = game.ball.getDirection();
+    } else { done = true; restartGame = false; finish_all_lvl = true; }
+    
 
     ALLEGRO_SAMPLE_ID sound_game_id;
     al_play_sample(Street_Fighter_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &sound_game_id);
@@ -341,6 +351,9 @@ int main(int /* argc */, char** /* argv */) {
             std::cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << std::endl;
             std::cout << "Score atteint : " << game.getScore() << "\n" << std::endl;
             menu_lose(win_png, event, queue, menu_wav, font);
+            // passer au level suivant
+            game_score += game.getScore();
+            index++;
             restartGame = true;
             done = restartGame;
           } else {
@@ -360,8 +373,9 @@ int main(int /* argc */, char** /* argv */) {
     }
     game.saveHighScore();
     al_stop_sample(&sound_game_id);
-    if (!restartGame) break;
+    if (!restartGame) { break; }
   }
+  if (finish_all_lvl) { cout << "\nVous avez fini le jeu Arkanoid !!!\n" << endl;}
 
   // les ressources allouées dynamiquement sont détruites
   al_destroy_font(font);

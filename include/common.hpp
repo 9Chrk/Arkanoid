@@ -59,7 +59,6 @@ json openJsonFile(string fileName);
 json readJsonFile(string fileName, string key);
 void writeJsonFile(string fileName, string key, json value);
 void writeJsonFile(string fileName, json data);
-void copyJsonFile(string sourceFileName, string destinationFileName);
 vector<string> executeCommand(string command);
 
 #endif
