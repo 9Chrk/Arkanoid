@@ -26,7 +26,7 @@ void Ball::checkCollisions(Point spaceship, float w, float h) {
   if (newPos.y - rayon <= 0) { d.y *= -1; }
   
   if (newPos.y + rayon >= spaceship.y - h / 2 &&
-      newPos.y + rayon <= spaceship.y + h / 2 + vitesse &&
+      newPos.y + rayon <= spaceship.y - h / 2 + vitesse &&
       newPos.x >= spaceship.x - w / 2 &&
       newPos.x <= spaceship.x + w / 2) {
   
@@ -60,4 +60,4 @@ void Ball::reset() {
 
 void Ball::setDirection(Point newDirection) { d = newDirection; }
 void Ball::setMouvement(bool cas) { mouvement = cas; }
-void  Ball::setFalling(bool cas) { falling = cas; }
+void Ball::setFalling(bool cas) { falling = cas; }
