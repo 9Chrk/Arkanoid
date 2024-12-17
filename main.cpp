@@ -58,6 +58,7 @@ void menu_lose(ALLEGRO_BITMAP* lose_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEU
     al_wait_for_event(queue, &event);
     if (event.type == ALLEGRO_EVENT_KEY_DOWN) { press_any_button = true; }
   }
+  al_stop_sample(&sound_menu_id);
 }
 
 void menu_button(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sample, ALLEGRO_SAMPLE* sound_menu,
