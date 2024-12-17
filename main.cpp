@@ -150,16 +150,16 @@ int main(int /* argc */, char** /* argv */) {
   al_start_timer(timer);
 
   // images
-  ALLEGRO_BITMAP* start_png = al_load_bitmap("./image/start.png");
-  ALLEGRO_BITMAP* background_png = al_load_bitmap("./image/background.png");
-  ALLEGRO_BITMAP* lose_png = al_load_bitmap("./image/lose.png");
-  ALLEGRO_BITMAP* win_png = al_load_bitmap("./image/win.png");
-  ALLEGRO_BITMAP* spaceship_png = al_load_bitmap("./image/spaceship.png");
-  ALLEGRO_BITMAP* heart_1_png = al_load_bitmap("./image/1heart.png");
-  ALLEGRO_BITMAP* heart_2_png = al_load_bitmap("./image/2heart.png");
-  ALLEGRO_BITMAP* heart_3_png = al_load_bitmap("./image/3heart.png");
-  ALLEGRO_BITMAP* score_png = al_load_bitmap("./image/score.png");
-  ALLEGRO_BITMAP* highScore_png = al_load_bitmap("./image/high_score.png");
+  ALLEGRO_BITMAP* start_png = al_load_bitmap("./images/start.png");
+  ALLEGRO_BITMAP* background_png = al_load_bitmap("./images/background.png");
+  ALLEGRO_BITMAP* lose_png = al_load_bitmap("./images/lose.png");
+  ALLEGRO_BITMAP* win_png = al_load_bitmap("./images/win.png");
+  ALLEGRO_BITMAP* spaceship_png = al_load_bitmap("./images/spaceship.png");
+  ALLEGRO_BITMAP* heart_1_png = al_load_bitmap("./images/1heart.png");
+  ALLEGRO_BITMAP* heart_2_png = al_load_bitmap("./images/2heart.png");
+  ALLEGRO_BITMAP* heart_3_png = al_load_bitmap("./images/3heart.png");
+  ALLEGRO_BITMAP* score_png = al_load_bitmap("./images/score.png");
+  ALLEGRO_BITMAP* highScore_png = al_load_bitmap("./images/high_score.png");
 
   //sounds
   ALLEGRO_SAMPLE* bip_wav = al_load_sample("./sounds/bip.wav");
@@ -220,7 +220,7 @@ int main(int /* argc */, char** /* argv */) {
   Rectangle button_play = Rectangle({button_play_position_x, button_play_position_y},
                                      button_play_width, button_play_height, 
                                      button_play_color, button_play_color);
-                                     
+
   Rectangle button_exit = Rectangle({button_exit_position_x, button_exit_position_y},
                                      button_exit_width, button_exit_height, 
                                      button_exit_color, button_exit_color);
