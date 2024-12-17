@@ -41,6 +41,11 @@ bool check_direction_changed (Point current_direction, Point &temp_direction) {
   return false;
 }
 
+void forceChangeLevel(int index, int game_score, Games &game, Point &temp_direction, vector<string> game_levels) {
+  game = Games(game_levels.at(index), game_score);
+  temp_direction = game.ball.getDirection();
+};
+
 void menu_lose(ALLEGRO_BITMAP* lose_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font) {
   bool press_any_button = false;
 
@@ -271,10 +276,8 @@ int main(int /* argc */, char** /* argv */) {
       showMenu = false;
     }
     
-
     if (index < game_levels.size()) {
-      game = Games(game_levels.at(index), game_score);
-      temp_direction = game.ball.getDirection();
+      forceChangeLevel(index, game_score, game, temp_direction, game_levels);
     } else { done = true; restartGame = false; finish_all_lvl = true; }
     
 
@@ -305,15 +308,25 @@ int main(int /* argc */, char** /* argv */) {
           else if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
             done = true;
           }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_0) { index = 0, forceChangeLevel(0, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_1) { index = 1, forceChangeLevel(1, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_2) { index = 2, forceChangeLevel(2, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_3) { index = 3, forceChangeLevel(3, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_4) { index = 4, forceChangeLevel(4, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_5) { index = 5, forceChangeLevel(5, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_6) { index = 6, forceChangeLevel(6, game_score, game, temp_direction, game_levels); }
           break;
+
         case ALLEGRO_EVENT_MOUSE_AXES: {
           game.spaceship.move({static_cast<float>(event.mouse.x),
                                static_cast<float>(event.mouse.y)});
           break;
         }
+
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
           done = true;
           break;
+
         case ALLEGRO_EVENT_TIMER: {
           if (check_direction_changed(game.ball.getDirection(), temp_direction)) {
               al_play_sample(bip_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
@@ -344,6 +357,7 @@ int main(int /* argc */, char** /* argv */) {
             std::cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << std::endl;
             std::cout << "Score atteint : " << game.getScore() << "\n" << std::endl;
             menu_button(lose_png, event, queue, button_wav, menu_wav, restartGame, button_yes, button_no);
+            index = 0;
             done = true;
           } else if (game.win()) {
             al_stop_sample(&sound_game_id);
