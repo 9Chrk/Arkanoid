@@ -14,7 +14,7 @@ class Ball {
 
  public:
   Ball();
-  Ball(Point position, float rayon, float vitesse, ALLEGRO_COLOR color);
+  Ball(float rayon, float vitesse, ALLEGRO_COLOR color);
 
   void draw();
   void move(Point spaceship);

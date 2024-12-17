@@ -8,13 +8,11 @@ Games::Games() : score(0) {
 
 void Games::initializeBall() {
   json _ball = readJsonFile("./data/settings.json", "ball");
-  float position_x = _ball["position.x"].get<float>();
-  float position_y = _ball["position.y"].get<float>();
   float rayon = _ball["rayon"].get<float>();
   float vitesse = _ball["vitesse"].get<float>();
   ALLEGRO_COLOR color = getColor(_ball["color"].get<string>());
   
-  ball = Ball({position_x, position_y}, rayon, vitesse, color);
+  ball = Ball(rayon, vitesse, color);
 }
 
 void Games::initializeSpaceship() {

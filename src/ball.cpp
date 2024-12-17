@@ -2,8 +2,8 @@
 
 Ball::Ball() : rayon(0), vitesse(0), color(BLACK), position({0, 0}), d({0, -1}), mouvement(false), falling(false) {}
 
-Ball::Ball(Point position, float rayon, float vitesse, ALLEGRO_COLOR color)
-    : rayon(rayon), vitesse(vitesse), color(color), position(position), d({0, -1}), mouvement(false), falling(false) {}
+Ball::Ball(float rayon, float vitesse, ALLEGRO_COLOR color)
+    : rayon(rayon), vitesse(vitesse), color(color), position({0, 0}), d({0, -1}), mouvement(false), falling(false) {}
 
 void Ball::draw() {
   al_draw_circle(position.x, position.y, rayon, color, rayon * 2);
