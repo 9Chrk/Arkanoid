@@ -32,12 +32,26 @@
       "position.y": 370,
       "width": 100
     },
+    "button_no": {
+      "color": "WHITE",
+      "height": 40,
+      "position.x": 275,
+      "position.y": 315,
+      "width": 340
+    },
     "button_play": {
       "color": "WHITE",
       "height": 40,
       "position.x": 275,
       "position.y": 315,
       "width": 340
+    },
+    "button_yes": {
+      "color": "WHITE",
+      "height": 32,
+      "position.x": 275,
+      "position.y": 370,
+      "width": 100
     }
   },
   "display_offset": {
@@ -50,7 +64,7 @@
     "score.x": 140,
     "score.y": 24
   },
-  "highscore": 530,
+  "highscore": 6433,
   "spaceship": {
     "fillColor": "WHITE",
     "frameColor": "BLACK",
