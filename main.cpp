@@ -123,7 +123,7 @@ void must_init(bool test, const char* description) {
   if (test) {
     return;
   }
-  std::cerr << "couldn't initialize " << description << '\n';
+  cerr << "couldn't initialize " << description << '\n';
   exit(1);
 }
 
@@ -354,21 +354,21 @@ int main(int /* argc */, char** /* argv */) {
           if (game.loose()) {
             al_stop_sample(&sound_game_id);
             al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-            std::cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << std::endl;
-            std::cout << "Score atteint : " << game.getScore() << "\n" << std::endl;
+            cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
+            cout << "Score atteint : " << game.getScore() << "\n" << endl;
             menu_button(lose_png, event, queue, button_wav, menu_wav, restartGame, button_yes, button_no);
-            index = 0;
+            game_score, index = 0;
             done = true;
           } else if (game.win()) {
             al_stop_sample(&sound_game_id);
             al_play_sample(win_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-            std::cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << std::endl;
-            std::cout << "Score atteint : " << game.getScore() << "\n" << std::endl;
+            int score = game.getScore();
+            cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << endl;
+            cout << "Score atteint : " << score << "\n" << endl;
             menu_lose(win_png, event, queue, menu_wav, font);
-            // passer au level suivant
-            game_score += game.getScore();
             index++;
             restartGame = true;
+            game_score = score;
             done = restartGame;
           } else {
             al_clear_to_color(WHITE);
