@@ -5,23 +5,42 @@
 #include "common.hpp"
 #include "rectangle.hpp"
 
+struct Line {
+  float m = 0, b = 0;
+  Line() = default;
+  Line(float slope, float y_intercept) : m(slope), b(y_intercept) {}
+};
+
 class Vecteur {
  private:
+  int w, h;
   Point position;
-  float w, h;
-  // Coordonnées
-  Point top_left = {position.x - w/2, position.y - h/2};
-  Point top_right = {position.x + w/2, position.y - h/2};
-  Point bottom_left = {position.x - w/2, position.y + h/2};
-  Point bottom_right = {position.x + w/2, position.y + h/2};
-  // Vecteur
-  pair<Point, Point> top_edge = make_pair(top_left, top_right);
-  pair<Point, Point> bottom_edge = make_pair(bottom_left, bottom_right);
-  pair<Point, Point> left_edge = make_pair(top_left, bottom_left);
-  pair<Point, Point> right_edge = make_pair(top_right, bottom_right);
+
+  pair<Point, Point> top_vec, bottom_vec, left_vec, right_vec;
+  vector<pair<Point, Point>> edges;
+
+  Line top, bottom, left, right;
+  vector<Line> lines;
+
+  bool hasIntersection;
+  Point intersectionPoint;
+  Line last_deplacement;
+
+  void updateEdges();
+  void updateLines();
+
+  float distance(Point p, Point q);
+  Point minimalDistance(vector<Point> points, Point reference);
+
+  Line calculateLineEquation(Point p, Point q);
+  bool sameEquationLine(Line line_1, Line line_2);
+  bool _intersection(Line deplacement, Line edge, pair<Point, Point> deplacement_vec, pair<Point, Point> edge_vec);
+  bool isOnSegment(Point p, Point q, Point inter);
 
  public:
-  Vecteur(Point position, float w, float h);
+  Vecteur(Point position, int w, int h);
+
+  int intersection(pair<Point, Point> deplacement_vec);
 };
 
 #endif

@@ -7,6 +7,13 @@ using namespace std;
 
 struct Point {
   float x = 0, y = 0;
+  Point() = default;
+  Point(float x, float y) : x(x), y(y) {}
+
+  bool operator<(const Point& other) const {   // pour que la def "map" soit valide
+    if (x != other.x) return x < other.x;
+    return y < other.y;
+  }
 };
 
 class Rectangle {
