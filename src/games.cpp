@@ -66,7 +66,7 @@ void Games::initializeBricks() {
 }
 
 void Games::draw() {
-  for (auto& brick : bricks) {
+  for (Brick brick : bricks) {
     if (!brick.isDestroyed()) {
       brick.draw();
     }
@@ -75,26 +75,45 @@ void Games::draw() {
   spaceship.draw();
 }
 
-void Games::checkCollisions() {
-  Point pos = ball.getPosition();
+vector<Point> Games::_collisionPoints(Point pos) {
   vector<Point> collisionPoints = {
+    {pos.x, pos.y},
     {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
     {pos.x - ball.getRayon(), pos.y}, {pos.x + ball.getRayon(), pos.y},
     {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
     {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
     {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite
   };
-  
-  for (auto& brick : bricks) {
+  return collisionPoints;
+}
+
+void Games::checkCollisions(int frame) {
+  Point pos = ball.getPosition();
+  float speed = ball.getVitesse();
+  Brick last_brick = bricks.at(bricks.size()-1);
+  if (pos.y >= last_brick.getPosition().y + last_brick.getHeight()/2 + speed) return;
+
+  Point direction = ball.getDirection();
+  vector<Point> collisionPoints = _collisionPoints(pos);
+
+  for (Brick& brick : bricks) {
     for (auto& point : collisionPoints) {
-      if (!brick.isDestroyed() && brick.contains(point)) {
+      Point temp_pos = point;
+      Point temp_next_pos = {pos.x + direction.x * speed * 1.5, pos.y + direction.y * speed * 1.5};
+      int intersection =  brick.vec.intersection({temp_pos, temp_next_pos});
+      if (!brick.isDestroyed() && intersection != -1 ) {
         if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {
-          if (brick.getScore() != 0) brick.destroy();
-          score += brick.getScore();
-        } else { brick.setSecondLife(false); }
+          if (brick.getScore() != 0) {
+            brick.destroy();
+            score += brick.getScore();
+          } else {
+            if (!brick.getLastFrame() || frame - brick.getLastFrame() > 2) { brick.setLastFrame(frame); }
+            else { return; }
+          }
+        } 
+        else { brick.setSecondLife(false); }
         
-        Point direction = ball.getDirection();
-        direction.y *= -1;
+        if (intersection) { direction.x *= -1; }  else { direction.y *= -1; }
         ball.setDirection(direction);
         return;
       }
@@ -127,5 +146,4 @@ bool Games::win() {
   return true;
 }
 
-[[gnu::pure]]
-int Games::getScore() { return score; }
+[[gnu::pure]] int Games::getScore() { return score; }

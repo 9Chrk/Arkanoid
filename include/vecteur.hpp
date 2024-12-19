@@ -22,7 +22,6 @@ class Vecteur {
   Line top, bottom, left, right;
   vector<Line> lines;
 
-  bool hasIntersection;
   Point intersectionPoint;
   Line last_deplacement;
 

@@ -258,7 +258,7 @@ int main(int /* argc */, char** /* argv */) {
 
   /////////////////   GAME   /////////////////
   
-  int index, game_score = 0;
+  int frame, index, game_score = 0;
   bool finish_all_lvl = false;
   bool showMenu = true;
   vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
@@ -328,10 +328,10 @@ int main(int /* argc */, char** /* argv */) {
           break;
 
         case ALLEGRO_EVENT_TIMER: {
+          frame++;
           if (check_direction_changed(game.ball.getDirection(), temp_direction)) {
               al_play_sample(bip_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
           }
-          game.checkCollisions();
 
           if (game.ball.isFalling()) {
             game.spaceship.damage();
@@ -342,6 +342,7 @@ int main(int /* argc */, char** /* argv */) {
             }
           } else {
             if (game.ball.inMouvement()) {
+              game.checkCollisions(frame);
               game.ball.move(game.spaceship.getPosition(),
                              game.spaceship.getWidth(),
                              game.spaceship.getHeight());

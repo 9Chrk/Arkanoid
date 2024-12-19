@@ -2,7 +2,7 @@
   "ball": {
     "color": "WHITE",
     "rayon": 4,
-    "vitesse": 10
+    "vitesse": 7
   },
   "brick": {
     "height": 15,
@@ -62,7 +62,7 @@
     "score.x": 140,
     "score.y": 24
   },
-  "highscore": 0,
+  "highscore": 4800,
   "spaceship": {
     "fillColor": "WHITE",
     "frameColor": "BLACK",

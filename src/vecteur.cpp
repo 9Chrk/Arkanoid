@@ -1,7 +1,7 @@
 #include "vecteur.hpp"
 
 Vecteur::Vecteur(Point position, int w, int h)
-        : position(position), w(w), h(h), hasIntersection(false), intersectionPoint({0, 0}) {
+        : position(position), w(w), h(h), intersectionPoint({0, 0}) {
   last_deplacement = calculateLineEquation({0, 0}, {0, 0});
   updateEdges();
   updateLines();
@@ -53,6 +53,9 @@ float Vecteur::distance(Point p, Point q) {
 }
 
 Point Vecteur::minimalDistance(vector<Point> points, Point reference) {
+  if (points.size() == 1) {
+    return points.at(0);
+  }
   Point min_point = points.at(0);
   float min_distance = distance(reference, points.at(0));
 
@@ -90,23 +93,16 @@ bool Vecteur::_intersection(Line deplacement, Line edge, pair<Point, Point> depl
 int Vecteur::intersection(pair<Point, Point> deplacement_vec) {
   // Point deplacement_vec_ordered = trierPoints(deplacement_vec);
   Line deplacement = calculateLineEquation(deplacement_vec.first, deplacement_vec.second);
-  
-  if (!sameEquationLine(deplacement, last_deplacement)) {
-    hasIntersection = false;
-  }
-  else if (sameEquationLine(deplacement, last_deplacement) && !hasIntersection) {
-    return -1; 
-  }
   last_deplacement = deplacement;
   vector<Point> intersections = {};
   map<Point, int> pointValues;
   // Tester chaque bord du rectangle
   for (int i = 0; i < 4; ++i) {
     if (_intersection(deplacement, lines.at(i), deplacement_vec, edges.at(i))) {
-      hasIntersection = true;
       intersections.push_back(intersectionPoint);
       pointValues[intersectionPoint] = (i < 2) ? 0 : 1;
     }
   }
-  return (hasIntersection) ? pointValues[minimalDistance(intersections, deplacement_vec.first)] : -1;
+  if (intersections.size()) { return pointValues[minimalDistance(intersections, deplacement_vec.first)]; } 
+  else { return -1;}
 }

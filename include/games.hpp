@@ -15,6 +15,7 @@ class Games {
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
+  vector<Point> _collisionPoints(Point pos);
 
  public:
   Games(string levelFile, int score);
@@ -24,7 +25,7 @@ class Games {
   void draw();
   bool win();
   bool loose();
-  void checkCollisions();
+  void checkCollisions(int frame);
   int getScore();
   int getHighScore();
   void saveHighScore();

@@ -9,8 +9,8 @@
 class Brick : public Rectangle {
  private:
   int score;
+  int lastFrame;
   bool destroyed, secondLife;
-  Vecteur vec;
 
  public:
   Brick(Point position, float w, float h, 
@@ -18,12 +18,17 @@ class Brick : public Rectangle {
         ALLEGRO_COLOR fillColor, 
         int score);
 
+  Vecteur vec;
   void destroy();
   bool isDestroyed();
   bool getSecondLife();
   void setSecondLife(bool cas);
+  void setLastFrame(int newFrame);
   int getScore();
-  
+  Point getPosition();
+  float getWidth();
+  float getHeight();
+  int   getLastFrame();
 };
 
 #endif

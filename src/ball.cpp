@@ -27,8 +27,8 @@ void Ball::checkCollisions(Point spaceship, float w, float h) {
   
   if (newPos.y + rayon >= spaceship.y - h / 2 &&
       newPos.y + rayon <= spaceship.y - h / 2 + vitesse &&
-      newPos.x >= spaceship.x - w / 2 &&
-      newPos.x <= spaceship.x + w / 2) {
+      newPos.x >= spaceship.x - w / 2 - rayon &&
+      newPos.x <= spaceship.x + w / 2 + rayon) {
   
     float x_rel = (newPos.x - spaceship.x) / (w / 2);
     x_rel = clamp(x_rel, -1.0f, 1.0f);
@@ -40,6 +40,8 @@ void Ball::checkCollisions(Point spaceship, float w, float h) {
     d.x = cos(theta);
     d.y = -sin(theta);
   }
+  newPos.x = clamp(newPos.x, 0.0f, static_cast<float>(windowWidth));
+  newPos.y = clamp(newPos.y, 0.0f, static_cast<float>(windowHeight)*1.5f);
   position = newPos;
 }
 
@@ -55,8 +57,9 @@ void Ball::reset() {
 [[gnu::pure]] Point Ball::getPosition() { return position; }
 [[gnu::pure]] Point Ball::getDirection() { return d; }
 [[gnu::pure]] float Ball::getRayon() { return rayon; }
+[[gnu::pure]] float Ball::getVitesse() { return vitesse; }
 [[gnu::pure]] bool Ball::inMouvement() { return mouvement; }
-[[gnu::pure]] bool Ball::isFalling() { return falling; } 
+[[gnu::pure]] bool Ball::isFalling() { return falling; }
 
 void Ball::setDirection(Point newDirection) { d = newDirection; }
 void Ball::setMouvement(bool cas) { mouvement = cas; }

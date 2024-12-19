@@ -27,6 +27,7 @@ class Ball {
   void setFalling(bool cas);
   void setDirection(Point newDirection);
   float getRayon();
+  float getVitesse();
   void checkCollisions(Point spaceship, float w, float h);
   void checkFall();
   void reset();

@@ -8,6 +8,12 @@ void Brick::destroy() { destroyed = true; }
 
 void Brick::setSecondLife(bool cas) { secondLife = cas; }
 
+void Brick::setLastFrame(int newFrame) { lastFrame = newFrame; }
+
 [[gnu::pure]] bool Brick::getSecondLife() { return secondLife; }
 [[gnu::pure]] int Brick::getScore() { return score; }
 [[gnu::pure]] bool Brick::isDestroyed() { return destroyed; }
+[[gnu::pure]] Point Brick::getPosition() { return position; }
+[[gnu::pure]] float Brick::getWidth() { return w; }
+[[gnu::pure]] float Brick::getHeight() { return h; }
+[[gnu::pure]] int Brick::getLastFrame() { return lastFrame; }
