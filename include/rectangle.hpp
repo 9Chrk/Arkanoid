@@ -10,9 +10,17 @@ struct Point {
   Point() = default;
   Point(float x, float y) : x(x), y(y) {}
 
-  bool operator<(const Point& other) const {   // pour que la def "map" soit valide
+  bool operator<(const Point &other) const {   // pour que la def "map" soit valide
     if (x != other.x) return x < other.x;
     return y < other.y;
+  }
+  
+  bool operator==(const Point &other) const {
+    return x == other.x && y == other.y;
+  }
+
+  bool operator!=(const Point &other) const {
+    return !(*this == other);
   }
 };
 

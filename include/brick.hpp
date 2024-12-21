@@ -9,7 +9,6 @@
 class Brick : public Rectangle {
  private:
   int score;
-  int lastFrame;
   bool destroyed, secondLife;
 
  public:
@@ -23,12 +22,10 @@ class Brick : public Rectangle {
   bool isDestroyed();
   bool getSecondLife();
   void setSecondLife(bool cas);
-  void setLastFrame(int newFrame);
   int getScore();
   Point getPosition();
   float getWidth();
   float getHeight();
-  int   getLastFrame();
 };
 
 #endif

@@ -46,18 +46,18 @@ void forceChangeLevel(int index, int game_score, Games &game, Point &temp_direct
   temp_direction = game.ball.getDirection();
 };
 
-void menu_lose(ALLEGRO_BITMAP* lose_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font) {
+void menu(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font, char* text) {
+  ALLEGRO_SAMPLE_ID sound_menu_id;
   bool press_any_button = false;
 
-  display_image(lose_png);
+  display_image(image_png);
+  al_play_sample(sound_menu, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &sound_menu_id);
+
   al_rest(4.0);
   float font_height = static_cast<float>(al_get_font_line_height(font));
-  al_draw_text(font, WHITE, windowWidth * 1/3, windowHeight - font_height, ALLEGRO_ALIGN_CENTER, "Press any key to continue...");
+  al_draw_text(font, WHITE, windowWidth * 1/3, windowHeight - font_height, ALLEGRO_ALIGN_CENTER, text);
   al_flip_display();
 
-  ALLEGRO_SAMPLE_ID sound_menu_id;
-  al_play_sample(sound_menu, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &sound_menu_id);
-  
   while (!press_any_button) { 
     al_flush_event_queue(queue);
     al_wait_for_event(queue, &event);
@@ -186,6 +186,7 @@ int main(int /* argc */, char** /* argv */) {
   ALLEGRO_BITMAP* heart_3_png = al_load_bitmap("./images/3heart.png");
   ALLEGRO_BITMAP* score_png = al_load_bitmap("./images/score.png");
   ALLEGRO_BITMAP* highScore_png = al_load_bitmap("./images/high_score.png");
+  ALLEGRO_BITMAP* finish_png = al_load_bitmap("./images/finish.png");
 
   //sounds
   ALLEGRO_SAMPLE* bip_wav = al_load_sample("./sounds/bip.wav");
@@ -196,6 +197,7 @@ int main(int /* argc */, char** /* argv */) {
   ALLEGRO_SAMPLE* Street_Fighter_wav = al_load_sample("./sounds/Street_Fighter.wav");
   ALLEGRO_SAMPLE* win_wav = al_load_sample("./sounds/win.wav");
   ALLEGRO_SAMPLE* menu_wav = al_load_sample("./sounds/menu.wav");
+  ALLEGRO_SAMPLE* finish_wav = al_load_sample("./sounds/finish.wav");
 
 
   //// INITIALISATION VARIABLES ////
@@ -258,7 +260,7 @@ int main(int /* argc */, char** /* argv */) {
 
   /////////////////   GAME   /////////////////
   
-  int frame, index, game_score = 0;
+  int index, game_score = 0;
   bool finish_all_lvl = false;
   bool showMenu = true;
   vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
@@ -328,7 +330,6 @@ int main(int /* argc */, char** /* argv */) {
           break;
 
         case ALLEGRO_EVENT_TIMER: {
-          frame++;
           if (check_direction_changed(game.ball.getDirection(), temp_direction)) {
               al_play_sample(bip_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
           }
@@ -342,7 +343,7 @@ int main(int /* argc */, char** /* argv */) {
             }
           } else {
             if (game.ball.inMouvement()) {
-              game.checkCollisions(frame);
+              game.checkCollisions();
               game.ball.move(game.spaceship.getPosition(),
                              game.spaceship.getWidth(),
                              game.spaceship.getHeight());
@@ -356,17 +357,18 @@ int main(int /* argc */, char** /* argv */) {
             al_stop_sample(&sound_game_id);
             al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
-            cout << "Score atteint : " << game.getScore() << "\n" << endl;
+            cout << "Score atteint : " << game.getScore() << endl;
+            cout << "Highscore : " << game.getHighScore() << "\n" << endl;
             menu_button(lose_png, event, queue, button_wav, menu_wav, restartGame, button_yes, button_no);
             game_score, index = 0;
             done = true;
           } else if (game.win()) {
             al_stop_sample(&sound_game_id);
-            al_play_sample(win_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             int score = game.getScore();
             cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << endl;
-            cout << "Score atteint : " << score << "\n" << endl;
-            menu_lose(win_png, event, queue, menu_wav, font);
+            cout << "Score atteint : " << game.getScore() << endl;
+            cout << "Highscore : " << game.getHighScore() << "\n" << endl;
+            menu(win_png, event, queue, win_wav, font, "Press any key to continue...");
             index++;
             restartGame = true;
             game_score = score;
@@ -390,7 +392,12 @@ int main(int /* argc */, char** /* argv */) {
     al_stop_sample(&sound_game_id);
     if (!restartGame) { break; }
   }
-  if (finish_all_lvl) { cout << "\nVous avez fini le jeu Arkanoid !!!\n" << endl;}
+  if (finish_all_lvl) {
+    cout << "Vous avez finis ARKANOID !!!";
+    cout << "Score atteint : " << game.getScore() << endl;
+    cout << "Highscore : " << game.getHighScore() << "\n" << endl;
+    menu(finish_png, event, queue, finish_wav, font, "Press any key to exit...");
+  }
 
   // les ressources allouées dynamiquement sont détruites
   al_destroy_font(font);
@@ -403,6 +410,12 @@ int main(int /* argc */, char** /* argv */) {
   al_destroy_bitmap(win_png);
   al_destroy_bitmap(lose_png);
   al_destroy_bitmap(spaceship_png);
+  al_destroy_bitmap(finish_png);
+  al_destroy_bitmap(heart_1_png);
+  al_destroy_bitmap(heart_2_png);
+  al_destroy_bitmap(heart_3_png);
+  al_destroy_bitmap(highScore_png);
+  al_destroy_bitmap(score_png);
   // sounds
   al_destroy_sample(win_wav);
   al_destroy_sample(fall_wav);
@@ -411,6 +424,8 @@ int main(int /* argc */, char** /* argv */) {
   al_destroy_sample(bonus_wav);
   al_destroy_sample(bip_wav);
   al_destroy_sample(menu_wav);
+  al_destroy_sample(finish_wav);
+  al_destroy_sample(lose_wav);
   al_uninstall_audio();
 
   return 0;

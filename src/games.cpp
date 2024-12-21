@@ -1,6 +1,6 @@
 #include "games.hpp"
 
-Games::Games(string levelFile, int score) : score(score), levelFile(levelFile) {
+Games::Games(string levelFile, int score) : score(score), levelFile(levelFile), lastCollisionPos({0, 0}) {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -87,13 +87,14 @@ vector<Point> Games::_collisionPoints(Point pos) {
   return collisionPoints;
 }
 
-void Games::checkCollisions(int frame) {
+void Games::checkCollisions() {
   Point pos = ball.getPosition();
   float speed = ball.getVitesse();
+  Point direction = ball.getDirection();
+
   Brick last_brick = bricks.at(bricks.size()-1);
   if (pos.y >= last_brick.getPosition().y + last_brick.getHeight()/2 + speed) return;
 
-  Point direction = ball.getDirection();
   vector<Point> collisionPoints = _collisionPoints(pos);
 
   for (Brick& brick : bricks) {
@@ -101,18 +102,18 @@ void Games::checkCollisions(int frame) {
       Point temp_pos = point;
       Point temp_next_pos = {pos.x + direction.x * speed * 1.5, pos.y + direction.y * speed * 1.5};
       int intersection =  brick.vec.intersection({temp_pos, temp_next_pos});
-      if (!brick.isDestroyed() && intersection != -1 ) {
+      if (!brick.isDestroyed() && intersection != -1) {
         if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {
           if (brick.getScore() != 0) {
             brick.destroy();
             score += brick.getScore();
-          } else {
-            if (!brick.getLastFrame() || frame - brick.getLastFrame() > 2) { brick.setLastFrame(frame); }
-            else { return; }
           }
+          else if (brick.getPosition() == getLastCollisionPos()) { return; }
         } 
         else { brick.setSecondLife(false); }
         
+        setLastCollisionPos(brick.getPosition());
+
         if (intersection) { direction.x *= -1; }  else { direction.y *= -1; }
         ball.setDirection(direction);
         return;
@@ -146,4 +147,7 @@ bool Games::win() {
   return true;
 }
 
+void Games::setLastCollisionPos(Point newPos) { lastCollisionPos = newPos; }
+
 [[gnu::pure]] int Games::getScore() { return score; }
+[[gnu::pure]] Point Games::getLastCollisionPos() { return lastCollisionPos; }

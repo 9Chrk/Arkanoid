@@ -9,13 +9,15 @@
 
 class Games {
  private:
-  vector<Brick> bricks;
   int score;
   string levelFile;
+  vector<Brick> bricks;
+  Point lastCollisionPos;
+  vector<Point> _collisionPoints(Point pos);
+
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
-  vector<Point> _collisionPoints(Point pos);
 
  public:
   Games(string levelFile, int score);
@@ -25,9 +27,11 @@ class Games {
   void draw();
   bool win();
   bool loose();
-  void checkCollisions(int frame);
+  void checkCollisions();
   int getScore();
   int getHighScore();
+  Point getLastCollisionPos();
+  void setLastCollisionPos(Point newPos);
   void saveHighScore();
   void resetHighScore();
 };
