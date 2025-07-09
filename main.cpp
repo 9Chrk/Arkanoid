@@ -158,7 +158,7 @@ int main(int /* argc */, char** /* argv */) {
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
   al_set_new_display_flags(ALLEGRO_WINDOWED);
-  al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
+  al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_CONVERT_BITMAP);
 
   ALLEGRO_DISPLAY* disp = al_create_display(windowWidth, windowHeight);
   must_init(disp, "display");
@@ -176,52 +176,28 @@ int main(int /* argc */, char** /* argv */) {
   al_start_timer(timer);
 
   // images
-  ALLEGRO_BITMAP* start_png = al_load_bitmap("./images/start.png");
-  ALLEGRO_BITMAP* background_png = al_load_bitmap("./images/background.png");
-  ALLEGRO_BITMAP* lose_png = al_load_bitmap("./images/lose.png");
-  ALLEGRO_BITMAP* win_png = al_load_bitmap("./images/win.png");
-  ALLEGRO_BITMAP* spaceship_png = al_load_bitmap("./images/spaceship.png");
-  ALLEGRO_BITMAP* heart_1_png = al_load_bitmap("./images/1heart.png");
-  ALLEGRO_BITMAP* heart_2_png = al_load_bitmap("./images/2heart.png");
-  ALLEGRO_BITMAP* heart_3_png = al_load_bitmap("./images/3heart.png");
-  ALLEGRO_BITMAP* score_png = al_load_bitmap("./images/score.png");
-  ALLEGRO_BITMAP* highScore_png = al_load_bitmap("./images/high_score.png");
-  ALLEGRO_BITMAP* finish_png = al_load_bitmap("./images/finish.png");
-
-  // check if images are loaded correctly
-  checkBitmap(start_png, "start.png");
-  checkBitmap(background_png, "background.png");
-  checkBitmap(lose_png, "lose.png");
-  checkBitmap(win_png, "win.png");
-  checkBitmap(heart_1_png, "1heart.png");
-  checkBitmap(heart_2_png, "2heart.png");
-  checkBitmap(heart_3_png, "3heart.png");
-  checkBitmap(score_png, "score.png");
-  checkBitmap(highScore_png, "high_score.png");
-  checkBitmap(finish_png, "finish.png");
-  checkBitmap(spaceship_png, "spaceship.png");
+  ALLEGRO_BITMAP* start_png = loadBitmap("./images/start.png");
+  ALLEGRO_BITMAP* background_png = loadBitmap("./images/background.png");
+  ALLEGRO_BITMAP* lose_png = loadBitmap("./images/lose.png");
+  ALLEGRO_BITMAP* win_png = loadBitmap("./images/win.png");
+  ALLEGRO_BITMAP* spaceship_png = loadBitmap("./images/spaceship.png");
+  ALLEGRO_BITMAP* heart_1_png = loadBitmap("./images/1heart.png");
+  ALLEGRO_BITMAP* heart_2_png = loadBitmap("./images/2heart.png");
+  ALLEGRO_BITMAP* heart_3_png = loadBitmap("./images/3heart.png");
+  ALLEGRO_BITMAP* score_png = loadBitmap("./images/score.png");
+  ALLEGRO_BITMAP* highScore_png = loadBitmap("./images/high_score.png");
+  ALLEGRO_BITMAP* finish_png = loadBitmap("./images/finish.png");
 
   //sounds
-  ALLEGRO_SAMPLE* bip_wav = al_load_sample("./sounds/bip.wav");
-  ALLEGRO_SAMPLE* bonus_wav = al_load_sample("./sounds/bonus.wav");
-  ALLEGRO_SAMPLE* button_wav = al_load_sample("./sounds/button.wav");
-  ALLEGRO_SAMPLE* fall_wav = al_load_sample("./sounds/fall.wav");
-  ALLEGRO_SAMPLE* lose_wav = al_load_sample("./sounds/lose.wav");
-  ALLEGRO_SAMPLE* Street_Fighter_wav = al_load_sample("./sounds/Street_Fighter.wav");
-  ALLEGRO_SAMPLE* win_wav = al_load_sample("./sounds/win.wav");
-  ALLEGRO_SAMPLE* menu_wav = al_load_sample("./sounds/menu.wav");
-  ALLEGRO_SAMPLE* finish_wav = al_load_sample("./sounds/finish.wav");
-
-  // check if sounds are loaded correctly
-  checkSample(bip_wav, "bip.wav");
-  checkSample(bonus_wav, "bonus.wav");
-  checkSample(button_wav, "button.wav");
-  checkSample(fall_wav, "fall.wav");
-  checkSample(lose_wav, "lose.wav");
-  checkSample(Street_Fighter_wav, "Street_Fighter.wav");
-  checkSample(win_wav, "win.wav");
-  checkSample(menu_wav, "menu.wav");
-  checkSample(finish_wav, "finish.wav");
+  ALLEGRO_SAMPLE* bip_wav = loadSample("./sounds/bip.wav");
+  ALLEGRO_SAMPLE* bonus_wav = loadSample("./sounds/bonus.wav");
+  ALLEGRO_SAMPLE* button_wav = loadSample("./sounds/button.wav");
+  ALLEGRO_SAMPLE* fall_wav = loadSample("./sounds/fall.wav");
+  ALLEGRO_SAMPLE* lose_wav = loadSample("./sounds/lose.wav");
+  ALLEGRO_SAMPLE* Street_Fighter_wav = loadSample("./sounds/Street_Fighter.wav");
+  ALLEGRO_SAMPLE* win_wav = loadSample("./sounds/win.wav");
+  ALLEGRO_SAMPLE* menu_wav = loadSample("./sounds/menu.wav");
+  ALLEGRO_SAMPLE* finish_wav = loadSample("./sounds/finish.wav");
 
   //// INITIALISATION VARIABLES ////
 
