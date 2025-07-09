@@ -117,7 +117,7 @@ void menu_button(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_Q
 }
 
 
-// ---- fonctions de test ----
+// ---- fonctions utilitaires ----
 
 void must_init(bool test, const char* description) {
   if (test) {
