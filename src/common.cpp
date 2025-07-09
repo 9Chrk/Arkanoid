@@ -80,7 +80,21 @@ vector<string> executeCommand(string command) { // donnée par chatGPT
     if (!line.empty() && line.back() == '\n') {
       line.pop_back();
     }
-    output.push_back(line);
-  }
+    output.push_back(line);  }
   return output;
+}
+
+ALLEGRO_BITMAP* loadBitmap(const char* filename) {
+  ALLEGRO_BITMAP* bmp = al_load_bitmap(filename);
+  checkBitmap(bmp, filename);
+  if (bmp) {
+    al_convert_bitmap(bmp);
+  }
+  return bmp;
+}
+
+ALLEGRO_SAMPLE* loadSample(const char* filename) {
+  ALLEGRO_SAMPLE* sample = al_load_sample(filename);
+  checkSample(sample, filename);
+  return sample;
 }
