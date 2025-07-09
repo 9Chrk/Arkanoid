@@ -62,5 +62,7 @@ void writeJsonFile(string fileName, json data);
 vector<string> executeCommand(string command);
 int checkBitmap(ALLEGRO_BITMAP* bitmap, const string fileName);
 int checkSample(ALLEGRO_SAMPLE* sample, const string fileName);
+ALLEGRO_BITMAP* loadBitmap(const char* filename);
+ALLEGRO_SAMPLE* loadSample(const char* filename);
 
 #endif
