@@ -51,6 +51,22 @@ void writeJsonFile(string fileName, json data) {
   newFile.close();
 }
 
+int checkBitmap(ALLEGRO_BITMAP* bitmap, const string fileName) {
+  if (!bitmap) {
+    cerr << "Erreur lors du chargement de l'image : " << fileName << endl;
+    return -1;
+  }
+  return 0;
+}
+
+int checkSample(ALLEGRO_SAMPLE* sample, const string fileName) {
+  if (!sample) {
+    cerr << "Erreur lors du chargement du son : " << fileName << endl;
+    return -1;
+  }
+  return 0;
+}
+
 vector<string> executeCommand(string command) { // donnée par chatGPT
   vector<string> output;
   unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);

@@ -142,12 +142,12 @@ int main(int /* argc */, char** /* argv */) {
   must_init(al_install_keyboard(), "keyboard");
   must_init(al_install_mouse(), "mouse");
   must_init(al_install_audio(), "audio");
+  must_init(al_init_acodec_addon(), "acodec");
+  must_init(al_reserve_samples(32), "acodec");
   must_init(al_init_image_addon(), "image");
   must_init(al_init_font_addon(), "font_addon");
   must_init(al_init_ttf_addon(), "ttf_addon");
   must_init(al_init_primitives_addon(), "primitives");
-  must_init(al_init_acodec_addon(), "acodec");
-  must_init(al_reserve_samples(25), "acodec");
 
   ALLEGRO_TIMER* timer = al_create_timer(1.0 / refreshPerSecond);
   must_init(timer, "timer");
@@ -188,6 +188,19 @@ int main(int /* argc */, char** /* argv */) {
   ALLEGRO_BITMAP* highScore_png = al_load_bitmap("./images/high_score.png");
   ALLEGRO_BITMAP* finish_png = al_load_bitmap("./images/finish.png");
 
+  // check if images are loaded correctly
+  checkBitmap(start_png, "start.png");
+  checkBitmap(background_png, "background.png");
+  checkBitmap(lose_png, "lose.png");
+  checkBitmap(win_png, "win.png");
+  checkBitmap(heart_1_png, "1heart.png");
+  checkBitmap(heart_2_png, "2heart.png");
+  checkBitmap(heart_3_png, "3heart.png");
+  checkBitmap(score_png, "score.png");
+  checkBitmap(highScore_png, "high_score.png");
+  checkBitmap(finish_png, "finish.png");
+  checkBitmap(spaceship_png, "spaceship.png");
+
   //sounds
   ALLEGRO_SAMPLE* bip_wav = al_load_sample("./sounds/bip.wav");
   ALLEGRO_SAMPLE* bonus_wav = al_load_sample("./sounds/bonus.wav");
@@ -199,6 +212,16 @@ int main(int /* argc */, char** /* argv */) {
   ALLEGRO_SAMPLE* menu_wav = al_load_sample("./sounds/menu.wav");
   ALLEGRO_SAMPLE* finish_wav = al_load_sample("./sounds/finish.wav");
 
+  // check if sounds are loaded correctly
+  checkSample(bip_wav, "bip.wav");
+  checkSample(bonus_wav, "bonus.wav");
+  checkSample(button_wav, "button.wav");
+  checkSample(fall_wav, "fall.wav");
+  checkSample(lose_wav, "lose.wav");
+  checkSample(Street_Fighter_wav, "Street_Fighter.wav");
+  checkSample(win_wav, "win.wav");
+  checkSample(menu_wav, "menu.wav");
+  checkSample(finish_wav, "finish.wav");
 
   //// INITIALISATION VARIABLES ////
 
@@ -260,10 +283,15 @@ int main(int /* argc */, char** /* argv */) {
 
   /////////////////   GAME   /////////////////
   
-  int index, game_score = 0;
+  int index, game_score = 0;  
   bool finish_all_lvl = false;
   bool showMenu = true;
   vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
+
+  if (game_levels.empty()) {
+    std::cerr << "Erreur : aucun niveau trouvé par research_jsonFile.sh\n";
+    return -1;
+  }
 
   Games game = Games(game_levels.at(index), game_score);
   Point temp_direction = game.ball.getDirection();
