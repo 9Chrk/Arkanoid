@@ -142,8 +142,8 @@ int main(int /* argc */, char** /* argv */) {
   must_init(al_install_keyboard(), "keyboard");
   must_init(al_install_mouse(), "mouse");
   must_init(al_install_audio(), "audio");
+  must_init(al_reserve_samples(32), "reserve samples");
   must_init(al_init_acodec_addon(), "acodec");
-  must_init(al_reserve_samples(32), "acodec");
   must_init(al_init_image_addon(), "image");
   must_init(al_init_font_addon(), "font_addon");
   must_init(al_init_ttf_addon(), "ttf_addon");
