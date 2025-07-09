@@ -138,7 +138,7 @@ void Games::resetHighScore() {
   writeJsonFile("./data/settings.json", "highscore", 0);
 }
 
-bool Games::loose() { return spaceship.isDeath(); }
+bool Games::lose() { return spaceship.isDeath(); }
 
 bool Games::win() {
   for (auto& brick : bricks) {

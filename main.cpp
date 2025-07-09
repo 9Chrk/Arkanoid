@@ -381,7 +381,7 @@ int main(int /* argc */, char** /* argv */) {
             }
           }
 
-          if (game.loose()) {
+          if (game.lose()) {
             al_stop_sample(&sound_game_id);
             al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
