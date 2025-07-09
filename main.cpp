@@ -283,7 +283,7 @@ int main(int /* argc */, char** /* argv */) {
 
   /////////////////   GAME   /////////////////
   
-  int index, game_score = 0;  
+  int index = 0, game_score = 0;
   bool finish_all_lvl = false;
   bool showMenu = true;
   vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
@@ -388,7 +388,8 @@ int main(int /* argc */, char** /* argv */) {
             cout << "Score atteint : " << game.getScore() << endl;
             cout << "Highscore : " << game.getHighScore() << "\n" << endl;
             menu_button(lose_png, event, queue, button_wav, menu_wav, restartGame, button_yes, button_no);
-            game_score, index = 0;
+            game_score = 0;
+            index = 0;
             done = true;
           } else if (game.win()) {
             al_stop_sample(&sound_game_id);
