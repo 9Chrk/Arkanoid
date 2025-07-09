@@ -26,7 +26,7 @@ class Games {
   Spaceship spaceship;
   void draw();
   bool win();
-  bool loose();
+  bool lose();
   void checkCollisions();
   int getScore();
   int getHighScore();
