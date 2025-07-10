@@ -13,4 +13,4 @@ if [ ! -d "$CHEMIN_DOSSIER" ]; then
     exit 1
 fi
 
-find "$CHEMIN_DOSSIER" -type f -name "${PREFIXE}*.json" -printf "%f\n"
+find "$CHEMIN_DOSSIER" -type f -name "${PREFIXE}*.json" -printf "%f\n" | sort -t'_' -k2n
