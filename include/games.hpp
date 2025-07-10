@@ -13,27 +13,27 @@ class Games {
   string levelFile;
   vector<Brick> bricks;
   Point lastCollisionPos;
-  vector<Point> _collisionPoints(Point pos);
+  vector<Point> _collisionPoints(const Point& pos);
 
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
 
  public:
-  Games(string levelFile, int score);
+  Games(const string& levelFile, int score);
 
   Ball ball;
   Spaceship spaceship;
-  void draw();
-  bool win();
-  bool lose();
+  void draw() const;
+  [[nodiscard]] bool win() const;
+  [[nodiscard]] bool lose() const;
   void checkCollisions();
-  int getScore();
-  int getHighScore();
-  Point getLastCollisionPos();
-  void setLastCollisionPos(Point newPos);
-  void saveHighScore();
-  void resetHighScore();
+  [[nodiscard]] int getScore() const;
+  [[nodiscard]] int getHighScore() const;
+  [[nodiscard]] Point getLastCollisionPos() const;
+  void setLastCollisionPos(const Point& newPos);
+  void saveHighScore() const;
+  void resetHighScore() const;
 };
 
 #endif

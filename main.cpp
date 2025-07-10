@@ -10,8 +10,8 @@ void display_image(ALLEGRO_BITMAP* image_name) {
   al_flip_display();
 }
 
-void display_info_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png, ALLEGRO_BITMAP* heart_png, ALLEGRO_FONT* font, Games game,
-                       Point score_pos, Point highscore_pos) {
+void display_info_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png, ALLEGRO_BITMAP* heart_png, ALLEGRO_FONT* font,
+                       const Games& game, const Point& score_pos, const Point& highscore_pos) {
   al_draw_bitmap(score_png, 0, 0, 0);
   al_draw_bitmap(highScore_png, windowWidth * 0, 0, 0);
   al_draw_bitmap(heart_png, windowWidth * 0, 0, 0);
@@ -19,21 +19,21 @@ void display_info_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png,
   al_draw_text(font, WHITE, highscore_pos.x, highscore_pos.y, ALLEGRO_ALIGN_CENTER, to_string(game.getHighScore()).c_str());
 }
 
-void display_spaceship(ALLEGRO_BITMAP* spaceship_png, Games& game) {
+void display_spaceship(ALLEGRO_BITMAP* spaceship_png, const Games& game) {
   Point spaceship_pos = game.spaceship.getPosition();
   float spaceship_width = game.spaceship.getWidth();
   float spaceship_height = game.spaceship.getHeight();
   al_draw_bitmap(spaceship_png, spaceship_pos.x - spaceship_width/2 - 3, spaceship_pos.y - spaceship_height/2 - 1, 0);
 }
 
-ALLEGRO_BITMAP* choose_heartFile(ALLEGRO_BITMAP* heart_1_png, ALLEGRO_BITMAP* heart_2_png, ALLEGRO_BITMAP* heart_3_png, Games& game) {
+ALLEGRO_BITMAP* choose_heartFile(ALLEGRO_BITMAP* heart_1_png, ALLEGRO_BITMAP* heart_2_png, ALLEGRO_BITMAP* heart_3_png, const Games& game) {
   int health = game.spaceship.getHealth();
   if (health == 1) { return heart_1_png; }
   else if (health == 2) { return heart_2_png; }
   else { return heart_3_png; }
 }
 
-bool check_direction_changed (Point current_direction, Point &temp_direction) {
+bool check_direction_changed (const Point& current_direction, Point &temp_direction) {
   if (current_direction.x != temp_direction.x || current_direction.y != temp_direction.y) {
     temp_direction = current_direction;
     return true;
@@ -41,7 +41,7 @@ bool check_direction_changed (Point current_direction, Point &temp_direction) {
   return false;
 }
 
-void forceChangeLevel(int index, int game_score, Games &game, Point &temp_direction, vector<string> game_levels) {
+void forceChangeLevel(int index, int game_score, Games &game, Point &temp_direction, const vector<string>& game_levels) {
   game = Games(game_levels.at(index), game_score);
   temp_direction = game.ball.getDirection();
 };
@@ -67,7 +67,7 @@ void menu(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* q
 }
 
 void menu_button(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sample, ALLEGRO_SAMPLE* sound_menu,
-                 bool &done, Rectangle button_on, Rectangle button_off) {    
+                 bool &done, const Rectangle& button_on, const Rectangle& button_off) {
   bool click_on_button = false;
   bool hover_play = false;
   bool hover_exit = false;

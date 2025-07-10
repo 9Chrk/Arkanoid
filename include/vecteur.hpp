@@ -28,18 +28,18 @@ class Vecteur {
   void updateEdges();
   void updateLines();
 
-  float distance(Point p, Point q);
-  Point minimalDistance(vector<Point> points, Point reference);
+  [[nodiscard]] float distance(const Point& p, const Point& q) const;
+  [[nodiscard]] Point minimalDistance(const vector<Point>& points, const Point& reference) const;
 
-  Line calculateLineEquation(Point p, Point q);
-  bool sameEquationLine(Line line_1, Line line_2);
-  bool _intersection(Line deplacement, Line edge, pair<Point, Point> deplacement_vec, pair<Point, Point> edge_vec);
-  bool isOnSegment(Point p, Point q, Point inter);
+  [[nodiscard]] Line calculateLineEquation(const Point& p, const Point& q) const;
+  [[nodiscard]] bool sameEquationLine(const Line& line_1, const Line& line_2) const;
+  bool _intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec);
+  [[nodiscard]] bool isOnSegment(const Point& p, const Point& q, const Point& inter) const;
 
  public:
-  Vecteur(Point position, int w, int h);
+  Vecteur(const Point& position, int w, int h);
 
-  int intersection(pair<Point, Point> deplacement_vec);
+  int intersection(const pair<Point, Point>& deplacement_vec);
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "vecteur.hpp"
 
-Vecteur::Vecteur(Point position, int w, int h)
+Vecteur::Vecteur(const Point& position, int w, int h)
         : position(position), w(w), h(h), intersectionPoint({0, 0}) {
   last_deplacement = calculateLineEquation({0, 0}, {0, 0});
   updateEdges();
@@ -27,16 +27,16 @@ void Vecteur::updateLines() {
   right = calculateLineEquation(right_vec.first, right_vec.second);
 }
 
-bool Vecteur::sameEquationLine(Line line_1, Line line_2) {
+bool Vecteur::sameEquationLine(const Line& line_1, const Line& line_2) const {
   return (line_1.m == line_2.m && line_1.b == line_2.b);
 }
 
-bool Vecteur::isOnSegment(Point p, Point q, Point inter) {
+bool Vecteur::isOnSegment(const Point& p, const Point& q, const Point& inter) const {
   return (inter.x >= min(p.x, q.x) && inter.x <= max(p.x, q.x) &&
           inter.y >= min(p.y, q.y) && inter.y <= max(p.y, q.y));
 }
 
-Line Vecteur::calculateLineEquation(Point p, Point q) {
+Line Vecteur::calculateLineEquation(const Point& p, const Point& q) const {
   float slope, y_intercept;
   if (p.x == q.x) {
     slope = INFINITY;
@@ -48,11 +48,11 @@ Line Vecteur::calculateLineEquation(Point p, Point q) {
   return Line(slope, y_intercept);
 }
 
-float Vecteur::distance(Point p, Point q) {
+float Vecteur::distance(const Point& p, const Point& q) const {
   return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));
 }
 
-Point Vecteur::minimalDistance(vector<Point> points, Point reference) {
+Point Vecteur::minimalDistance(const vector<Point>& points, const Point& reference) const {
   if (points.size() == 1) {
     return points.at(0);
   }
@@ -70,7 +70,7 @@ Point Vecteur::minimalDistance(vector<Point> points, Point reference) {
 }
 
 
-bool Vecteur::_intersection(Line deplacement, Line edge, pair<Point, Point> deplacement_vec, pair<Point, Point> edge_vec) {
+bool Vecteur::_intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec) {
   if (deplacement.m == edge.m) { return false; }
 
   float inter_x, inter_y;
@@ -90,7 +90,7 @@ bool Vecteur::_intersection(Line deplacement, Line edge, pair<Point, Point> depl
          isOnSegment(edge_vec.first, edge_vec.second, intersectionPoint);
 }
 
-int Vecteur::intersection(pair<Point, Point> deplacement_vec) {
+int Vecteur::intersection(const pair<Point, Point>& deplacement_vec) {
   // Point deplacement_vec_ordered = trierPoints(deplacement_vec);
   Line deplacement = calculateLineEquation(deplacement_vec.first, deplacement_vec.second);
   last_deplacement = deplacement;

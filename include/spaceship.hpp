@@ -11,17 +11,18 @@ class Spaceship : public Rectangle {
 
  public:
   Spaceship();
-  Spaceship(Point position, float w, float h, int vitesse, int health, ALLEGRO_COLOR frameColor, ALLEGRO_COLOR fillColor);
+  Spaceship(const Point& position, float w, float h, int vitesse, int health,
+            const ALLEGRO_COLOR& frameColor, const ALLEGRO_COLOR& fillColor);
 
   void move(int direction);
-  void move(Point mousePosition);
-  bool validPosition(Point position);
-  Point getPosition();
-  float getWidth();
-  float getHeight();
-  int getHealth();
+  void move(const Point& mousePosition);
+  [[nodiscard]] bool validPosition(const Point& position) const;
+  [[nodiscard]] Point getPosition() const;
+  [[nodiscard]] float getWidth() const;
+  [[nodiscard]] float getHeight() const;
+  [[nodiscard]] int getHealth() const;
   void damage();
-  bool isDeath();
+  [[nodiscard]] bool isDeath() const;
 };
 
 #endif

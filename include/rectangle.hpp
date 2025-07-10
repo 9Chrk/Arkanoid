@@ -31,13 +31,13 @@ class Rectangle {
   ALLEGRO_COLOR frameColor, fillColor;
 
  public:
-  Rectangle(Point position, float w, float h,
-            ALLEGRO_COLOR frameColor = BLACK,
-            ALLEGRO_COLOR fillColor = WHITE);
+  Rectangle(const Point& position, float w, float h,
+            const ALLEGRO_COLOR& frameColor = BLACK,
+            const ALLEGRO_COLOR& fillColor = WHITE);
             
-  void draw();
-  bool contains(Point p);
-  pair<Point, Point> diag_coor();
+  void draw() const;
+  [[nodiscard]] bool contains(const Point& p) const;
+  [[nodiscard]] pair<Point, Point> diag_coor() const;
 };
 
 #endif
