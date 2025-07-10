@@ -1,6 +1,6 @@
 #include "games.hpp"
 
-Games::Games(string levelFile, int score) : score(score), levelFile(levelFile), lastCollisionPos({0, 0}) {
+Games::Games(const string& levelFile, int score) : score(score), levelFile(levelFile), lastCollisionPos({0, 0}) {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -65,7 +65,7 @@ void Games::initializeBricks() {
   }
 }
 
-void Games::draw() {
+void Games::draw() const {
   for (Brick brick : bricks) {
     if (!brick.isDestroyed()) {
       brick.draw();
@@ -75,7 +75,7 @@ void Games::draw() {
   spaceship.draw();
 }
 
-vector<Point> Games::_collisionPoints(Point pos) {
+vector<Point> Games::_collisionPoints(const Point& pos) {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
     {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
@@ -122,7 +122,7 @@ void Games::checkCollisions() {
   }
 }
 
-void Games::saveHighScore() {
+void Games::saveHighScore() const {
   json settings = openJsonFile("./data/settings.json");
   int highscore = settings["highscore"].get<int>();
   if (score >= highscore) { 
@@ -130,24 +130,24 @@ void Games::saveHighScore() {
   }
 }
 
-int Games::getHighScore() {
+int Games::getHighScore() const {
   return readJsonFile("./data/settings.json", "highscore").get<int>();
 }
 
-void Games::resetHighScore() {
+void Games::resetHighScore() const {
   writeJsonFile("./data/settings.json", "highscore", 0);
 }
 
-bool Games::lose() { return spaceship.isDeath(); }
+bool Games::lose() const { return spaceship.isDeath(); }
 
-bool Games::win() {
+bool Games::win() const {
   for (auto& brick : bricks) {
     if (!brick.isDestroyed() && brick.getScore() != 0) return false;
   }
   return true;
 }
 
-void Games::setLastCollisionPos(Point newPos) { lastCollisionPos = newPos; }
+void Games::setLastCollisionPos(const Point& newPos) { lastCollisionPos = newPos; }
 
-[[gnu::pure]] int Games::getScore() { return score; }
-[[gnu::pure]] Point Games::getLastCollisionPos() { return lastCollisionPos; }
+[[gnu::pure]] int Games::getScore() const { return score; }
+[[gnu::pure]] Point Games::getLastCollisionPos() const { return lastCollisionPos; }

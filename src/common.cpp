@@ -1,7 +1,7 @@
 #include "common.hpp"
 
 [[gnu::pure]]
-ALLEGRO_COLOR getColor(string colorName) {
+ALLEGRO_COLOR getColor(const string& colorName) {
   if (colorName == "WHITE") return WHITE;
   else if (colorName == "GREY") return GREY;
   else if (colorName == "BLACK") return BLACK;
@@ -17,7 +17,7 @@ ALLEGRO_COLOR getColor(string colorName) {
   else { return BLACK; }
 }
 
-json openJsonFile(string fileName) {
+json openJsonFile(const string& fileName) {
   ifstream file(fileName);
   if (!file.is_open()) {
     throw runtime_error("Impossible d'ouvrir le fichier : " + fileName);
@@ -28,7 +28,7 @@ json openJsonFile(string fileName) {
   return data;
 }
 
-json readJsonFile(string fileName, string key) {
+json readJsonFile(const string& fileName, const string& key) {
   json data = openJsonFile(fileName);
   if (!data.contains(key)) {
     throw invalid_argument("Clé non trouvée : " + key);
@@ -36,13 +36,13 @@ json readJsonFile(string fileName, string key) {
   return data[key];
 }
 
-void writeJsonFile(string fileName, string key, json value) {
+void writeJsonFile(const string& fileName, const string& key, const json& value) {
   json data = openJsonFile(fileName);
   data[key] = value;
   writeJsonFile(fileName, data);
 }
 
-void writeJsonFile(string fileName, json data) {
+void writeJsonFile(const string& fileName, const json& data) {
   ofstream newFile(fileName);
   if (!newFile.is_open()) {
     throw runtime_error("Impossible d'écrire dans le fichier : " + fileName);
@@ -51,7 +51,7 @@ void writeJsonFile(string fileName, json data) {
   newFile.close();
 }
 
-int checkBitmap(ALLEGRO_BITMAP* bitmap, const string fileName) {
+int checkBitmap(ALLEGRO_BITMAP* bitmap, const string& fileName) {
   if (!bitmap) {
     cerr << "Erreur lors du chargement de l'image : " << fileName << endl;
     return -1;
@@ -59,7 +59,7 @@ int checkBitmap(ALLEGRO_BITMAP* bitmap, const string fileName) {
   return 0;
 }
 
-int checkSample(ALLEGRO_SAMPLE* sample, const string fileName) {
+int checkSample(ALLEGRO_SAMPLE* sample, const string& fileName) {
   if (!sample) {
     cerr << "Erreur lors du chargement du son : " << fileName << endl;
     return -1;
@@ -67,7 +67,7 @@ int checkSample(ALLEGRO_SAMPLE* sample, const string fileName) {
   return 0;
 }
 
-vector<string> executeCommand(string command) { // donnée par chatGPT
+vector<string> executeCommand(const string& command) { // donnée par chatGPT
   vector<string> output;
   unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
 

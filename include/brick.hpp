@@ -12,20 +12,20 @@ class Brick : public Rectangle {
   bool destroyed, secondLife;
 
  public:
-  Brick(Point position, float w, float h, 
-        ALLEGRO_COLOR frameColor, 
-        ALLEGRO_COLOR fillColor, 
+  Brick(const Point& position, float w, float h,
+        const ALLEGRO_COLOR& frameColor,
+        const ALLEGRO_COLOR& fillColor,
         int score);
 
   Vecteur vec;
   void destroy();
-  bool isDestroyed();
-  bool getSecondLife();
+  [[nodiscard]] bool isDestroyed() const;
+  [[nodiscard]] bool getSecondLife() const;
   void setSecondLife(bool cas);
-  int getScore();
-  Point getPosition();
-  float getWidth();
-  float getHeight();
+  [[nodiscard]] int getScore() const;
+  [[nodiscard]] Point getPosition() const;
+  [[nodiscard]] float getWidth() const;
+  [[nodiscard]] float getHeight() const;
 };
 
 #endif

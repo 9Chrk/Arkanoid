@@ -54,14 +54,14 @@ static const ALLEGRO_COLOR SILVER  = al_map_rgb(224, 224, 224);
 static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 
 
-ALLEGRO_COLOR getColor(string colorName);
-json openJsonFile(string fileName);
-json readJsonFile(string fileName, string key);
-void writeJsonFile(string fileName, string key, json value);
-void writeJsonFile(string fileName, json data);
-vector<string> executeCommand(string command);
-int checkBitmap(ALLEGRO_BITMAP* bitmap, const string fileName);
-int checkSample(ALLEGRO_SAMPLE* sample, const string fileName);
+[[nodiscard]] ALLEGRO_COLOR getColor(const string& colorName);
+[[nodiscard]] json openJsonFile(const string& fileName);
+[[nodiscard]] json readJsonFile(const string& fileName, const string& key);
+void writeJsonFile(const string& fileName, const string& key, const json& value);
+void writeJsonFile(const string& fileName, const json& data);
+[[nodiscard]] vector<string> executeCommand(const string& command);
+int checkBitmap(ALLEGRO_BITMAP* bitmap, const string& fileName);
+int checkSample(ALLEGRO_SAMPLE* sample, const string& fileName);
 ALLEGRO_BITMAP* loadBitmap(const char* filename);
 ALLEGRO_SAMPLE* loadSample(const char* filename);
 
