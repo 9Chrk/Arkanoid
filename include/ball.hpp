@@ -5,29 +5,37 @@
 #include "common.hpp"
 #include "spaceship.hpp"
 
+
 class Ball {
  private:
-   float rayon, vitesse;
-   ALLEGRO_COLOR color;
-   Point position, d;
-   bool mouvement, falling;
+  Point position, d;
+  float rayon, vitesse;
+  bool mouvement, falling;
+  ALLEGRO_COLOR color;
 
  public:
   Ball();
   Ball(float rayon, float vitesse, ALLEGRO_COLOR color);
 
+  // Drawing and movement
   void draw() const;
   void move(const Point& spaceship, int spaceship_height);
   void move(const Point& spaceship, float w, float h);
-  [[nodiscard]] Point getPosition() const;
-  [[nodiscard]] Point getDirection() const;
-  [[nodiscard]] bool inMouvement() const;
-  [[nodiscard]] bool isFalling() const;
+  
+  // Getters
+  Point getPosition()  const;
+  Point getDirection() const;
+  bool inMouvement()   const;
+  bool isFalling()     const;
+  float getRayon()     const;
+  float getVitesse()   const;
+  
+  // Setters
   void setMouvement(bool cas);
   void setFalling(bool cas);
   void setDirection(const Point& newDirection);
-  [[nodiscard]] float getRayon() const;
-  [[nodiscard]] float getVitesse() const;
+  
+  // Collision and state management
   void checkCollisions(const Point& spaceship, float w, float h);
   void checkFall();
   void reset();
