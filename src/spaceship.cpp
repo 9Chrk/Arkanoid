@@ -1,10 +1,20 @@
 #include "spaceship.hpp"
  
+
 Spaceship::Spaceship() : Rectangle({0.0f, 0.0f}, 0, 0, BLACK, BLACK), health(0), vitesse(0) {}
 
 Spaceship::Spaceship(const Point& position, float w, float h, int vitesse, int health,
                      const ALLEGRO_COLOR& frameColor, const ALLEGRO_COLOR& fillColor)
          : Rectangle(position, w, h, frameColor, fillColor), health(health), vitesse(vitesse) {}
+
+// Getters
+[[gnu::pure]] Point Spaceship::getPosition() const { return position; }
+[[gnu::pure]] float Spaceship::getWidth()    const { return w; }
+[[gnu::pure]] float Spaceship::getHeight()   const { return h; }
+[[gnu::pure]] int Spaceship::getHealth()     const { return health; }
+[[gnu::pure]] bool Spaceship::isDeath()      const { return health <= 0; }
+
+// Other methods
 
 void Spaceship::move(int direction) {
   Point newPos = position;
@@ -20,15 +30,8 @@ void Spaceship::move(const Point& mousePosition) {
   }
 }
 
-[[gnu::pure]]
 bool Spaceship::validPosition(const Point& newPos) const {
   return (newPos.x - w / 2 >= 0) && (newPos.x + w / 2 <= windowWidth);
 }
-
-[[gnu::pure]] Point Spaceship::getPosition() const { return position; }
-[[gnu::pure]] float Spaceship::getWidth() const { return w; }
-[[gnu::pure]] float Spaceship::getHeight() const { return h; }
-[[gnu::pure]] int Spaceship::getHealth() const { return health; }
-[[gnu::pure]] bool Spaceship::isDeath() const { return health <= 0; }
 
 void Spaceship::damage() { health--; }
