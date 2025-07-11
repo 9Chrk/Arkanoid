@@ -265,7 +265,7 @@ int main(int /* argc */, char** /* argv */) {
   vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
 
   if (game_levels.empty()) {
-    std::cerr << "Erreur : aucun niveau trouvé par research_jsonFile.sh\n";
+    std::cerr << "Error: no level found by research_jsonFile.sh\n";
     return -1;
   }
 
@@ -360,8 +360,8 @@ int main(int /* argc */, char** /* argv */) {
           if (game.lose()) {
             al_stop_sample(&sound_game_id);
             al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-            cout << "\nGame Over... Les briques ont gagné cette fois-ci. 🧱" << endl;
-            cout << "Score atteint : " << game.getScore() << endl;
+            cout << "\nGame Over... The bricks have won this time. 🧱" << endl;
+            cout << "Score achieved : " << game.getScore() << endl;
             cout << "Highscore : " << game.getHighScore() << "\n" << endl;
             menu_button(lose_png, event, queue, button_wav, menu_wav, restartGame, button_yes, button_no);
             game_score = 0;
@@ -370,8 +370,8 @@ int main(int /* argc */, char** /* argv */) {
           } else if (game.win()) {
             al_stop_sample(&sound_game_id);
             int score = game.getScore();
-            cout << "\nFélicitations ! Tu as brisé toutes les briques ! 🎇" << endl;
-            cout << "Score atteint : " << game.getScore() << endl;
+            cout << "\nCongratulations! You've broken every brick!🎇" << endl;
+            cout << "Score achieved : " << game.getScore() << endl;
             cout << "Highscore : " << game.getHighScore() << "\n" << endl;
             menu(win_png, event, queue, win_wav, font, "Press any key to continue...");
             index++;
@@ -398,8 +398,8 @@ int main(int /* argc */, char** /* argv */) {
     if (!restartGame) { break; }
   }
   if (finish_all_lvl) {
-    cout << "Vous avez finis ARKANOID !!!";
-    cout << "Score atteint : " << game.getScore() << endl;
+    cout << "You have finished ARKANOID !!!";
+    cout << "Score achieved : " << game.getScore() << endl;
     cout << "Highscore : " << game.getHighScore() << "\n" << endl;
     menu(finish_png, event, queue, finish_wav, font, "Press any key to exit...");
   }
