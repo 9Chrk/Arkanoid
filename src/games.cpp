@@ -1,10 +1,13 @@
 #include "games.hpp"
 
+
 Games::Games(const string& levelFile, int score) : score(score), levelFile(levelFile), lastCollisionPos({0, 0}) {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
 }
+
+// Initialization methods
 
 void Games::initializeBall() {
   json _ball = readJsonFile("./data/settings.json", "ball");
@@ -65,6 +68,37 @@ void Games::initializeBricks() {
   }
 }
 
+// Getters
+
+[[gnu::pure]] int Games::getScore() const {
+  return score;
+}
+
+[[gnu::pure]] int Games::getHighScore() const {
+  return readJsonFile("./data/settings.json", "highscore").get<int>();
+}
+
+[[gnu::pure]] Point Games::getLastCollisionPos() const {
+  return lastCollisionPos;
+ }
+
+[[gnu::pure]] bool Games::lose() const {
+  return spaceship.isDeath(); 
+}
+
+[[gnu::pure]] bool Games::win() const {
+  for (auto& brick : bricks) {
+    if (!brick.isDestroyed() && brick.getScore() != 0) return false;
+  }
+  return true;
+}
+
+// Setters
+
+void Games::setLastCollisionPos(const Point& newPos) { lastCollisionPos = newPos; }
+
+// Other methods
+
 void Games::draw() const {
   for (Brick brick : bricks) {
     if (!brick.isDestroyed()) {
@@ -73,18 +107,6 @@ void Games::draw() const {
   }
   ball.draw();
   spaceship.draw();
-}
-
-vector<Point> Games::_collisionPoints(const Point& pos) {
-  vector<Point> collisionPoints = {
-    {pos.x, pos.y},
-    {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
-    {pos.x - ball.getRayon(), pos.y}, {pos.x + ball.getRayon(), pos.y},
-    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
-    {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
-    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite
-  };
-  return collisionPoints;
 }
 
 void Games::checkCollisions() {
@@ -122,6 +144,18 @@ void Games::checkCollisions() {
   }
 }
 
+vector<Point> Games::_collisionPoints(const Point& pos) {
+  vector<Point> collisionPoints = {
+    {pos.x, pos.y},
+    {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
+    {pos.x - ball.getRayon(), pos.y}, {pos.x + ball.getRayon(), pos.y},
+    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
+    {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
+    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite
+  };
+  return collisionPoints;
+}
+
 void Games::saveHighScore() const {
   json settings = openJsonFile("./data/settings.json");
   int highscore = settings["highscore"].get<int>();
@@ -130,24 +164,6 @@ void Games::saveHighScore() const {
   }
 }
 
-int Games::getHighScore() const {
-  return readJsonFile("./data/settings.json", "highscore").get<int>();
-}
-
 void Games::resetHighScore() const {
   writeJsonFile("./data/settings.json", "highscore", 0);
 }
-
-bool Games::lose() const { return spaceship.isDeath(); }
-
-bool Games::win() const {
-  for (auto& brick : bricks) {
-    if (!brick.isDestroyed() && brick.getScore() != 0) return false;
-  }
-  return true;
-}
-
-void Games::setLastCollisionPos(const Point& newPos) { lastCollisionPos = newPos; }
-
-[[gnu::pure]] int Games::getScore() const { return score; }
-[[gnu::pure]] Point Games::getLastCollisionPos() const { return lastCollisionPos; }

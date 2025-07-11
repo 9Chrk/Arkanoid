@@ -7,6 +7,7 @@
 #include "ball.hpp"
 #include "spaceship.hpp"
 
+
 class Games {
  private:
   int score;
@@ -15,6 +16,7 @@ class Games {
   Point lastCollisionPos;
   vector<Point> _collisionPoints(const Point& pos);
 
+  // Initialization methods
   void initializeBall();
   void initializeSpaceship();
   void initializeBricks();
@@ -24,16 +26,22 @@ class Games {
 
   Ball ball;
   Spaceship spaceship;
-  void draw() const;
-  [[nodiscard]] bool win() const;
-  [[nodiscard]] bool lose() const;
-  void checkCollisions();
-  [[nodiscard]] int getScore() const;
-  [[nodiscard]] int getHighScore() const;
-  [[nodiscard]] Point getLastCollisionPos() const;
+
+  // Getters
+  int getScore()              const;
+  int getHighScore()          const;
+  Point getLastCollisionPos() const;
+  bool win()                  const;
+  bool lose()                 const;
+
+  // Setters
   void setLastCollisionPos(const Point& newPos);
+
+  // Other methods
+  void draw() const;
+  void checkCollisions();
   void saveHighScore() const;
   void resetHighScore() const;
-};
+};;
 
 #endif
