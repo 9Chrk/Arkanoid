@@ -11,6 +11,7 @@
 #include <utility>
 #include <cstdio>
 #include <memory>
+#include <limits>
 #include "../libs/json.hpp"
 
 #include <allegro5/allegro5.h>

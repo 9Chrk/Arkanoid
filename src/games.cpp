@@ -1,7 +1,8 @@
 #include "games.hpp"
 
 
-Games::Games(const string& levelFile, int score) : score(score), levelFile(levelFile), lastCollisionPos({0, 0}) {
+Games::Games(const string& levelFile, int score)
+     : score(score), levelFile(levelFile), bricks(), lastCollisionPos({0, 0}), ball(), spaceship() {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -122,7 +123,7 @@ void Games::checkCollisions() {
   for (Brick& brick : bricks) {
     for (auto& point : collisionPoints) {
       Point temp_pos = point;
-      Point temp_next_pos = {pos.x + direction.x * speed * 1.5, pos.y + direction.y * speed * 1.5};
+      Point temp_next_pos = {pos.x + direction.x * speed * 1.5f, pos.y + direction.y * speed * 1.5f};
       int intersection =  brick.vec.intersection({temp_pos, temp_next_pos});
       if (!brick.isDestroyed() && intersection != -1) {
         if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {

@@ -13,8 +13,7 @@ CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wold-style-cast -Woverloaded-virtual -Wredundant-tags \
             -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel \
             -Wsuggest-attribute=cold -Wsuggest-attribute=const \
-            -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure \
-            -Wsuggest-final-methods -Wsuggest-final-types -Wsuggest-override \
+            -Wsuggest-attribute=noreturn -Wsuggest-override \
             -Wswitch-default -Wswitch-enum -Wundef -Wuseless-cast -Wvolatile \
             -Wzero-as-null-pointer-constant
 

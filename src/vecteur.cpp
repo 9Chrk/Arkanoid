@@ -2,8 +2,11 @@
 
 
 Vecteur::Vecteur(const Point& position, int w, int h)
-        : position(position), w(w), h(h), intersectionPoint({0, 0}) {
-  last_deplacement = calculateLineEquation({0, 0}, {0, 0});
+       : w(w), h(h), position(position),
+         top_vec(), bottom_vec(), left_vec(), right_vec(), edges(),
+         top(), bottom(), left(), right(), lines(),
+         intersectionPoint({0, 0}),
+         last_deplacement(calculateLineEquation({0, 0}, {0, 0})) {
   updateEdges();
   updateLines();
   edges = {top_vec, bottom_vec, left_vec, right_vec};
@@ -11,10 +14,12 @@ Vecteur::Vecteur(const Point& position, int w, int h)
 }
 
 void Vecteur::updateEdges() {
-  Point top_left = {position.x - w / 2.0f, position.y - h / 2.0f};
-  Point top_right = {position.x + w / 2.0f, position.y - h / 2.0f};
-  Point bottom_left = {position.x - w / 2.0f, position.y + h / 2.0f};
-  Point bottom_right = {position.x + w / 2.0f, position.y + h / 2.0f};
+  float half_w = static_cast<float>(w) / 2.0f;
+  float half_h = static_cast<float>(h) / 2.0f;
+  Point top_left = {position.x - half_w, position.y - half_h};
+  Point top_right = {position.x + half_w, position.y - half_h};
+  Point bottom_left = {position.x - half_w, position.y + half_h};
+  Point bottom_right = {position.x + half_w, position.y + half_h};
   top_vec = make_pair(top_left, top_right);
   bottom_vec = make_pair(bottom_left, bottom_right);
   left_vec = make_pair(top_left, bottom_left);
@@ -29,7 +34,8 @@ void Vecteur::updateLines() {
 }
 
 [[gnu::pure]] bool Vecteur::sameEquationLine(const Line& line_1, const Line& line_2) const {
-  return (line_1.m == line_2.m && line_1.b == line_2.b);
+  constexpr float eps = numeric_limits<float>::epsilon();
+  return (fabs(line_1.m - line_2.m) <= eps && fabs(line_1.b - line_2.b) <= eps);
 }
 
 [[gnu::pure]] bool Vecteur::isOnSegment(const Point& p, const Point& q, const Point& inter) const {
@@ -39,7 +45,8 @@ void Vecteur::updateLines() {
 
 [[gnu::pure]] Line Vecteur::calculateLineEquation(const Point& p, const Point& q) const {
   float slope, y_intercept;
-  if (p.x == q.x) {
+  constexpr float eps = numeric_limits<float>::epsilon();
+  if (fabs(p.x - q.x) <= eps) {
     slope = INFINITY;
     y_intercept = p.x;
   } else {
@@ -50,7 +57,7 @@ void Vecteur::updateLines() {
 }
 
 [[gnu::pure]] float Vecteur::distance(const Point& p, const Point& q) const {
-  return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));
+  return hypot(q.x - p.x, q.y - p.y);
 }
 
 [[gnu::pure]] Point Vecteur::minimalDistance(const vector<Point>& points, const Point& reference) const {
@@ -71,13 +78,14 @@ void Vecteur::updateLines() {
 }
 
 bool Vecteur::_intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec) {
-  if (deplacement.m == edge.m) { return false; }
+  constexpr float eps = numeric_limits<float>::epsilon();
+  if (fabs(deplacement.m - edge.m) <= eps) { return false; }
 
   float inter_x, inter_y;
-  if (deplacement.m == INFINITY) {
+  if (isinf(deplacement.m)) {
     inter_x = deplacement.b;
     inter_y = edge.m * inter_x + edge.b;
-  } else if (edge.m == INFINITY) {
+  } else if (isinf(edge.m)) {
     inter_x = edge.b;
     inter_y = deplacement.m * inter_x + deplacement.b;
   } else {
@@ -98,7 +106,7 @@ int Vecteur::intersection(const pair<Point, Point>& deplacement_vec) {
   map<Point, int> pointValues;
   // Tester chaque bord du rectangle
   for (int i = 0; i < 4; ++i) {
-    if (_intersection(deplacement, lines.at(i), deplacement_vec, edges.at(i))) {
+    if (_intersection(deplacement, lines.at(static_cast<size_t>(i)), deplacement_vec, edges.at(static_cast<size_t>(i)))) {
       intersections.push_back(intersectionPoint);
       pointValues[intersectionPoint] = (i < 2) ? 0 : 1;
     }

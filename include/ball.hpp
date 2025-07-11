@@ -19,7 +19,7 @@ class Ball {
 
   // Drawing and movement
   void draw() const;
-  void move(const Point& spaceship, int spaceship_height);
+  void move(const Point& spaceship, float spaceship_height);
   void move(const Point& spaceship, float w, float h);
   
   // Getters

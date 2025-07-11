@@ -33,8 +33,10 @@ void display_spaceship(ALLEGRO_BITMAP* spaceship_png, const Games& game) {
   else { return heart_3_png; }
 }
 
-bool check_direction_changed (const Point& current_direction, Point &temp_direction) {
-  if (current_direction.x != temp_direction.x || current_direction.y != temp_direction.y) {
+bool check_direction_changed(const Point& current_direction, Point& temp_direction) {
+  constexpr float eps = numeric_limits<float>::epsilon();
+  if (fabs(current_direction.x - temp_direction.x) > eps ||
+      fabs(current_direction.y - temp_direction.y) > eps) {
     temp_direction = current_direction;
     return true;
   }
@@ -42,11 +44,11 @@ bool check_direction_changed (const Point& current_direction, Point &temp_direct
 }
 
 void forceChangeLevel(int index, int game_score, Games &game, Point &temp_direction, const vector<string>& game_levels) {
-  game = Games(game_levels.at(index), game_score);
+  game = Games(game_levels.at(static_cast<size_t>(index)), game_score);
   temp_direction = game.ball.getDirection();
 };
 
-void menu(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font, char* text) {
+void menu(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font, const char* text) {
   ALLEGRO_SAMPLE_ID sound_menu_id;
   bool press_any_button = false;
 
@@ -265,11 +267,11 @@ int main(int /* argc */, char** /* argv */) {
   vector<string> game_levels = executeCommand("./research_jsonFile.sh ./data level_");
 
   if (game_levels.empty()) {
-    std::cerr << "Error: no level found by research_jsonFile.sh\n";
+    cerr << "Error: no level found by research_jsonFile.sh\n";
     return -1;
   }
 
-  Games game = Games(game_levels.at(index), game_score);
+  Games game = Games(game_levels.at(static_cast<size_t>(index)), game_score);
   Point temp_direction = game.ball.getDirection();
 
   while (true) {
@@ -282,7 +284,7 @@ int main(int /* argc */, char** /* argv */) {
       showMenu = false;
     }
     
-    if (index < game_levels.size()) {
+    if (index < static_cast<int>(game_levels.size())) {
       forceChangeLevel(index, game_score, game, temp_direction, game_levels);
     } else { done = true; restartGame = false; finish_all_lvl = true; }
     

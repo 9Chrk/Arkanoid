@@ -1,10 +1,13 @@
 #include "ball.hpp"
 
 
-Ball::Ball() : rayon(0), vitesse(0), color(BLACK), position({0, 0}), d({0, -1}), mouvement(false), falling(false) {}
+Ball::Ball()
+    : position({0, 0}), d({0, -1}), rayon(0), vitesse(0),
+      mouvement(false), falling(false), color(BLACK) {}
 
 Ball::Ball(float rayon, float vitesse, ALLEGRO_COLOR color)
-    : rayon(rayon), vitesse(vitesse), color(color), position({0, 0}), d({0, -1}), mouvement(false), falling(false) {}
+    : position({0, 0}), d({0, -1}), rayon(rayon), vitesse(vitesse),
+      mouvement(false), falling(false), color(color) {}
 
 // Drawing and movement
 
@@ -12,7 +15,7 @@ void Ball::draw() const {
   al_draw_circle(position.x, position.y, rayon, color, rayon * 2);
 }
 
-void Ball::move(const Point& spaceship, int spaceship_height) {
+void Ball::move(const Point& spaceship, float spaceship_height) {
   position.x = spaceship.x;
   position.y = spaceship.y - spaceship_height - rayon;
 }

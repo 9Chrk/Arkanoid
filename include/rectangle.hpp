@@ -13,12 +13,14 @@ struct Point {
 
   // pour que la def "map" soit valide
   bool operator<(const Point &other) const {
-    if (x != other.x) return x < other.x;
+    constexpr float eps = numeric_limits<float>::epsilon();
+    if (fabs(x - other.x) > eps) return x < other.x;
     return y < other.y;
   }
-  
+
   bool operator==(const Point &other) const {
-    return x == other.x && y == other.y;
+    constexpr float eps = numeric_limits<float>::epsilon();
+    return fabs(x - other.x) <= eps && fabs(y - other.y) <= eps;
   }
 
   bool operator!=(const Point &other) const {
