@@ -5,12 +5,14 @@
 #include "common.hpp"
 using namespace std;
 
+
 struct Point {
   float x = 0, y = 0;
   Point() = default;
   Point(float x, float y) : x(x), y(y) {}
 
-  bool operator<(const Point &other) const {   // pour que la def "map" soit valide
+  // pour que la def "map" soit valide
+  bool operator<(const Point &other) const {
     if (x != other.x) return x < other.x;
     return y < other.y;
   }
@@ -36,8 +38,8 @@ class Rectangle {
             const ALLEGRO_COLOR& fillColor = WHITE);
             
   void draw() const;
-  [[nodiscard]] bool contains(const Point& p) const;
-  [[nodiscard]] pair<Point, Point> diag_coor() const;
+  bool contains(const Point& p) const;
+  pair<Point, Point> diag_coor() const;
 };
 
 #endif
