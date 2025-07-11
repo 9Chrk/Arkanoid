@@ -1,5 +1,6 @@
 #include "vecteur.hpp"
 
+
 Vecteur::Vecteur(const Point& position, int w, int h)
         : position(position), w(w), h(h), intersectionPoint({0, 0}) {
   last_deplacement = calculateLineEquation({0, 0}, {0, 0});
@@ -68,7 +69,6 @@ Point Vecteur::minimalDistance(const vector<Point>& points, const Point& referen
   }
   return min_point;
 }
-
 
 bool Vecteur::_intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec) {
   if (deplacement.m == edge.m) { return false; }

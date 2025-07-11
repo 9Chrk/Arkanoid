@@ -5,6 +5,7 @@
 #include "common.hpp"
 #include "rectangle.hpp"
 
+
 struct Line {
   float m = 0, b = 0;
   Line() = default;
@@ -28,13 +29,13 @@ class Vecteur {
   void updateEdges();
   void updateLines();
 
-  [[nodiscard]] float distance(const Point& p, const Point& q) const;
-  [[nodiscard]] Point minimalDistance(const vector<Point>& points, const Point& reference) const;
+  float distance(const Point& p, const Point& q) const;
+  Point minimalDistance(const vector<Point>& points, const Point& reference) const;
 
-  [[nodiscard]] Line calculateLineEquation(const Point& p, const Point& q) const;
-  [[nodiscard]] bool sameEquationLine(const Line& line_1, const Line& line_2) const;
+  Line calculateLineEquation(const Point& p, const Point& q) const;
+  bool sameEquationLine(const Line& line_1, const Line& line_2) const;
   bool _intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec);
-  [[nodiscard]] bool isOnSegment(const Point& p, const Point& q, const Point& inter) const;
+  bool isOnSegment(const Point& p, const Point& q, const Point& inter) const;
 
  public:
   Vecteur(const Point& position, int w, int h);
