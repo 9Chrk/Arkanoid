@@ -28,16 +28,16 @@ void Vecteur::updateLines() {
   right = calculateLineEquation(right_vec.first, right_vec.second);
 }
 
-bool Vecteur::sameEquationLine(const Line& line_1, const Line& line_2) const {
+[[gnu::pure]] bool Vecteur::sameEquationLine(const Line& line_1, const Line& line_2) const {
   return (line_1.m == line_2.m && line_1.b == line_2.b);
 }
 
-bool Vecteur::isOnSegment(const Point& p, const Point& q, const Point& inter) const {
+[[gnu::pure]] bool Vecteur::isOnSegment(const Point& p, const Point& q, const Point& inter) const {
   return (inter.x >= min(p.x, q.x) && inter.x <= max(p.x, q.x) &&
           inter.y >= min(p.y, q.y) && inter.y <= max(p.y, q.y));
 }
 
-Line Vecteur::calculateLineEquation(const Point& p, const Point& q) const {
+[[gnu::pure]] Line Vecteur::calculateLineEquation(const Point& p, const Point& q) const {
   float slope, y_intercept;
   if (p.x == q.x) {
     slope = INFINITY;
@@ -49,11 +49,11 @@ Line Vecteur::calculateLineEquation(const Point& p, const Point& q) const {
   return Line(slope, y_intercept);
 }
 
-float Vecteur::distance(const Point& p, const Point& q) const {
+[[gnu::pure]] float Vecteur::distance(const Point& p, const Point& q) const {
   return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));
 }
 
-Point Vecteur::minimalDistance(const vector<Point>& points, const Point& reference) const {
+[[gnu::pure]] Point Vecteur::minimalDistance(const vector<Point>& points, const Point& reference) const {
   if (points.size() == 1) {
     return points.at(0);
   }

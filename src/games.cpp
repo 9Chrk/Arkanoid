@@ -144,7 +144,7 @@ void Games::checkCollisions() {
   }
 }
 
-vector<Point> Games::_collisionPoints(const Point& pos) {
+[[gnu::pure]] vector<Point> Games::_collisionPoints(const Point& pos) {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
     {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},

@@ -26,7 +26,7 @@ void display_spaceship(ALLEGRO_BITMAP* spaceship_png, const Games& game) {
   al_draw_bitmap(spaceship_png, spaceship_pos.x - spaceship_width/2 - 3, spaceship_pos.y - spaceship_height/2 - 1, 0);
 }
 
-ALLEGRO_BITMAP* choose_heartFile(ALLEGRO_BITMAP* heart_1_png, ALLEGRO_BITMAP* heart_2_png, ALLEGRO_BITMAP* heart_3_png, const Games& game) {
+[[gnu::pure]] ALLEGRO_BITMAP* choose_heartFile(ALLEGRO_BITMAP* heart_1_png, ALLEGRO_BITMAP* heart_2_png, ALLEGRO_BITMAP* heart_3_png, const Games& game) {
   int health = game.spaceship.getHealth();
   if (health == 1) { return heart_1_png; }
   else if (health == 2) { return heart_2_png; }

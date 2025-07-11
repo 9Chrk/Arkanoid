@@ -30,7 +30,7 @@ void Spaceship::move(const Point& mousePosition) {
   }
 }
 
-bool Spaceship::validPosition(const Point& newPos) const {
+[[gnu::pure]] bool Spaceship::validPosition(const Point& newPos) const {
   return (newPos.x - w / 2 >= 0) && (newPos.x + w / 2 <= windowWidth);
 }
 
