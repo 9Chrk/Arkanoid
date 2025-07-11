@@ -9,6 +9,7 @@
 #include <ranges>
 #include <vector>
 #include <utility>
+#include <algorithm>
 #include <cstdio>
 #include <memory>
 #include <limits>

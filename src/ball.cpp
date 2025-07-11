@@ -37,6 +37,7 @@ void Ball::move(const Point& spaceship, float w, float h) {
 void Ball::setDirection(const Point& newDirection) { d = newDirection; }
 void Ball::setMouvement(bool cas) { mouvement = cas; }
 void Ball::setFalling(bool cas) { falling = cas; }
+void Ball::setPosition(const Point& p) { position = p; }
 
 // Collision and state management
 

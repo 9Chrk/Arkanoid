@@ -43,4 +43,29 @@ class Vecteur {
   int intersection(const pair<Point, Point>& deplacement_vec);
 };
 
+struct Vec2 { float x = 0.f, y = 0.f; };
+
+struct Rect {
+  float x = 0.f, y = 0.f, w = 0.f, h = 0.f;
+  void inflate(float r) {
+    x -= r; y -= r; w += 2 * r; h += 2 * r;
+  }
+};
+
+Vec2  operator+(Vec2 a, Vec2 b);
+Vec2  operator-(Vec2 a, Vec2 b);
+Vec2  operator*(Vec2 v, float s);
+Vec2  operator*(float s, Vec2 v);
+
+float dot(Vec2 a, Vec2 b);
+float length2(Vec2 v);
+Vec2  normalize(Vec2 v);
+Vec2  reflect(Vec2 v, Vec2 n);
+Vec2  clamp(Vec2 p, Vec2 min, Vec2 max);
+bool  sweepCircleAABB(const Vec2& c0, const Vec2& vel,
+                      float radius,
+                      const Rect& box,
+                      float tMax,
+                      float& outTOI, Vec2& outN);
+
 #endif
