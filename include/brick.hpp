@@ -6,6 +6,7 @@
 #include "rectangle.hpp"
 #include "vecteur.hpp"
 
+
 class Brick : public Rectangle {
  private:
   int score;
@@ -18,14 +19,20 @@ class Brick : public Rectangle {
         int score);
 
   Vecteur vec;
+
+  // Actions
   void destroy();
-  [[nodiscard]] bool isDestroyed() const;
-  [[nodiscard]] bool getSecondLife() const;
+
+  // Getters
+  bool isDestroyed()   const;
+  bool getSecondLife() const;
+  int getScore()       const;
+  Point getPosition()  const;
+  float getWidth()     const;
+  float getHeight()    const;
+
+  // Setters
   void setSecondLife(bool cas);
-  [[nodiscard]] int getScore() const;
-  [[nodiscard]] Point getPosition() const;
-  [[nodiscard]] float getWidth() const;
-  [[nodiscard]] float getHeight() const;
 };
 
 #endif
