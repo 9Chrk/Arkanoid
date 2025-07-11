@@ -13,9 +13,8 @@ class Games {
   int score;
   string levelFile;
   vector<Brick> bricks;
-  Point lastCollisionPos;
-  vector<Point> _collisionPoints(const Point& pos);
 
+  
   // Initialization methods
   void initializeBall();
   void initializeSpaceship();
@@ -30,16 +29,12 @@ class Games {
   // Getters
   int getScore()              const;
   int getHighScore()          const;
-  Point getLastCollisionPos() const;
   bool win()                  const;
   bool lose()                 const;
 
-  // Setters
-  void setLastCollisionPos(const Point& newPos);
-
   // Other methods
   void draw() const;
-  void checkCollisions();
+  void updatePhysics(float dt);
   void saveHighScore() const;
   void resetHighScore() const;
 };

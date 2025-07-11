@@ -347,12 +347,10 @@ int main(int /* argc */, char** /* argv */) {
             }
           } else {
             if (game.ball.inMouvement()) {
-              game.checkCollisions();
-              game.ball.move(game.spaceship.getPosition(),
-                             game.spaceship.getWidth(),
-                             game.spaceship.getHeight());
+              game.updatePhysics(1.0f / refreshPerSecond);
+              game.ball.checkFall();
             } else {
-              game.ball.move(game.spaceship.getPosition(), 
+              game.ball.move(game.spaceship.getPosition(),
                              game.spaceship.getHeight());
             }
           }

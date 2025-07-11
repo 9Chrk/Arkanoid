@@ -1,7 +1,7 @@
 #include "games.hpp"
 
 
-Games::Games(const string& levelFile, int score) : score(score), levelFile(levelFile), lastCollisionPos({0, 0}) {
+Games::Games(const string& levelFile, int score) : score(score), levelFile(levelFile) {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -78,9 +78,6 @@ void Games::initializeBricks() {
   return readJsonFile("./data/settings.json", "highscore").get<int>();
 }
 
-[[gnu::pure]] Point Games::getLastCollisionPos() const {
-  return lastCollisionPos;
- }
 
 [[gnu::pure]] bool Games::lose() const {
   return spaceship.isDeath(); 
@@ -95,7 +92,6 @@ void Games::initializeBricks() {
 
 // Setters
 
-void Games::setLastCollisionPos(const Point& newPos) { lastCollisionPos = newPos; }
 
 // Other methods
 
@@ -109,52 +105,80 @@ void Games::draw() const {
   spaceship.draw();
 }
 
-void Games::checkCollisions() {
-  Point pos = ball.getPosition();
-  float speed = ball.getVitesse();
-  Point direction = ball.getDirection();
+void Games::updatePhysics(float dt) {
+  Vec2 c0 = {ball.getPosition().x, ball.getPosition().y};
+  Vec2 vel = {ball.getDirection().x * ball.getVitesse() * refreshPerSecond,
+              ball.getDirection().y * ball.getVitesse() * refreshPerSecond};
+  float remaining = dt;
+  const float EPS = 1e-4f;
 
-  Brick last_brick = bricks.at(bricks.size()-1);
-  if (pos.y >= last_brick.getPosition().y + last_brick.getHeight()/2 + speed) return;
+  while (remaining > 0.f) {
+    float bestTOI = remaining;
+    Brick* hitB   = nullptr;
+    Vec2   hitN;
+    bool   hit    = false;
 
-  vector<Point> collisionPoints = _collisionPoints(pos);
+    for (Brick& b : bricks) {
+      if (b.isDestroyed()) continue;
+      Rect r{b.getPosition().x - b.getWidth()/2, b.getPosition().y - b.getHeight()/2,
+             b.getWidth(), b.getHeight()};
+      float toi; Vec2 n;
+      if (sweepCircleAABB(c0, vel, ball.getRayon(), r, remaining, toi, n))
+        if (toi < bestTOI) { bestTOI = toi; hitB = &b; hitN = n; hit = true; }
+    }
 
-  for (Brick& brick : bricks) {
-    for (auto& point : collisionPoints) {
-      Point temp_pos = point;
-      Point temp_next_pos = {pos.x + direction.x * speed * 1.5, pos.y + direction.y * speed * 1.5};
-      int intersection =  brick.vec.intersection({temp_pos, temp_next_pos});
-      if (!brick.isDestroyed() && intersection != -1) {
-        if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {
-          if (brick.getScore() != 0) {
-            brick.destroy();
-            score += brick.getScore();
-          }
-          else if (brick.getPosition() == getLastCollisionPos()) { return; }
-        } 
-        else { brick.setSecondLife(false); }
-        
-        setLastCollisionPos(brick.getPosition());
+    // spaceship as moving AABB
+    Rect paddle{spaceship.getPosition().x - spaceship.getWidth()/2,
+                spaceship.getPosition().y - spaceship.getHeight()/2,
+                spaceship.getWidth(), spaceship.getHeight()};
+    {
+      float toi; Vec2 n;
+      if (sweepCircleAABB(c0, vel, ball.getRayon(), paddle, remaining, toi, n))
+        if (toi < bestTOI) { bestTOI = toi; hitB = nullptr; hitN = n; hit = true; }
+    }
 
-        if (intersection) { direction.x *= -1; }  else { direction.y *= -1; }
-        ball.setDirection(direction);
-        return;
+    // walls (left, right, top)
+    Rect walls[3] = {
+      {-1.f, 0.f, 1.f, (float)windowHeight},
+      {(float)windowWidth, 0.f, 1.f, (float)windowHeight},
+      {0.f, -1.f, (float)windowWidth, 1.f}
+    };
+    for (const Rect& w : walls) {
+      float toi; Vec2 n;
+      if (sweepCircleAABB(c0, vel, ball.getRayon(), w, remaining, toi, n))
+        if (toi < bestTOI) { bestTOI = toi; hitB = nullptr; hitN = n; hit = true; }
+    }
+
+    if (!hit) {
+      c0.x += vel.x * remaining;
+      c0.y += vel.y * remaining;
+      break;
+    }
+
+    c0.x += vel.x * (bestTOI - EPS);
+    c0.y += vel.y * (bestTOI - EPS);
+
+    vel = reflect(vel, hitN);
+    if (hitB) {
+      if (hitB->getScore() != 200 || (hitB->getScore() == 200 && !hitB->getSecondLife())) {
+        if (hitB->getScore() != 0) {
+          hitB->destroy();
+          score += hitB->getScore();
+        }
+      } else {
+        hitB->setSecondLife(false);
       }
     }
+
+    remaining -= bestTOI;
   }
+
+  ball.setPosition({c0.x, c0.y});
+  float len = std::sqrt(length2(vel));
+  if (len > 0.f) vel = {vel.x / len, vel.y / len};
+  ball.setDirection({vel.x, vel.y});
 }
 
-[[gnu::pure]] vector<Point> Games::_collisionPoints(const Point& pos) {
-  vector<Point> collisionPoints = {
-    {pos.x, pos.y},
-    {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
-    {pos.x - ball.getRayon(), pos.y}, {pos.x + ball.getRayon(), pos.y},
-    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
-    {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
-    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite
-  };
-  return collisionPoints;
-}
 
 void Games::saveHighScore() const {
   json settings = openJsonFile("./data/settings.json");

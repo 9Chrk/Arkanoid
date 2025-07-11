@@ -103,6 +103,59 @@ int Vecteur::intersection(const pair<Point, Point>& deplacement_vec) {
       pointValues[intersectionPoint] = (i < 2) ? 0 : 1;
     }
   }
-  if (intersections.size()) { return pointValues[minimalDistance(intersections, deplacement_vec.first)]; } 
+  if (intersections.size()) { return pointValues[minimalDistance(intersections, deplacement_vec.first)]; }
   else { return -1;}
+}
+
+// ---- additional geometry helpers ----
+
+float dot(Vec2 a, Vec2 b) {
+  return a.x * b.x + a.y * b.y;
+}
+
+float length2(Vec2 v) {
+  return dot(v, v);
+}
+
+Vec2 normalize(Vec2 v) {
+  float len = std::sqrt(length2(v));
+  if (len > 0.f) { v.x /= len; v.y /= len; }
+  return v;
+}
+
+Vec2 reflect(Vec2 v, Vec2 n) {
+  float d = dot(v, n) * 2.f;
+  return {v.x - d * n.x, v.y - d * n.y};
+}
+
+Vec2 clamp(Vec2 p, Vec2 min, Vec2 max) {
+  return {std::clamp(p.x, min.x, max.x), std::clamp(p.y, min.y, max.y)};
+}
+
+bool sweepCircleAABB(const Vec2& c0, const Vec2& vel,
+                     float radius,
+                     const Rect& box,
+                     float tMax,
+                     float& outTOI, Vec2& outN)
+{
+  Rect exp = box;
+  exp.inflate(radius);
+
+  Vec2 invDir = {1.0f / vel.x, 1.0f / vel.y};
+  float t1 = (exp.x - c0.x) * invDir.x;
+  float t2 = (exp.x + exp.w - c0.x) * invDir.x;
+  float t3 = (exp.y - c0.y) * invDir.y;
+  float t4 = (exp.y + exp.h - c0.y) * invDir.y;
+
+  float tNear = std::max(std::min(t1, t2), std::min(t3, t4));
+  float tFar  = std::min(std::max(t1, t2), std::max(t3, t4));
+
+  if (tNear > tFar || tFar < 0.f || tNear > tMax) return false;
+
+  outTOI = std::max(tNear, 0.f);
+  if      (tNear == t1) outN = {-1.f, 0.f};
+  else if (tNear == t2) outN = { 1.f, 0.f};
+  else if (tNear == t3) outN = { 0.f,-1.f};
+  else                  outN = { 0.f, 1.f};
+  return true;
 }

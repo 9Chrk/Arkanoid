@@ -4,6 +4,29 @@
 
 #include "common.hpp"
 #include "rectangle.hpp"
+#include <algorithm>
+
+struct Vec2 {
+  float x = 0, y = 0;
+};
+
+struct Rect {
+  float x = 0, y = 0, w = 0, h = 0;
+  void inflate(float r) {
+    x -= r; y -= r; w += 2 * r; h += 2 * r;
+  }
+};
+
+float  dot(Vec2 a, Vec2 b);
+float  length2(Vec2 v);
+Vec2   normalize(Vec2 v);
+Vec2   reflect(Vec2 v, Vec2 n);
+Vec2   clamp(Vec2 p, Vec2 min, Vec2 max);
+bool   sweepCircleAABB(const Vec2& c0, const Vec2& vel,
+                       float radius,
+                       const Rect& box,
+                       float tMax,
+                       float& outTOI, Vec2& outN);
 
 
 struct Line {
