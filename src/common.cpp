@@ -58,7 +58,7 @@ void writeJsonFile(const string& fileName, const json& data) {
 
 vector<string> executeCommand(const string& command) { // donnée par chatGPT
   vector<string> output;
-  unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
+  unique_ptr<FILE, int(*)(FILE*)> pipe(popen(command.c_str(), "r"), pclose);
 
   if (!pipe) {
     throw runtime_error("Error during command execution.");
