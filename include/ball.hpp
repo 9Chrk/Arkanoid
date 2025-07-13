@@ -34,6 +34,7 @@ class Ball {
   void setMouvement(bool cas);
   void setFalling(bool cas);
   void setDirection(const Point& newDirection);
+  void setPosition(const Point& newPosition);
   
   // Collision and state management
   void checkCollisions(const Point& spaceship, float w, float h);

@@ -79,10 +79,6 @@ void Games::initializeBricks() {
   return readJsonFile("./data/settings.json", "highscore").get<int>();
 }
 
-[[gnu::pure]] Point Games::getLastCollisionPos() const {
-  return lastCollisionPos;
- }
-
 [[gnu::pure]] bool Games::lose() const {
   return spaceship.isDeath(); 
 }
@@ -131,7 +127,6 @@ void Games::checkCollisions() {
             brick.destroy();
             score += brick.getScore();
           }
-          else if (brick.getPosition() == getLastCollisionPos()) { return; }
         } 
         else { brick.setSecondLife(false); }
         

@@ -28,11 +28,10 @@ class Games {
   Spaceship spaceship;
 
   // Getters
-  int getScore()              const;
-  int getHighScore()          const;
-  Point getLastCollisionPos() const;
-  bool win()                  const;
-  bool lose()                 const;
+  int getScore()     const;
+  int getHighScore() const;
+  bool win()         const;
+  bool lose()        const;
 
   // Setters
   void setLastCollisionPos(const Point& newPos);
