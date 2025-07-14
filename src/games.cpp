@@ -90,10 +90,6 @@ void Games::initializeBricks() {
   return true;
 }
 
-// Setters
-
-void Games::setLastCollisionPos(const Point& newPos) { lastCollisionPos = newPos; }
-
 // Other methods
 
 void Games::draw() const {
@@ -107,44 +103,56 @@ void Games::draw() const {
 }
 
 void Games::checkCollisions() {
-  Point pos = ball.getPosition();
-  float speed = ball.getVitesse();
+  Point pos       = ball.getPosition();
+  float speed     = ball.getVitesse();
   Point direction = ball.getDirection();
 
-  Brick last_brick = bricks.at(bricks.size()-1);
-  if (pos.y >= last_brick.getPosition().y + last_brick.getHeight()/2 + speed) return;
+  const Brick &last = bricks.back();
+  if (pos.y >= last.getPosition().y + last.getHeight() / 2 + speed) return;
 
-  vector<Point> collisionPoints = _collisionPoints(pos);
+  const vector<Point> collisionPoints = _collisionPoints(pos);
 
-  for (Brick& brick : bricks) {
-    for (auto& point : collisionPoints) { // stocker chaque solu et prend lq meilleur min
-      Point temp_pos = point;
-      Point temp_next_pos = {temp_pos.x + direction.x * speed, temp_pos.y + direction.y * speed};
-      int intersection =  brick.vec.intersection({temp_pos, temp_next_pos});
-      if (!brick.isDestroyed() && intersection != -1) {
-        if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {
-          if (brick.getScore() != 0) {
-            brick.destroy();
-            score += brick.getScore();
-          }
-        } 
-        else { brick.setSecondLife(false); }
-        
-        setLastCollisionPos(brick.getPosition());
+  int   hitSide      = -1;      
+  Brick *hitBrick    = nullptr;
+  float bestDistance = INFINITY; 
 
-        if (intersection) { direction.x *= -1; }  else { direction.y *= -1; }
-        ball.setDirection(direction);
-        return;
+  for (Brick &brick : bricks) {
+
+    if (brick.isDestroyed()) continue;
+
+    for (const Point &p : collisionPoints) {
+      Point nextP = {p.x + direction.x * speed, p.y + direction.y * speed};
+      pair<Point, int> intersectionResult = brick.vec.intersection({p, nextP});
+
+      int side = intersectionResult.second;
+      if (side == -1) continue;
+
+      float distance = Vecteur::distance(p, intersectionResult.first);
+
+      if (distance < bestDistance) {
+        hitSide      = side;
+        hitBrick     = &brick;
+        bestDistance = distance;
       }
     }
   }
+  if (!hitBrick) return;
+
+  // Gestion score / seconde vie
+  if (hitBrick->getScore() != 200 || !hitBrick->getSecondLife()) {
+    if (hitBrick->getScore() != 0) {
+      hitBrick->destroy();
+      score += hitBrick->getScore();
+    }
+  } else { hitBrick->setSecondLife(false);}
+
+  if (hitSide) { direction.x *= -1.f; } else { direction.y *= -1.f; }
+  ball.setDirection(direction);
 }
 
 [[gnu::pure]] vector<Point> Games::_collisionPoints(const Point& pos) {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
-    {pos.x, pos.y - ball.getRayon()}, {pos.x, pos.y + ball.getRayon()},
-    {pos.x - ball.getRayon(), pos.y}, {pos.x + ball.getRayon(), pos.y},
     {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
     {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
     {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite

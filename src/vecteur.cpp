@@ -5,8 +5,7 @@ Vecteur::Vecteur(const Point& position, int w, int h)
        : w(w), h(h), position(position),
          top_vec(), bottom_vec(), left_vec(), right_vec(), edges(),
          top(), bottom(), left(), right(), lines(),
-         intersectionPoint({0, 0}),
-         last_deplacement(calculateLineEquation({0, 0}, {0, 0})) {
+         intersectionPoint({0, 0}) {
   updateEdges();
   updateLines();
   edges = {top_vec, bottom_vec, left_vec, right_vec};
@@ -56,7 +55,7 @@ void Vecteur::updateLines() {
   return Line(slope, y_intercept);
 }
 
-[[gnu::pure]] float Vecteur::distance(const Point& p, const Point& q) const {
+[[gnu::pure]] float Vecteur::distance(const Point& p, const Point& q) {
   return hypot(q.x - p.x, q.y - p.y);
 }
 
@@ -98,10 +97,9 @@ bool Vecteur::_intersection(const Line& deplacement, const Line& edge, const pai
          isOnSegment(edge_vec.first, edge_vec.second, intersectionPoint);
 }
 
-int Vecteur::intersection(const pair<Point, Point>& deplacement_vec) {
+pair<Point, int> Vecteur::intersection(const pair<Point, Point>& deplacement_vec) {
   // Point deplacement_vec_ordered = trierPoints(deplacement_vec);
   Line deplacement = calculateLineEquation(deplacement_vec.first, deplacement_vec.second);
-  last_deplacement = deplacement;
   vector<Point> intersections = {};
   map<Point, int> pointValues;
   // Tester chaque bord du rectangle
@@ -111,6 +109,9 @@ int Vecteur::intersection(const pair<Point, Point>& deplacement_vec) {
       pointValues[intersectionPoint] = (i < 2) ? 0 : 1;
     }
   }
-  if (intersections.size()) { return pointValues[minimalDistance(intersections, deplacement_vec.first)]; } 
-  else { return -1;}
+  if (intersections.empty()) return {{0,0}, -1};
+
+  Point closestIntersection = minimalDistance(intersections, deplacement_vec.first);
+  if (intersections.size()) return {closestIntersection, pointValues[closestIntersection]};
+  else return {{0, 0}, -1};
 }

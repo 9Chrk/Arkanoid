@@ -33,9 +33,6 @@ class Games {
   bool win()         const;
   bool lose()        const;
 
-  // Setters
-  void setLastCollisionPos(const Point& newPos);
-
   // Other methods
   void draw() const;
   void checkCollisions();

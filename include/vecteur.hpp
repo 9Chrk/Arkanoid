@@ -23,24 +23,22 @@ class Vecteur {
   Line top, bottom, left, right;
   vector<Line> lines;
 
-  Point intersectionPoint;
-  Line last_deplacement;
-
   void updateEdges();
   void updateLines();
 
-  float distance(const Point& p, const Point& q) const;
-  Point minimalDistance(const vector<Point>& points, const Point& reference) const;
-
+  Point intersectionPoint;
   Line calculateLineEquation(const Point& p, const Point& q) const;
   bool sameEquationLine(const Line& line_1, const Line& line_2) const;
+
   bool _intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec);
   bool isOnSegment(const Point& p, const Point& q, const Point& inter) const;
+  Point minimalDistance(const vector<Point>& points, const Point& reference) const;
 
  public:
   Vecteur(const Point& position, int w, int h);
 
-  int intersection(const pair<Point, Point>& deplacement_vec);
+  static float distance(const Point& p, const Point& q);
+  pair<Point, int> intersection(const pair<Point, Point>& deplacement_vec);
 };
 
 #endif
