@@ -117,9 +117,9 @@ void Games::checkCollisions() {
   vector<Point> collisionPoints = _collisionPoints(pos);
 
   for (Brick& brick : bricks) {
-    for (auto& point : collisionPoints) {
+    for (auto& point : collisionPoints) { // stocker chaque solu et prend lq meilleur min
       Point temp_pos = point;
-      Point temp_next_pos = {pos.x + direction.x * speed * 1.5f, pos.y + direction.y * speed * 1.5f};
+      Point temp_next_pos = {temp_pos.x + direction.x * speed, temp_pos.y + direction.y * speed};
       int intersection =  brick.vec.intersection({temp_pos, temp_next_pos});
       if (!brick.isDestroyed() && intersection != -1) {
         if (brick.getScore() != 200 || (brick.getScore() == 200 && !brick.getSecondLife())) {
