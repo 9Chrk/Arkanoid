@@ -38,6 +38,7 @@ class Vecteur {
   Vecteur(const Point& position, int w, int h);
 
   static float distance(const Point& p, const Point& q);
+  static Point normalize(const Point& p);
   pair<Point, int> intersection(const pair<Point, Point>& deplacement_vec);
 };
 

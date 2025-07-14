@@ -105,10 +105,10 @@ void Games::draw() const {
 void Games::checkCollisions() {
   Point pos       = ball.getPosition();
   float speed     = ball.getVitesse();
-  Point direction = ball.getDirection();
+  Point direction = Vecteur::normalize(ball.getDirection());
 
   const Brick &last = bricks.back();
-  if (pos.y >= last.getPosition().y + last.getHeight() / 2 + speed) return;
+  if (pos.y >= last.getPosition().y + (last.getHeight() / 2) + (speed * speed)) return;
 
   const vector<Point> collisionPoints = _collisionPoints(pos);
 
@@ -146,7 +146,10 @@ void Games::checkCollisions() {
     }
   } else { hitBrick->setSecondLife(false);}
 
-  if (hitSide) { direction.x *= -1.f; } else { direction.y *= -1.f; }
+  if (hitSide == 1) { direction.x *= -1.f; } else if (hitSide == 0) { direction.y *= -1.f; } else {
+    direction.x *= -1.f;
+    direction.y *= -1.f;
+  }
   ball.setDirection(direction);
 }
 
@@ -155,7 +158,8 @@ void Games::checkCollisions() {
     {pos.x, pos.y},
     {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}, // Haut-Droite
     {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Gauche
-    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}  // Bas-Droite
+    {static_cast<float>(pos.x + ball.getRayon() / sqrt(2)), static_cast<float>(pos.y + ball.getRayon() / sqrt(2))}, // Bas-Droite
+    {static_cast<float>(pos.x - ball.getRayon() / sqrt(2)), static_cast<float>(pos.y - ball.getRayon() / sqrt(2))}  // Haut-Gauche
   };
   return collisionPoints;
 }

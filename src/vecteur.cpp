@@ -105,8 +105,14 @@ pair<Point, int> Vecteur::intersection(const pair<Point, Point>& deplacement_vec
   // Tester chaque bord du rectangle
   for (int i = 0; i < 4; ++i) {
     if (_intersection(deplacement, lines.at(static_cast<size_t>(i)), deplacement_vec, edges.at(static_cast<size_t>(i)))) {
-      intersections.push_back(intersectionPoint);
-      pointValues[intersectionPoint] = (i < 2) ? 0 : 1;
+      int side = (i < 2) ? 0 : 1;
+      auto it = pointValues.find(intersectionPoint);
+      if (it == pointValues.end()) {
+        intersections.push_back(intersectionPoint);
+        pointValues[intersectionPoint] = side;
+      } else if (it->second != side) {
+        it->second = 2;
+      }
     }
   }
   if (intersections.empty()) return {{0,0}, -1};
@@ -114,4 +120,11 @@ pair<Point, int> Vecteur::intersection(const pair<Point, Point>& deplacement_vec
   Point closestIntersection = minimalDistance(intersections, deplacement_vec.first);
   if (intersections.size()) return {closestIntersection, pointValues[closestIntersection]};
   else return {{0, 0}, -1};
+}
+
+Point Vecteur::normalize(const Point& p) {
+  constexpr float eps = numeric_limits<float>::epsilon();
+  float norm = sqrt(p.x * p.x + p.y * p.y);
+  if (norm < eps) return {0.f, 0.f};
+  return {p.x / norm, p.y / norm};
 }
