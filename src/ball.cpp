@@ -12,12 +12,12 @@ Ball::Ball(float rayon, float vitesse, ALLEGRO_COLOR color)
 // Drawing and movement
 
 void Ball::draw() const {
-  al_draw_circle(position.x, position.y, rayon, color, rayon * 2);
+  al_draw_filled_circle(position.x, position.y, rayon, color);
 }
 
 void Ball::move(const Point& spaceship, float spaceship_height) {
   position.x = spaceship.x;
-  position.y = spaceship.y - spaceship_height - rayon;
+  position.y = spaceship.y - spaceship_height/2 - rayon;
 }
 
 void Ball::move(const Point& spaceship, float w, float h) {
@@ -62,8 +62,8 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
       d.x = cos(theta);
       d.y = -sin(theta);
     }
-    newPos.x = clamp(newPos.x, 0.0f, static_cast<float>(windowWidth));
-    newPos.y = clamp(newPos.y, 0.0f, static_cast<float>(windowHeight)*1.5f);
+    newPos.x = clamp(newPos.x, 0.0f + rayon, static_cast<float>(windowWidth) - rayon);
+    newPos.y = clamp(newPos.y, 0.0f + rayon, static_cast<float>(windowHeight)*1.5f);
     position = newPos;
 }
   
