@@ -1,24 +1,24 @@
 #include "common.hpp"
 
 
-// Colors
 [[gnu::pure]] ALLEGRO_COLOR getColor(const string& colorName) {
-  if (colorName == "WHITE") return WHITE;
-  else if (colorName == "GREY") return GREY;
-  else if (colorName == "BLACK") return BLACK;
-  else if (colorName == "ORANGE") return ORANGE;
-  else if (colorName == "CYAN") return CYAN;
-  else if (colorName == "GREEN") return GREEN;
-  else if (colorName == "RED") return RED;
-  else if (colorName == "BLUE") return BLUE;
+  if      (colorName == "WHITE")   return WHITE;
+  else if (colorName == "GREY")    return GREY;
+  else if (colorName == "BLACK")   return BLACK;
+  else if (colorName == "ORANGE")  return ORANGE;
+  else if (colorName == "CYAN")    return CYAN;
+  else if (colorName == "GREEN")   return GREEN;
+  else if (colorName == "RED")     return RED;
+  else if (colorName == "BLUE")    return BLUE;
   else if (colorName == "MAGENTA") return MAGENTA;
-  else if (colorName == "YELLOW") return YELLOW;
-  else if (colorName == "SILVER") return SILVER;
-  else if (colorName == "GOLD") return GOLD;
+  else if (colorName == "YELLOW")  return YELLOW;
+  else if (colorName == "SILVER")  return SILVER;
+  else if (colorName == "GOLD")    return GOLD;
   else { return BLACK; }
 }
 
-// JSON functions
+
+// ###################  JSON functions  ###################
 
 json openJsonFile(const string& fileName) {
   ifstream file(fileName);
@@ -54,7 +54,8 @@ void writeJsonFile(const string& fileName, const json& data) {
   newFile.close();
 }
 
-// System commands
+
+// ###################  System commands  ###################
 
 vector<string> executeCommand(const string& command) { // donnée par chatGPT
   vector<string> output;
@@ -74,7 +75,8 @@ vector<string> executeCommand(const string& command) { // donnée par chatGPT
   return output;
 }
 
-// Allegro resource checking and loading
+
+// ###################  Allegro resource checking and loading  ###################
 
 int checkBitmap(ALLEGRO_BITMAP* bitmap, const string& fileName) {
   if (!bitmap) {

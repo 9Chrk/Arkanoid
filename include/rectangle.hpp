@@ -5,18 +5,10 @@
 #include "common.hpp"
 using namespace std;
 
-
 struct Point {
   float x = 0, y = 0;
   Point() = default;
   Point(float x, float y) : x(x), y(y) {}
-
-  // pour que la def "map" soit valide
-  bool operator<(const Point &other) const {
-    constexpr float eps = numeric_limits<float>::epsilon();
-    if (fabs(x - other.x) > eps) return x < other.x;
-    return y < other.y;
-  }
 
   bool operator==(const Point &other) const {
     constexpr float eps = numeric_limits<float>::epsilon();
@@ -26,7 +18,17 @@ struct Point {
   bool operator!=(const Point &other) const {
     return !(*this == other);
   }
+
+  // for the def “map” to be valid
+  bool operator<(const Point &other) const {
+    constexpr float eps = numeric_limits<float>::epsilon();
+    if (fabs(x - other.x) > eps) return x < other.x;
+    return y < other.y;
+  }
 };
+
+
+// ################### Rectangle class ###################
 
 class Rectangle {
  protected:
@@ -38,9 +40,16 @@ class Rectangle {
   Rectangle(const Point& position, float w, float h,
             const ALLEGRO_COLOR& frameColor = BLACK,
             const ALLEGRO_COLOR& fillColor = WHITE);
-            
-  void draw() const;
-  bool contains(const Point& p) const;
+  
+  Rectangle(Rectangle&&)                 = default;
+  Rectangle(const Rectangle&)            = default;
+  Rectangle& operator=(Rectangle&&)      = default;
+  Rectangle& operator=(const Rectangle&) = default;
+
+  virtual ~Rectangle();
+
+  virtual void draw() const;
+  bool contains(const Point& p)  const;
   pair<Point, Point> diag_coor() const;
 };
 

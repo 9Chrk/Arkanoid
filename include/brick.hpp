@@ -4,13 +4,15 @@
 
 #include "common.hpp"
 #include "rectangle.hpp"
-#include "vecteur.hpp"
+#include "vector.hpp"
+#include "bonus.hpp"
 
 
 class Brick : public Rectangle {
  private:
   int score;
   bool destroyed, secondLife;
+  BonusType bonus;
 
  public:
   Brick(const Point& position, float w, float h,
@@ -18,9 +20,9 @@ class Brick : public Rectangle {
         const ALLEGRO_COLOR& fillColor,
         int score);
 
-  Vecteur vec;
+  Vector vec;
 
-  // Actions
+  // Methods
   void destroy();
 
   // Getters
@@ -30,10 +32,12 @@ class Brick : public Rectangle {
   Point getPosition()  const;
   float getWidth()     const;
   float getHeight()    const;
+  BonusType getBonus() const;
 
   // Setters
   void setSecondLife(bool cas);
   void setFrameColor(const ALLEGRO_COLOR& color);
+  void setBonus(BonusType bonus);
 };
 
 #endif

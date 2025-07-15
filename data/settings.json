@@ -1,8 +1,21 @@
 {
   "ball": {
     "color": "WHITE",
-    "rayon": 7,
-    "vitesse": 7
+    "radius": 7,
+    "speed": 7
+  },
+  "bonus": {
+    "height": 6,
+    "speed": 5,
+    "width": 25
+  },
+  "bonus_colors": {
+    "CATCH": "GREEN",
+    "EXPAND": "BLUE",
+    "EXTRA_LIFE": "GREEN",
+    "LASER": "RED",
+    "SLOW_DOWN": "ORANGE",
+    "SPLIT": "CYAN"
   },
   "brick": {
     "height": 15,
@@ -70,7 +83,7 @@
     "height": 15,
     "position.x": 250,
     "position.y": 470,
-    "vitesse": 75,
+    "speed": 75,
     "width": 100
   }
 }

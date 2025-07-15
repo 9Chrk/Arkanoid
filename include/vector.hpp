@@ -1,10 +1,9 @@
 #pragma once
-#ifndef VECTEUR_HPP
-#define VECTEUR_HPP
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 #include "common.hpp"
 #include "rectangle.hpp"
-
 
 struct Line {
   float m = 0, b = 0;
@@ -12,7 +11,10 @@ struct Line {
   Line(float slope, float y_intercept) : m(slope), b(y_intercept) {}
 };
 
-class Vecteur {
+
+// ###################  Vector class  ###################
+
+class Vector {
  private:
   int w, h;
   Point position;
@@ -22,23 +24,30 @@ class Vecteur {
 
   Line top, bottom, left, right;
   vector<Line> lines;
+  
+  Point intersectionPoint;
 
+  // Update methods
   void updateEdges();
   void updateLines();
 
-  Point intersectionPoint;
+  // Internal geometric tools
   Line calculateLineEquation(const Point& p, const Point& q) const;
   bool sameEquationLine(const Line& line_1, const Line& line_2) const;
 
+  // Intersection detection
   bool _intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec);
   bool isOnSegment(const Point& p, const Point& q, const Point& inter) const;
   Point minimalDistance(const vector<Point>& points, const Point& reference) const;
 
  public:
-  Vecteur(const Point& position, int w, int h);
+  Vector(const Point& position, int w, int h);
 
+  // Static utility functions
   static float distance(const Point& p, const Point& q);
   static Point normalize(const Point& p);
+
+  // Intersection detection
   pair<Point, int> intersection(const pair<Point, Point>& deplacement_vec);
 };
 

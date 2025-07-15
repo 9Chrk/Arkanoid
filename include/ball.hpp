@@ -22,24 +22,24 @@ class Ball {
   void move(const Point& spaceship, float spaceship_height);
   void move(const Point& spaceship, float w, float h);
   
+  // Collision and state management
+  void checkCollisions(const Point& spaceship, float w, float h);
+  void checkFall();
+  void reset();
+  
   // Getters
   Point getPosition()  const;
   Point getDirection() const;
   bool inMouvement()   const;
   bool isFalling()     const;
-  float getRayon()     const;
-  float getVitesse()   const;
+  float getRadius()    const;
+  float getSpeed()     const;
   
   // Setters
   void setMouvement(bool cas);
-  void setFalling(bool cas);
+  void setFalling(  bool cas);
   void setDirection(const Point& newDirection);
-  void setPosition(const Point& newPosition);
-  
-  // Collision and state management
-  void checkCollisions(const Point& spaceship, float w, float h);
-  void checkFall();
-  void reset();
+  void setPosition( const Point& newPosition);
 };
 
 #endif

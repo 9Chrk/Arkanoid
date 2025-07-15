@@ -4,9 +4,14 @@
 Rectangle::Rectangle(const Point& position, float w, float h, const ALLEGRO_COLOR& frameColor, const ALLEGRO_COLOR& fillColor)
          : position(position), w(w), h(h), frameColor(frameColor), fillColor(fillColor) {}
 
+Rectangle::~Rectangle() = default;
+
+
+// ###################  Methods  ###################
+
 [[gnu::pure]] pair<Point, Point> Rectangle::diag_coor() const {
-  Point up_left = {position.x - w / 2, position.y - h / 2};
-  Point down_right = {position.x + w / 2, position.y + h / 2};
+  Point up_left    = {position.x - w/2, position.y - h/2};
+  Point down_right = {position.x + w/2, position.y + h/2};
   return {up_left, down_right};
 }
 

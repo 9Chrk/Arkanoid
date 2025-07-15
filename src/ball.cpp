@@ -9,7 +9,8 @@ Ball::Ball(float rayon, float vitesse, ALLEGRO_COLOR color)
     : position({0, 0}), d({0, -1}), rayon(rayon), vitesse(vitesse),
       mouvement(false), falling(false), color(color) {}
 
-// Drawing and movement
+
+// ###################  Drawing and movement  ###################
 
 void Ball::draw() const {
   al_draw_filled_circle(position.x, position.y, rayon, color);
@@ -25,21 +26,8 @@ void Ball::move(const Point& spaceship, float w, float h) {
   checkFall();
 }
 
-// Getters
-[[gnu::pure]] Point Ball::getPosition()  const { return position; }
-[[gnu::pure]] Point Ball::getDirection() const { return d; }
-[[gnu::pure]] float Ball::getRayon()     const { return rayon; }
-[[gnu::pure]] float Ball::getVitesse()   const { return vitesse; }
-[[gnu::pure]] bool  Ball::inMouvement()  const { return mouvement; }
-[[gnu::pure]] bool  Ball::isFalling()    const { return falling; }
 
-// Setters
-void Ball::setDirection(const Point& newDirection) { d = newDirection; }
-void Ball::setMouvement(bool cas) { mouvement = cas; }
-void Ball::setFalling(bool cas) { falling = cas; }
-void Ball::setPosition(const Point& newPosition) { position = newPosition; }
-
-// Collision and state management
+// ###################  Collision and state management  ###################
 
 void Ball::checkCollisions(const Point& spaceship, float w, float h) {
   Point newPos = {position.x + d.x * vitesse, position.y + d.y * vitesse};
@@ -47,12 +35,12 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
   if (newPos.x - rayon <= 0 || newPos.x + rayon >= windowWidth) { d.x *= -1; }
   if (newPos.y - rayon <= 0) { d.y *= -1; }
   
-  if (newPos.y + rayon >= spaceship.y - h / 2 &&
-    newPos.y + rayon <= spaceship.y - h / 2 + vitesse &&
-    newPos.x >= spaceship.x - w / 2 - rayon &&
-    newPos.x <= spaceship.x + w / 2 + rayon) {
+  if (newPos.y + rayon >= spaceship.y - h/2 &&
+    newPos.y + rayon <= spaceship.y - h/2 + vitesse &&
+    newPos.x >= spaceship.x - w/2 - rayon &&
+    newPos.x <= spaceship.x + w/2 + rayon) {
       
-      float x_rel = (newPos.x - spaceship.x) / (w / 2);
+      float x_rel = (newPos.x - spaceship.x) / (w/2);
       x_rel = clamp(x_rel, -1.0f, 1.0f);
       
       float alpha = 30 + 120 * (1 - x_rel);
@@ -75,4 +63,22 @@ void Ball::reset() {
   d = {0, -1};
   mouvement = false;
 }
+
+
+// ###################  Getters  ###################
+
+[[gnu::pure]] Point Ball::getPosition()  const { return position;  }
+[[gnu::pure]] Point Ball::getDirection() const { return d;         }
+[[gnu::pure]] float Ball::getRadius()    const { return rayon;     }
+[[gnu::pure]] float Ball::getSpeed()     const { return vitesse;   }
+[[gnu::pure]] bool  Ball::inMouvement()  const { return mouvement; }
+[[gnu::pure]] bool  Ball::isFalling()    const { return falling;   }
+
+
+// ###################  Setters  ###################
+
+void Ball::setMouvement(bool cas)                  { mouvement = cas;        }
+void Ball::setFalling(bool cas)                    { falling = cas;          }
+void Ball::setDirection(const Point& newDirection) { d = newDirection;       }
+void Ball::setPosition(const Point& newPosition)   { position = newPosition; }
   

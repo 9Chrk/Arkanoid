@@ -39,6 +39,7 @@ using json = nlohmann::json;
 static const int    windowWidth      = 550;
 static const int    windowHeight     = 500;
 static const double refreshPerSecond = 60;
+static const float  playableArea     = 1/3;
 
 static const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
 static const ALLEGRO_COLOR GREY    = al_map_rgb(192, 192, 192);
@@ -59,8 +60,8 @@ static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 ALLEGRO_COLOR getColor(const string& colorName);
 
 // JSON functions
-json openJsonFile(const string& fileName);
-json readJsonFile(const string& fileName, const string& key);
+json  openJsonFile(const string& fileName);
+json  readJsonFile(const string& fileName, const string& key);
 void writeJsonFile(const string& fileName, const string& key, const json& value);
 void writeJsonFile(const string& fileName, const json& data);
 
