@@ -144,7 +144,7 @@ void Games::checkCollisions() {
       hitBrick->destroy();
       score += hitBrick->getScore();
     }
-  } else { hitBrick->setSecondLife(false);}
+  } else { hitBrick->setFrameColor(RED); hitBrick->setSecondLife(false); }
 
   if (hitSide == 1) { direction.x *= -1.f; } else if (hitSide == 0) { direction.y *= -1.f; } else {
     direction.x *= -1.f;
@@ -175,3 +175,5 @@ void Games::saveHighScore() const {
 void Games::resetHighScore() const {
   writeJsonFile("./data/settings.json", "highscore", 0);
 }
+
+void Games::resetScore() { score = 0; } 

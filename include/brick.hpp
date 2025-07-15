@@ -33,6 +33,7 @@ class Brick : public Rectangle {
 
   // Setters
   void setSecondLife(bool cas);
+  void setFrameColor(const ALLEGRO_COLOR& color);
 };
 
 #endif

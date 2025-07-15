@@ -38,6 +38,7 @@ class Games {
   void checkCollisions();
   void saveHighScore() const;
   void resetHighScore() const;
+  void resetScore();
 };
 
 #endif

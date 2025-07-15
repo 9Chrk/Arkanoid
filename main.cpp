@@ -10,20 +10,31 @@ void display_image(ALLEGRO_BITMAP* image_name) {
   al_flip_display();
 }
 
-void display_info_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png, ALLEGRO_BITMAP* heart_png, ALLEGRO_FONT* font,
-                       const Games& game, const Point& score_pos, const Point& highscore_pos) {
+void display_score_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png, ALLEGRO_FONT* font,
+                        const Games& game, const Point& score_pos, const Point& highscore_pos) {
   al_draw_bitmap(score_png, 0, 0, 0);
   al_draw_bitmap(highScore_png, windowWidth * 0, 0, 0);
-  al_draw_bitmap(heart_png, windowWidth * 0, 0, 0);
   al_draw_text(font, WHITE, score_pos.x, score_pos.y, ALLEGRO_ALIGN_CENTER, to_string(game.getScore()).c_str());
   al_draw_text(font, WHITE, highscore_pos.x, highscore_pos.y, ALLEGRO_ALIGN_CENTER, to_string(game.getHighScore()).c_str());
 }
 
+void display_info_game(ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png, ALLEGRO_BITMAP* heart_png, ALLEGRO_FONT* font,
+                       const Games& game, const Point& score_pos, const Point& highscore_pos) {
+  display_score_game(score_png, highScore_png, font, game, score_pos, highscore_pos);
+  al_draw_bitmap(heart_png, windowWidth * 0, 0, 0);
+}
+
 void display_spaceship(ALLEGRO_BITMAP* spaceship_png, const Games& game) {
-  Point spaceship_pos = game.spaceship.getPosition();
-  float spaceship_width = game.spaceship.getWidth();
-  float spaceship_height = game.spaceship.getHeight();
-  al_draw_bitmap(spaceship_png, spaceship_pos.x - spaceship_width/2 - 3, spaceship_pos.y - spaceship_height/2 - 1, 0);
+  float imgW = static_cast<float>(al_get_bitmap_width(spaceship_png));
+  float imgH = static_cast<float>(al_get_bitmap_height(spaceship_png));
+
+  Point spaceship_pos    = game.spaceship.getPosition();
+  float spaceship_width  = game.spaceship.getWidth();
+  float spaceship_height = imgH;
+
+  // Centrer l’image correctement
+  al_draw_scaled_bitmap(spaceship_png, 0, 0, imgW, imgH, spaceship_pos.x - spaceship_width/2, spaceship_pos.y - spaceship_height/2,
+                        spaceship_width, spaceship_height, 0);
 }
 
 [[gnu::pure]] ALLEGRO_BITMAP* choose_heartFile(ALLEGRO_BITMAP* heart_1_png, ALLEGRO_BITMAP* heart_2_png, ALLEGRO_BITMAP* heart_3_png, const Games& game) {
@@ -48,11 +59,20 @@ void forceChangeLevel(int index, int game_score, Games &game, Point &temp_direct
   temp_direction = game.ball.getDirection();
 };
 
-void menu(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font, const char* text) {
+#define UNUSED(x) (void)(x)
+
+void menu(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_SAMPLE* sound_menu, ALLEGRO_FONT* font, 
+          const char* text, ALLEGRO_BITMAP* score_png, ALLEGRO_BITMAP* highScore_png,
+          const Games& game, const Point& score_pos, const Point& highscore_pos, bool displayScore = false) {
+
   ALLEGRO_SAMPLE_ID sound_menu_id;
   bool press_any_button = false;
 
   display_image(image_png);
+  if (displayScore) { cout << "🛑 Score display disabled " << endl; }                                  // ---> display_score_game(score_png, highScore_png, font, game, score_pos, highscore_pos);
+  UNUSED(score_png); UNUSED(highScore_png); UNUSED(game); UNUSED(score_pos); UNUSED(highscore_pos); // delete this line if you want to display the score in the menu
+  al_flip_display();
+  
   al_play_sample(sound_menu, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &sound_menu_id);
 
   al_rest(4.0);
@@ -311,6 +331,7 @@ int main(int /* argc */, char** /* argv */) {
           }
           else if (event.keyboard.keycode == ALLEGRO_KEY_R) {
             game.ball.reset();
+            game.resetScore();
             game.resetHighScore();
           }
           else if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
@@ -323,6 +344,8 @@ int main(int /* argc */, char** /* argv */) {
           else if (event.keyboard.keycode == ALLEGRO_KEY_4) { index = 4, forceChangeLevel(4, game_score, game, temp_direction, game_levels); }
           else if (event.keyboard.keycode == ALLEGRO_KEY_5) { index = 5, forceChangeLevel(5, game_score, game, temp_direction, game_levels); }
           else if (event.keyboard.keycode == ALLEGRO_KEY_6) { index = 6, forceChangeLevel(6, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_7) { index = 7, forceChangeLevel(7, game_score, game, temp_direction, game_levels); }
+          else if (event.keyboard.keycode == ALLEGRO_KEY_8) { index = 8, forceChangeLevel(8, game_score, game, temp_direction, game_levels); }
           break;
 
         case ALLEGRO_EVENT_MOUSE_AXES: {
@@ -375,7 +398,7 @@ int main(int /* argc */, char** /* argv */) {
             cout << "\nCongratulations! You've broken every brick!🎇" << endl;
             cout << "Score achieved : " << game.getScore() << endl;
             cout << "Highscore : " << game.getHighScore() << "\n" << endl;
-            menu(win_png, event, queue, win_wav, font, "Press any key to continue...");
+            menu(win_png, event, queue, win_wav, font, "Press any key to continue...", score_png, highScore_png, game, score_pos, highscore_pos, true);
             index++;
             restartGame = true;
             game_score = score;
@@ -400,10 +423,10 @@ int main(int /* argc */, char** /* argv */) {
     if (!restartGame) { break; }
   }
   if (finish_all_lvl) {
-    cout << "You have finished ARKANOID !!!";
+    cout << "\nYou have finished ARKANOID !!!" << endl;
     cout << "Score achieved : " << game.getScore() << endl;
     cout << "Highscore : " << game.getHighScore() << "\n" << endl;
-    menu(finish_png, event, queue, finish_wav, font, "Press any key to exit...");
+    menu(finish_png, event, queue, finish_wav, font, "Press any key to exit...", score_png, highScore_png, game, score_pos, highscore_pos);
   }
 
   // les ressources allouées dynamiquement sont détruites

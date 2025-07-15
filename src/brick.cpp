@@ -19,3 +19,4 @@ void Brick::destroy() { destroyed = true; }
 
 // Setters
 void Brick::setSecondLife(bool cas) { secondLife = cas; }
+void Brick::setFrameColor(const ALLEGRO_COLOR& color) { frameColor = color; };
