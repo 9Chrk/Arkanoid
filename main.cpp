@@ -138,22 +138,6 @@ void menu_button(ALLEGRO_BITMAP* image_png, ALLEGRO_EVENT event, ALLEGRO_EVENT_Q
   al_stop_sample(&sound_menu_id);
 }
 
-
-// ---- fonctions utilitaires ----
-
-void must_init(bool test, const char* description) {
-  if (test) {
-    return;
-  }
-  cerr << "couldn't initialize " << description << '\n';
-  exit(1);
-}
-
-void must_init(void* test, const char* description) {
-  must_init(test != nullptr, description);
-}
-
-
 // ---------------------------- MAIN ----------------------------
 
 int main(int /* argc */, char** /* argv */) {
@@ -198,28 +182,28 @@ int main(int /* argc */, char** /* argv */) {
   al_start_timer(timer);
 
   // images
-  ALLEGRO_BITMAP* start_png = loadBitmap("./images/start.png");
+  ALLEGRO_BITMAP* start_png      = loadBitmap("./images/start.png");
   ALLEGRO_BITMAP* background_png = loadBitmap("./images/background.png");
-  ALLEGRO_BITMAP* lose_png = loadBitmap("./images/lose.png");
-  ALLEGRO_BITMAP* win_png = loadBitmap("./images/win.png");
-  ALLEGRO_BITMAP* spaceship_png = loadBitmap("./images/spaceship.png");
-  ALLEGRO_BITMAP* heart_1_png = loadBitmap("./images/1heart.png");
-  ALLEGRO_BITMAP* heart_2_png = loadBitmap("./images/2heart.png");
-  ALLEGRO_BITMAP* heart_3_png = loadBitmap("./images/3heart.png");
-  ALLEGRO_BITMAP* score_png = loadBitmap("./images/score.png");
-  ALLEGRO_BITMAP* highScore_png = loadBitmap("./images/high_score.png");
-  ALLEGRO_BITMAP* finish_png = loadBitmap("./images/finish.png");
+  ALLEGRO_BITMAP* lose_png       = loadBitmap("./images/lose.png");
+  ALLEGRO_BITMAP* win_png        = loadBitmap("./images/win.png");
+  ALLEGRO_BITMAP* spaceship_png  = loadBitmap("./images/spaceship.png");
+  ALLEGRO_BITMAP* heart_1_png    = loadBitmap("./images/1heart.png");
+  ALLEGRO_BITMAP* heart_2_png    = loadBitmap("./images/2heart.png");
+  ALLEGRO_BITMAP* heart_3_png    = loadBitmap("./images/3heart.png");
+  ALLEGRO_BITMAP* score_png      = loadBitmap("./images/score.png");
+  ALLEGRO_BITMAP* highScore_png  = loadBitmap("./images/high_score.png");
+  ALLEGRO_BITMAP* finish_png     = loadBitmap("./images/finish.png");
 
   //sounds
-  ALLEGRO_SAMPLE* bip_wav = loadSample("./sounds/bip.wav");
-  ALLEGRO_SAMPLE* bonus_wav = loadSample("./sounds/bonus.wav");
-  ALLEGRO_SAMPLE* button_wav = loadSample("./sounds/button.wav");
-  ALLEGRO_SAMPLE* fall_wav = loadSample("./sounds/fall.wav");
-  ALLEGRO_SAMPLE* lose_wav = loadSample("./sounds/lose.wav");
+  ALLEGRO_SAMPLE* bip_wav            = loadSample("./sounds/bip.wav");
+  ALLEGRO_SAMPLE* bonus_wav          = loadSample("./sounds/bonus.wav");
+  ALLEGRO_SAMPLE* button_wav         = loadSample("./sounds/button.wav");
+  ALLEGRO_SAMPLE* fall_wav           = loadSample("./sounds/fall.wav");
+  ALLEGRO_SAMPLE* lose_wav           = loadSample("./sounds/lose.wav");
   ALLEGRO_SAMPLE* Street_Fighter_wav = loadSample("./sounds/Street_Fighter.wav");
-  ALLEGRO_SAMPLE* win_wav = loadSample("./sounds/win.wav");
-  ALLEGRO_SAMPLE* menu_wav = loadSample("./sounds/menu.wav");
-  ALLEGRO_SAMPLE* finish_wav = loadSample("./sounds/finish.wav");
+  ALLEGRO_SAMPLE* win_wav            = loadSample("./sounds/win.wav");
+  ALLEGRO_SAMPLE* menu_wav           = loadSample("./sounds/menu.wav");
+  ALLEGRO_SAMPLE* finish_wav         = loadSample("./sounds/finish.wav");
 
   //// INITIALISATION VARIABLES ////
 
@@ -227,33 +211,33 @@ int main(int /* argc */, char** /* argv */) {
   json display_score = readJsonFile("./data/settings.json", "display_score");
   json button = readJsonFile("./data/settings.json", "display_button");
   //
-  float score_x = display_score["score.x"].get<float>();
-  float score_y = display_score["score.y"].get<float>();
+  float score_x     = display_score["score.x"].get<float>();
+  float score_y     = display_score["score.y"].get<float>();
   float highscore_x = display_score["highscore.x"].get<float>();
   float highscore_y = display_score["highscore.y"].get<float>();
   //
-  float button_play_position_x = button["button_play"]["position.x"].get<float>();
-  float button_play_position_y = button["button_play"]["position.y"].get<float>();
-  float button_play_width = button["button_play"]["width"].get<float>();
-  float button_play_height = button["button_play"]["height"].get<float>();
+  float button_play_position_x    = button["button_play"]["position.x"].get<float>();
+  float button_play_position_y    = button["button_play"]["position.y"].get<float>();
+  float button_play_width         = button["button_play"]["width"].get<float>();
+  float button_play_height        = button["button_play"]["height"].get<float>();
   ALLEGRO_COLOR button_play_color = getColor(button["button_play"]["color"].get<string>());
   //
-  float button_exit_position_x = button["button_exit"]["position.x"].get<float>();
-  float button_exit_position_y = button["button_exit"]["position.y"].get<float>();
-  float button_exit_width = button["button_exit"]["width"].get<float>();
-  float button_exit_height = button["button_exit"]["height"].get<float>();
+  float button_exit_position_x    = button["button_exit"]["position.x"].get<float>();
+  float button_exit_position_y    = button["button_exit"]["position.y"].get<float>();
+  float button_exit_width         = button["button_exit"]["width"].get<float>();
+  float button_exit_height        = button["button_exit"]["height"].get<float>();
   ALLEGRO_COLOR button_exit_color = getColor(button["button_exit"]["color"].get<string>());
   //
-  float button_yes_position_x = button["button_yes"]["position.x"].get<float>();
-  float button_yes_position_y = button["button_yes"]["position.y"].get<float>();
-  float button_yes_width = button["button_yes"]["width"].get<float>();
-  float button_yes_height = button["button_yes"]["height"].get<float>();
+  float button_yes_position_x    = button["button_yes"]["position.x"].get<float>();
+  float button_yes_position_y    = button["button_yes"]["position.y"].get<float>();
+  float button_yes_width         = button["button_yes"]["width"].get<float>();
+  float button_yes_height        = button["button_yes"]["height"].get<float>();
   ALLEGRO_COLOR button_yes_color = getColor(button["button_yes"]["color"].get<string>());
   //
-  float button_no_position_x = button["button_no"]["position.x"].get<float>();
-  float button_no_position_y = button["button_no"]["position.y"].get<float>();
-  float button_no_width = button["button_no"]["width"].get<float>();
-  float button_no_height = button["button_no"]["height"].get<float>();
+  float button_no_position_x    = button["button_no"]["position.x"].get<float>();
+  float button_no_position_y    = button["button_no"]["position.y"].get<float>();
+  float button_no_width         = button["button_no"]["width"].get<float>();
+  float button_no_height        = button["button_no"]["height"].get<float>();
   ALLEGRO_COLOR button_no_color = getColor(button["button_no"]["color"].get<string>());
   //////////
 
@@ -382,7 +366,8 @@ int main(int /* argc */, char** /* argv */) {
             }
           }
 
-          if (game.lose()) {
+          if (game.lose()) 
+          {
             al_stop_sample(&sound_game_id);
             al_play_sample(lose_wav, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             cout << "\nGame Over... The bricks have won this time. 🧱" << endl;
@@ -392,7 +377,9 @@ int main(int /* argc */, char** /* argv */) {
             game_score = 0;
             index = 0;
             done = true;
-          } else if (game.win()) {
+          } 
+          else if (game.win()) 
+          {
             al_stop_sample(&sound_game_id);
             int score = game.getScore();
             cout << "\nCongratulations! You've broken every brick!🎇" << endl;
@@ -403,7 +390,9 @@ int main(int /* argc */, char** /* argv */) {
             restartGame = true;
             game_score = score;
             done = restartGame;
-          } else {
+          } 
+          else 
+          {
             al_clear_to_color(WHITE);
             al_draw_bitmap(background_png, 0, 0, 0);
             ALLEGRO_BITMAP* heart_png = choose_heartFile(heart_1_png, heart_2_png, heart_3_png, game);

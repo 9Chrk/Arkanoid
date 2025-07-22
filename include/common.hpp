@@ -74,4 +74,8 @@ int checkSample(ALLEGRO_SAMPLE* sample, const string& fileName);
 ALLEGRO_BITMAP* loadBitmap(const char* filename);
 ALLEGRO_SAMPLE* loadSample(const char* filename);
 
+// Allegro resource initialization
+void must_init(bool test, const char* description);
+void must_init(void* test, const char* description);
+
 #endif

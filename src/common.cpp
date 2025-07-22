@@ -108,3 +108,16 @@ ALLEGRO_SAMPLE* loadSample(const char* filename) {
   checkSample(sample, filename);
   return sample;
 }
+
+
+// ###################  Allegro resource initialization  ###################
+
+void must_init(bool test, const char* description) {
+  if (test) return;
+  cerr << "couldn't initialize " << description << '\n';
+  exit(1);
+}
+
+void must_init(void* test, const char* description) {
+  must_init(test != nullptr, description);
+}
