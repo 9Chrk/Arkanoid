@@ -38,7 +38,7 @@ class Brick : public Rectangle {
   // Setters
   void setSecondLife(bool cas);
   void setFrameColor(const ALLEGRO_COLOR& color);
-  void setBonus(BonusType bonus);
+  void setBonus(BonusType bonusType);
 };
 
 #endif

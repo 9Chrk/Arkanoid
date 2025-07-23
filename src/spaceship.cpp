@@ -14,7 +14,7 @@ Spaceship::Spaceship(const Point& position, float w, float h, int vitesse, int h
 void Spaceship::move(int direction) {
   Point newPos = position;
   newPos.x += (direction == 0 ? -static_cast<float>(vitesse) : static_cast<float>(vitesse));
-  position.x = clamp(newPos.x, w/2.0f, windowWidth - w/2.0f);
+  position.x = clamp(newPos.x, w/2, windowWidth - w/2);
 }
 
 void Spaceship::move(const Point& mousePosition) {

@@ -47,8 +47,8 @@ class Rectangle {
 
   virtual ~Rectangle();
 
-  virtual void draw() const;
-  bool contains(const Point& p)  const;
+  virtual void draw()                 const;
+  bool contains(const Point& p)       const;
   std::pair<Point, Point> diag_coor() const;
 };
 

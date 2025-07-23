@@ -16,7 +16,7 @@ struct Line {
 
 class Vector {
  private:
-  int w, h;
+  float w, h;
   Point position;
 
   pair<Point, Point> top_vec, bottom_vec, left_vec, right_vec;
@@ -41,7 +41,7 @@ class Vector {
   Point minimalDistance(const vector<Point>& points, const Point& reference) const;
 
  public:
-  Vector(const Point& position, int w, int h);
+  Vector(const Point& position, float w, float h);
 
   // Static utility functions
   static float distance(const Point& p, const Point& q);

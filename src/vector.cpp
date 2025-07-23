@@ -2,7 +2,7 @@ using namespace std;
 #include "vector.hpp"
 
 
-Vector::Vector(const Point& position, int w, int h)
+Vector::Vector(const Point& position, float w, float h)
        : w(w), h(h), position(position),
          top_vec(), bottom_vec(), left_vec(), right_vec(), edges(),
          top(), bottom(), left(), right(), lines(),
@@ -17,13 +17,10 @@ Vector::Vector(const Point& position, int w, int h)
 // ###################  Update methods  ###################
 
 void Vector::updateEdges() {
-  float half_w = static_cast<float>(w)/2.0f;
-  float half_h = static_cast<float>(h)/2.0f;
-  
-  Point top_left     = {position.x - half_w, position.y - half_h};
-  Point top_right    = {position.x + half_w, position.y - half_h};
-  Point bottom_left  = {position.x - half_w, position.y + half_h};
-  Point bottom_right = {position.x + half_w, position.y + half_h};
+  Point top_left     = {position.x - w/2, position.y - h/2};
+  Point top_right    = {position.x + w/2, position.y - h/2};
+  Point bottom_left  = {position.x - w/2, position.y + h/2};
+  Point bottom_right = {position.x + w/2, position.y + h/2};
 
   top_vec    = make_pair(top_left, top_right);
   bottom_vec = make_pair(bottom_left, bottom_right);
@@ -143,6 +140,6 @@ bool Vector::_intersection(const Line& deplacement, const Line& edge, const pair
 Point Vector::normalize(const Point& p){
   constexpr float eps = numeric_limits<float>::epsilon();
   float norm = sqrt(p.x * p.x + p.y * p.y);
-  if (norm < eps) return {0.f, 0.f};
+  if (norm < eps) return {0,0};
   return {p.x / norm, p.y / norm};
 }

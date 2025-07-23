@@ -17,7 +17,7 @@ Bonus::Bonus(const Point& position, float w, float h,
  
  void Bonus::draw() const {
    if (active) {
-     float rayon = w/2.0f;
+     float rayon = w/2;
      Point left_arc  = {position.x - rayon, position.y};
      Point right_arc = {position.x + rayon, position.y};
  

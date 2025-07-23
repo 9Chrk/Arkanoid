@@ -40,7 +40,7 @@ using json = nlohmann::json;
 static const int    windowWidth      = 550;
 static const int    windowHeight     = 500;
 static const double refreshPerSecond = 60;
-static const float  playableArea     = 1/3;
+static const float  playableArea     = 1.0f/3.0f;
 extern ALLEGRO_FONT* font_bonus; // defined in main.cpp TEMPORARILY
 
 static const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);

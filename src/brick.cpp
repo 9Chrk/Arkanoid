@@ -17,8 +17,8 @@ void Brick::draw() const {
     float text_width  = static_cast<float>(al_get_text_width(font_bonus, txt.c_str()));
     float text_height = static_cast<float>(al_get_font_line_height(font_bonus));
 
-    float draw_x = position.x - text_width/2.0f;
-    float draw_y = position.y - text_height/2.0f;
+    float draw_x = position.x - text_width/2;
+    float draw_y = position.y - text_height/2;
 
     al_draw_text(font_bonus, BLACK, draw_x, draw_y, 0, txt.c_str());
   }
@@ -40,4 +40,4 @@ void Brick::draw() const {
 
 void Brick::setSecondLife(bool cas)                   { secondLife = cas;   }
 void Brick::setFrameColor(const ALLEGRO_COLOR& color) { frameColor = color; }
-void Brick::setBonus(BonusType bonus)                 { bonus = bonus;      }
+void Brick::setBonus(BonusType bonusType)             { bonus = bonusType;  }

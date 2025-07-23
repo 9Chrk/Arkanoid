@@ -44,15 +44,15 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
       float x_rel = (newPos.x - spaceship.x) / (w/2);
       x_rel = clamp(x_rel, -1.0f, 1.0f);
       
-      float alpha = 30 + 120 * (1 - x_rel);
+      float alpha = 30.0f + 120.0f * (1.0f - x_rel);
       alpha = clamp(alpha, 30.0f, 150.0f);
       float theta = alpha * static_cast<float>(M_PI) / 180.0f;
       
       d.x = cos(theta);
       d.y = -sin(theta);
     }
-    newPos.x = clamp(newPos.x, 0.0f + rayon, static_cast<float>(windowWidth) - rayon);
-    newPos.y = clamp(newPos.y, 0.0f + rayon, static_cast<float>(windowHeight)*1.5f);
+    newPos.x = clamp(newPos.x, rayon, static_cast<float>(windowWidth) - rayon);
+    newPos.y = clamp(newPos.y, rayon, static_cast<float>(windowHeight)*1.5f);
     position = newPos;
 }
   

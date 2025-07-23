@@ -62,8 +62,8 @@ void Games::initializeBricks()
 
     if (score != -1) {
       bricks.emplace_back(
-        Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x/2.0f,
-               offset_start_y + offset_y * static_cast<float>(i) + offset_y/2.0f}),
+        Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x/2,
+               offset_start_y + offset_y * static_cast<float>(i) + offset_y/2}),
         width, height, BLACK, getColor(bricks_colors.at(bricks_data.at(index))), score, BonusType::NONE
       );
     }
@@ -157,12 +157,12 @@ void Games::handleBrickHit(Brick* hitBrick) {
 
 void Games::handleBallRebound(Point& direction, int hitSide) {
   if (hitSide == 1) {
-    direction.x *= -1.f;
+    direction.x *= -1;
   } else if (hitSide == 0) {
-    direction.y *= -1.f;
+    direction.y *= -1;
   } else {
-    direction.x *= -1.f;
-    direction.y *= -1.f;
+    direction.x *= -1;
+    direction.y *= -1;
   }
   ball.setDirection(direction);
 }
