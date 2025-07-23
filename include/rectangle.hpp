@@ -3,7 +3,6 @@
 #define RECTANGLE_HPP
 
 #include "common.hpp"
-using namespace std;
 
 struct Point {
   float x = 0, y = 0;
@@ -11,7 +10,7 @@ struct Point {
   Point(float x, float y) : x(x), y(y) {}
 
   bool operator==(const Point &other) const {
-    constexpr float eps = numeric_limits<float>::epsilon();
+    constexpr float eps = std::numeric_limits<float>::epsilon();
     return fabs(x - other.x) <= eps && fabs(y - other.y) <= eps;
   }
 
@@ -21,7 +20,7 @@ struct Point {
 
   // for the def “map” to be valid
   bool operator<(const Point &other) const {
-    constexpr float eps = numeric_limits<float>::epsilon();
+    constexpr float eps = std::numeric_limits<float>::epsilon();
     if (fabs(x - other.x) > eps) return x < other.x;
     return y < other.y;
   }
@@ -50,7 +49,7 @@ class Rectangle {
 
   virtual void draw() const;
   bool contains(const Point& p)  const;
-  pair<Point, Point> diag_coor() const;
+  std::pair<Point, Point> diag_coor() const;
 };
 
 #endif

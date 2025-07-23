@@ -4,19 +4,8 @@
 
 #include "common.hpp"
 #include "rectangle.hpp"
+#include "bonus_type.hpp"
 
-enum class BonusType {
-  NONE,
-  LASER,
-  EXPAND,
-  CATCH,
-  SLOW_DOWN,
-  SPLIT,
-  EXTRA_LIFE,
-};
-
-
-// ################### Bonus class ###################
 
 class Bonus : public Rectangle {
  private:

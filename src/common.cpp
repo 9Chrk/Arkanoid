@@ -1,3 +1,4 @@
+using namespace std;
 #include "common.hpp"
 
 
@@ -15,6 +16,26 @@
   else if (colorName == "SILVER")  return SILVER;
   else if (colorName == "GOLD")    return GOLD;
   else { return BLACK; }
+}
+
+[[gnu::pure]] string getBonusAbbreviation(const BonusType& bonusType) {
+  if      (bonusType == BonusType::CATCH)      return "CT";
+  else if (bonusType == BonusType::EXPAND)     return "EX";
+  else if (bonusType == BonusType::EXTRA_LIFE) return "EL";
+  else if (bonusType == BonusType::LASER)      return "LS";
+  else if (bonusType == BonusType::SLOW_DOWN)  return "SD";
+  else if (bonusType == BonusType::SPLIT)      return "SP";
+  else { return ""; }
+}
+
+[[gnu::pure]] BonusType getBonusType(const string& bonusName) {
+  if      (bonusName == "CATCH") return BonusType::CATCH;
+  else if (bonusName == "EXPAND") return BonusType::EXPAND;
+  else if (bonusName == "EXTRA_LIFE") return BonusType::EXTRA_LIFE;
+  else if (bonusName == "LASER") return BonusType::LASER;
+  else if (bonusName == "SLOW_DOWN") return BonusType::SLOW_DOWN;
+  else if (bonusName == "SPLIT") return BonusType::SPLIT;
+  else { return BonusType::NONE; }
 }
 
 

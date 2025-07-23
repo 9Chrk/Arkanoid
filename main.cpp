@@ -1,6 +1,9 @@
+using namespace std;
 #include "include/common.hpp"
 #include "include/games.hpp"
 
+
+ALLEGRO_FONT* font_bonus = nullptr; // defined in main.cpp TEMPORARILY
 
 // ---- fonctions ----
 
@@ -172,7 +175,9 @@ int main(int /* argc */, char** /* argv */) {
   al_set_window_title(disp, "Arkanoid");
 
   ALLEGRO_FONT* font = al_load_font("./font/Distant_galaxy.ttf", 20, 0);
+  font_bonus = al_load_font("./font/Pixeled.ttf", 6, 0);
   must_init(font, "font");
+  must_init(font_bonus, "font_bonus");
 
   al_register_event_source(queue, al_get_keyboard_event_source());
   al_register_event_source(queue, al_get_display_event_source(disp));

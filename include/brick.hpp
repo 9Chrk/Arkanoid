@@ -5,7 +5,7 @@
 #include "common.hpp"
 #include "rectangle.hpp"
 #include "vector.hpp"
-#include "bonus.hpp"
+#include "bonus_type.hpp"
 
 
 class Brick : public Rectangle {
@@ -18,12 +18,13 @@ class Brick : public Rectangle {
   Brick(const Point& position, float w, float h,
         const ALLEGRO_COLOR& frameColor,
         const ALLEGRO_COLOR& fillColor,
-        int score);
+        int score, BonusType bonus = BonusType::NONE);
 
   Vector vec;
 
   // Methods
   void destroy();
+  void draw() const override;
 
   // Getters
   bool isDestroyed()   const;

@@ -12,7 +12,6 @@
 #include <cstdio>
 #include <memory>
 #include <limits>
-#include "../libs/json.hpp"
 
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro.h>
@@ -33,17 +32,20 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
-using namespace std;
+#include "bonus_type.hpp"
+#include "../libs/json.hpp"
+
 using json = nlohmann::json;
 
 static const int    windowWidth      = 550;
 static const int    windowHeight     = 500;
 static const double refreshPerSecond = 60;
 static const float  playableArea     = 1/3;
+extern ALLEGRO_FONT* font_bonus; // defined in main.cpp TEMPORARILY
 
 static const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
 static const ALLEGRO_COLOR GREY    = al_map_rgb(192, 192, 192);
-static const ALLEGRO_COLOR BLACK   = al_map_rgb(50, 50, 50);
+static const ALLEGRO_COLOR BLACK   = al_map_rgb(0,   0,   0);
 static const ALLEGRO_COLOR YELLOW  = al_map_rgb(255, 223, 56);
 static const ALLEGRO_COLOR PINK    = al_map_rgb(255, 114, 192);
 static const ALLEGRO_COLOR BLUE    = al_map_rgb(122, 170, 255);
@@ -56,21 +58,23 @@ static const ALLEGRO_COLOR SILVER  = al_map_rgb(224, 224, 224);
 static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 
 
-// Colors
-ALLEGRO_COLOR getColor(const string& colorName);
+// Colors and Bonus
+ALLEGRO_COLOR getColor(const std::string& colorName);
+std::string getBonusAbbreviation(const BonusType& bonusName);
+BonusType getBonusType(const std::string& bonusName);
 
 // JSON functions
-json  openJsonFile(const string& fileName);
-json  readJsonFile(const string& fileName, const string& key);
-void writeJsonFile(const string& fileName, const string& key, const json& value);
-void writeJsonFile(const string& fileName, const json& data);
+json  openJsonFile(const std::string& fileName);
+json  readJsonFile(const std::string& fileName, const std::string& key);
+void writeJsonFile(const std::string& fileName, const std::string& key, const json& value);
+void writeJsonFile(const std::string& fileName, const json& data);
 
 // System commands
-vector<string> executeCommand(const string& command);
+std::vector<std::string> executeCommand(const std::string& command);
 
 // Allegro resource checking and loading
-int checkBitmap(ALLEGRO_BITMAP* bitmap, const string& fileName);
-int checkSample(ALLEGRO_SAMPLE* sample, const string& fileName);
+int checkBitmap(ALLEGRO_BITMAP* bitmap, const std::string& fileName);
+int checkSample(ALLEGRO_SAMPLE* sample, const std::string& fileName);
 ALLEGRO_BITMAP* loadBitmap(const char* filename);
 ALLEGRO_SAMPLE* loadSample(const char* filename);
 
