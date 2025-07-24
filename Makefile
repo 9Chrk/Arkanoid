@@ -34,7 +34,7 @@ OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(notdir $(SRCS)))
 
 # Règle par défaut
 all: clean $(OBJ_DIR) $(OBJS)
-	$(CXX) $(OBJS) -o main $(LDLIBS)
+	$(CXX) $(OBJS) -o Arkanoid $(LDLIBS)
 
 # Compilation des fichiers objets
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -49,4 +49,4 @@ $(OBJ_DIR):
 
 # Nettoyage
 clean:
-	rm -rf $(OBJ_DIR)/*.o main
+	rm -rf $(OBJ_DIR) $(OBJ_DIR)/*.o Arkanoid

@@ -74,7 +74,7 @@ void Games::initializeBricks()
 // ###################  Methods  ###################
 
 void Games::draw() const {
-  for (Brick brick : bricks) {
+  for (const Brick& brick : bricks) {
     if (!brick.isDestroyed()) {
       brick.draw();
     }
