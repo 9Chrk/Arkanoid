@@ -1,4 +1,3 @@
-using namespace std;
 #include "Ball.hpp"
 
 
@@ -36,17 +35,17 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
     newPos.x <= spaceship.x + w/2 + radius) {
       
       float x_rel = (newPos.x - spaceship.x) / (w/2);
-      x_rel = clamp(x_rel, -1.0f, 1.0f);
+      x_rel = std::clamp(x_rel, -1.0f, 1.0f);
       
       float alpha = 30.0f + 120.0f * (1.0f - x_rel);
-      alpha = clamp(alpha, 30.0f, 150.0f);
+      alpha = std::clamp(alpha, 30.0f, 150.0f);
       float theta = alpha * static_cast<float>(M_PI) / 180.0f;
       
-      direction.x = cos(theta);
-      direction.y = -sin(theta);
+      direction.x = std::cos(theta);
+      direction.y = -std::sin(theta);
     }
-    newPos.x = clamp(newPos.x, radius, GameWidth - radius);
-    newPos.y = clamp(newPos.y, radius, GameHeight * 1.5f);
+    newPos.x = std::clamp(newPos.x, radius, GameWidth - radius);
+    newPos.y = std::clamp(newPos.y, radius, GameHeight * 1.5f);
     position = newPos;
 }
   

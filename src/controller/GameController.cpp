@@ -1,8 +1,7 @@
-using namespace std;
 #include "GameController.hpp"
 
 
-GameController::GameController(shared_ptr<GameModel> model, int levelIndex, const vector<string>& levelFiles, int totalScore)
+GameController::GameController(std::shared_ptr<GameModel> model, int levelIndex, const std::vector<std::string>& levelFiles, int totalScore)
     : model(model), view(GameView(model)), levelFiles(levelFiles), totalScore(totalScore), levelIndex(levelIndex), tempDirection({0, -1}) {}
 
 // Getters
@@ -11,7 +10,7 @@ GameView& GameController::getView() {
   return view;
 }
 
-shared_ptr<GameModel> GameController::getModel() {
+std::shared_ptr<GameModel> GameController::getModel() {
   return model;
 }
 

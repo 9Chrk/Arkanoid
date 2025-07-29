@@ -1,8 +1,7 @@
-using namespace std;
 #include "GameModel.hpp"
 
 
-GameModel::GameModel(const string& levelFile, int score)
+GameModel::GameModel(const std::string& levelFile, int score)
          : score(score), levelFile(levelFile), ball(), spaceship(), bricks(), bonuses() {
   initializeBall();
   initializeSpaceship();
@@ -36,7 +35,7 @@ void GameModel::initializeBricks()
 {
   json level                    = openJsonFile("./assets/data/" + levelFile);
   json settings                 = openJsonFile("./assets/data/settings.json");
-  vector<string> bricks_data    = level["bricks"].get<vector<string>>();
+  std::vector<std::string> bricks_data    = level["bricks"].get<std::vector<std::string>>();
   const int dim_x               = level["dim_x"].get<int>();
   const int width               = settings["brick"]["width"].get<int>();
   const int height              = settings["brick"]["height"].get<int>();
@@ -54,7 +53,7 @@ void GameModel::initializeBricks()
   for (size_t index = 0; index < bricks_data.size(); ++index) {
     size_t i = index / static_cast<size_t>(dim_x);
     size_t j = index % static_cast<size_t>(dim_x);
-    int score = stoi(bricks_data.at(index));
+    int score = std::stoi(bricks_data.at(index));
 
     if (score != -1) {
       bricks.emplace_back(
@@ -87,7 +86,7 @@ bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) {
 }
 
 GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, const Point& direction, float speed) {
-  const vector<Point> collisionPoints = _collisionPoints(pos);
+  const std::vector<Point> collisionPoints = _collisionPoints(pos);
   CollisionResult result;
   
   for (Brick &brick : bricks) {
@@ -101,12 +100,12 @@ GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, con
   return result;
 }
 
-GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) {
+GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const std::vector<Point>& collisionPoints, const Point& direction, float speed) {
   CollisionResult result;
   
   for (const Point &p : collisionPoints) {
     Point nextP = {p.x + direction.x * speed, p.y + direction.y * speed};
-    pair<Point, int> intersectionResult = brick.getVector().intersection({p, nextP});
+    std::pair<Point, int> intersectionResult = brick.getVector().intersection({p, nextP});
     int side = intersectionResult.second;
     
     if (side == -1) continue;
@@ -146,22 +145,22 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
 
 // Helper methods
 
-[[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) {
-  vector<Point> collisionPoints = {
+[[gnu::pure]] std::vector<Point> GameModel::_collisionPoints(const Point& pos) {
+  std::vector<Point> collisionPoints = {
     {pos.x, pos.y},
-    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Haut-Droite
-    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bas-Gauche
-    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bas-Droite
-    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}  // Haut-Gauche
+    {static_cast<float>(pos.x + ball.getRadius() / std::sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / std::sqrt(2))}, // Haut-Droite
+    {static_cast<float>(pos.x - ball.getRadius() / std::sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / std::sqrt(2))}, // Bas-Gauche
+    {static_cast<float>(pos.x + ball.getRadius() / std::sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / std::sqrt(2))}, // Bas-Droite
+    {static_cast<float>(pos.x - ball.getRadius() / std::sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / std::sqrt(2))}  // Haut-Gauche
   };
   return collisionPoints;
 }
 
 bool GameModel::checkDirectionChanged(Point& tempDirection) {
   const Point& currentDirection = ball.getDirection();
-  constexpr float eps = numeric_limits<float>::epsilon();
-  if (fabs(currentDirection.x - tempDirection.x) > eps ||
-      fabs(currentDirection.y - tempDirection.y) > eps) {
+  constexpr float eps = std::numeric_limits<float>::epsilon();
+  if (std::fabs(currentDirection.x - tempDirection.x) > eps ||
+      std::fabs(currentDirection.y - tempDirection.y) > eps) {
     tempDirection = currentDirection;
     return true;
   }
@@ -197,8 +196,8 @@ void GameModel::resetScore() {
 [[gnu::pure]] Ball& GameModel::getBall()                         { return ball;      }
 [[gnu::pure]] Spaceship& GameModel::getSpaceship()               { return spaceship; }
 
-[[gnu::pure]] const vector<Brick>& GameModel::getBricks()  const { return bricks;    }
-[[gnu::pure]] const vector<Bonus>& GameModel::getBonuses() const { return bonuses;   }
+[[gnu::pure]] const std::vector<Brick>& GameModel::getBricks()  const { return bricks;    }
+[[gnu::pure]] const std::vector<Bonus>& GameModel::getBonuses() const { return bonuses;   }
 
 
 [[gnu::pure]] bool GameModel::lose() const { return spaceship.isDeath(); }
