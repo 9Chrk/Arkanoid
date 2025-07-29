@@ -1,40 +1,39 @@
-using namespace std;
 #include "Engine.hpp"
 
 
 Engine::Engine()
   : gameLevels(executeCommand("./research_jsonFile.sh ./assets/data level_")) {
   if (gameLevels.empty()) {
-    cerr << "Error: no level found by research_jsonFile.sh\n";
-    exit(EXIT_FAILURE);
+    std::cerr << "Error: no level found by research_jsonFile.sh\n";
+    std::exit(EXIT_FAILURE);
   }
 }
 
 // Print methods
 
 void Engine::printWin(int score, int highscore) {
-  cout << "\nCongratulations! You've broken every brick! 🎇" << endl;
-  cout << "Score achieved : " << score << endl;
-  cout << "Highscore      : " << highscore << "\n" << endl;
+  std::cout << "\nCongratulations! You've broken every brick! 🎇" << std::endl;
+  std::cout << "Score achieved : " << score << std::endl;
+  std::cout << "Highscore      : " << highscore << "\n" << std::endl;
 }
 
 void Engine::printLose(int score, int highscore) {
-  cout << "\nGame Over... The bricks have won this time. 🧱" << endl;
-  cout << "Score achieved : " << score << endl;
-  cout << "Highscore      : " << highscore << "\n" << endl;
+  std::cout << "\nGame Over... The bricks have won this time. 🧱" << std::endl;
+  std::cout << "Score achieved : " << score << std::endl;
+  std::cout << "Highscore      : " << highscore << "\n" << std::endl;
 }
 
 void Engine::printFinish(int score, int highscore) {
-  cout << "\nYou have finished ARKANOID !!!" << endl;
-  cout << "Score achieved : " << score << endl;
-  cout << "Highscore      : " << highscore << "\n" << endl;
+  std::cout << "\nYou have finished ARKANOID !!!" << std::endl;
+  std::cout << "Score achieved : " << score << std::endl;
+  std::cout << "Highscore      : " << highscore << "\n" << std::endl;
 }
 
 // Handle Allegro Events
 
 bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID soundID) {
   GameView& view = controller.getView();
-  shared_ptr<GameModel> model = controller.getModel();
+  std::shared_ptr<GameModel> model = controller.getModel();
 
   if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE || 
      (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)) {
@@ -75,7 +74,7 @@ bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller
 // Game loop
 
 void Engine::run() {
-  auto model = make_shared<GameModel>(gameLevels.at(static_cast<size_t>(index)), gameScore);
+  auto model = std::make_shared<GameModel>(gameLevels.at(static_cast<size_t>(index)), gameScore);
   GameController controller = GameController(model, index, gameLevels, gameScore);
   GameView& view = controller.getView();
 
@@ -83,8 +82,8 @@ void Engine::run() {
   allegroConfig = view.getAllegroConfig();
 
   if (!uiConfig || !allegroConfig) {
-    cerr << "Fatal Error: UIConfig or AllegroConfig is null.\n";
-    exit(EXIT_FAILURE);
+    std::cerr << "Fatal Error: UIConfig or AllegroConfig is null.\n";
+    std::exit(EXIT_FAILURE);
   }
 
   while (true) {
