@@ -3,8 +3,12 @@ CXX = g++
 CXXFLAGS += -std=c++20
 CXXFLAGS += -pedantic -Wall -Wextra
 CXXFLAGS += -O2
-CXXFLAGS += -Iinclude # Inclure les fichiers d'en-tête
-CXXFLAGS += -Ilibs    # Inclure la librairie lié à Json
+CXXFLAGS += -Ilibs
+CXXFLAGS += -Iinclude
+CXXFLAGS += -Iinclude/model      # Inclure la librairie lié à Json    
+CXXFLAGS += -Iinclude/view          
+CXXFLAGS += -Iinclude/controller    
+CXXFLAGS += -Iinclude/engine         
 CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wctor-dtor-privacy -Wdeprecated-copy-dtor -Wduplicated-branches \
             -Wduplicated-cond -Weffc++ -Wextra-semi -Wfloat-equal \
@@ -17,36 +21,36 @@ CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wswitch-default -Wswitch-enum -Wundef -Wuseless-cast -Wvolatile \
             -Wzero-as-null-pointer-constant
 
+obj/src/model/GameModel.o: CXXFLAGS += -Wno-suggest-attribute=const
+
 # Gestion des dépendances Allegro
 CXXFLAGS += $(shell pkg-config --cflags allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 allegro_ttf-5 allegro_audio-5 allegro_acodec-5)
 LDLIBS += $(shell pkg-config --libs allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 allegro_ttf-5 allegro_audio-5 allegro_acodec-5)
 
 # Dossiers
-SRC_DIR = ./src
-INCLUDE_DIR = ./include
-LIBS_DIR = ./libs
-OBJ_DIR = ./obj
-MAIN = ./main.cpp
+SRC_DIR = src
+OBJ_DIR = obj
+MAIN = src/main.cpp
 
-# Récupération des fichiers source et objets
-SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(MAIN)
-OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(notdir $(SRCS)))
+# Récupération des .cpp récursivement
+SRCS = $(shell find $(SRC_DIR) -name '*.cpp')
+
+# Objets avec préservation des sous-dossiers
+OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
 # Règle par défaut
 all: clean $(OBJ_DIR) $(OBJS)
-	$(CXX) $(OBJS) -o Arkanoid $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o Arkanoid $(LDLIBS)
 
-# Compilation des fichiers objets
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
+# Règle de compilation : crée dossier si nécessaire
 $(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Création du dossier obj si nécessaire
+# Création du dossier obj/ si manquant
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 # Nettoyage
 clean:
-	rm -rf $(OBJ_DIR) $(OBJ_DIR)/*.o Arkanoid
+	rm -rf $(OBJ_DIR) Arkanoid

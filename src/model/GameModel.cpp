@@ -1,46 +1,42 @@
 using namespace std;
-#include "games.hpp"
+#include "GameModel.hpp"
 
 
-Games::Games(const string& levelFile, int score)
-     : score(score), levelFile(levelFile), bricks(), ball(), spaceship() {
+GameModel::GameModel(const string& levelFile, int score)
+         : score(score), levelFile(levelFile), ball(), spaceship(), bricks(), bonuses() {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
+  // InitializeBonuses
 }
 
+// Initialization methods
 
-// ###################  Initialization methods  ###################
-
-void Games::initializeBall() 
+void GameModel::initializeBall() 
 {
-  json _ball                    = readJsonFile("./data/settings.json", "ball");
+  json _ball                    = readJsonFile("./assets/data/settings.json", "ball");
   float radius                  = _ball["radius"].get<float>();
   float speed                   = _ball["speed"].get<float>();
-  ALLEGRO_COLOR color           = getColor(_ball["color"].get<string>());
-  ball                          = Ball(radius, speed, color);
+  ball                          = Ball(radius, speed);
 }
 
-void Games::initializeSpaceship() 
+void GameModel::initializeSpaceship() 
 {
-  json _spaceship               = readJsonFile("./data/settings.json", "spaceship");
+  json _spaceship               = readJsonFile("./assets/data/settings.json", "spaceship");
   float position_x              = _spaceship["position.x"].get<float>();
   float position_y              = _spaceship["position.y"].get<float>();
   float width                   = _spaceship["width"].get<float>();
   float height                  = _spaceship["height"].get<float>();
   int speed                     = _spaceship["speed"].get<int>();
   int health                    = _spaceship["health"].get<int>();
-  ALLEGRO_COLOR frameColor      = getColor(_spaceship["frameColor"].get<string>());
-  ALLEGRO_COLOR fillColor       = getColor(_spaceship["fillColor"].get<string>());
-  spaceship                     = Spaceship({position_x, position_y}, width, height, speed, health, frameColor, fillColor);
+  spaceship                     = Spaceship({position_x, position_y}, width, height, speed, health);
 }
 
-void Games::initializeBricks() 
+void GameModel::initializeBricks() 
 {
-  json level                    = openJsonFile("./data/" + levelFile);
-  json settings                 = openJsonFile("./data/settings.json");
+  json level                    = openJsonFile("./assets/data/" + levelFile);
+  json settings                 = openJsonFile("./assets/data/settings.json");
   vector<string> bricks_data    = level["bricks"].get<vector<string>>();
-  auto bricks_colors            = settings["brick_colors"].get<map<string, string>>();
   const int dim_x               = level["dim_x"].get<int>();
   const int width               = settings["brick"]["width"].get<int>();
   const int height              = settings["brick"]["height"].get<int>();
@@ -51,7 +47,7 @@ void Games::initializeBricks()
   const float offset_x          = static_cast<float>(width + margin);
   const float offset_y          = static_cast<float>(height + margin);
   const float total_width       = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
-  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (windowWidth - total_width)/2.0f;
+  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GameWidth - total_width)/2.0f;
   const float offset_start_y    = static_cast<float>(_offset_start_y);
 
 
@@ -64,33 +60,15 @@ void Games::initializeBricks()
       bricks.emplace_back(
         Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x/2,
                offset_start_y + offset_y * static_cast<float>(i) + offset_y/2}),
-        width, height, BLACK, getColor(bricks_colors.at(bricks_data.at(index))), score, BonusType::NONE
+        width, height, score, BonusType::NONE
       );
     }
   }
 }
 
+// Collision management
 
-// ###################  Methods  ###################
-
-void Games::draw() const {
-  for (const Brick& brick : bricks) {
-    if (!brick.isDestroyed()) {
-      brick.draw();
-    }
-  }
-  ball.draw();
-  spaceship.draw();
-}
-
-void Games::resetScore() { 
-  score = 0; 
-} 
-
-
-// ###################  Collision management  ###################
-
-void Games::checkCollisions() {
+void GameModel::checkCollisions() {
   Point pos = ball.getPosition();
   float speed = ball.getSpeed();
   Point direction = Vector::normalize(ball.getDirection());
@@ -103,12 +81,12 @@ void Games::checkCollisions() {
   handleBallRebound(direction, collision.hitSide);                         // Bounce management
 }
 
-bool Games::shouldSkipCollisionCheck(const Point& pos, float speed) {
+bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) {
   const Brick &last = bricks.back();
   return pos.y >= last.getPosition().y + (last.getHeight()/2) + (speed * speed);
 }
 
-CollisionResult Games::findClosestCollision(const Point& pos, const Point& direction, float speed) {
+GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, const Point& direction, float speed) {
   const vector<Point> collisionPoints = _collisionPoints(pos);
   CollisionResult result;
   
@@ -123,12 +101,12 @@ CollisionResult Games::findClosestCollision(const Point& pos, const Point& direc
   return result;
 }
 
-CollisionResult Games::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) {
+GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) {
   CollisionResult result;
   
   for (const Point &p : collisionPoints) {
     Point nextP = {p.x + direction.x * speed, p.y + direction.y * speed};
-    pair<Point, int> intersectionResult = brick.vec.intersection({p, nextP});
+    pair<Point, int> intersectionResult = brick.getVector().intersection({p, nextP});
     int side = intersectionResult.second;
     
     if (side == -1) continue;
@@ -143,19 +121,18 @@ CollisionResult Games::checkBrickCollision(Brick& brick, const vector<Point>& co
   return result;
 }
 
-void Games::handleBrickHit(Brick* hitBrick) {
+void GameModel::handleBrickHit(Brick* hitBrick) {
   if (hitBrick->getScore() != 200 || !hitBrick->getSecondLife()) {
     if (hitBrick->getScore() != 0) {
       hitBrick->destroy();
       score += hitBrick->getScore();
     }
   } else {
-    hitBrick->setFrameColor(RED);
     hitBrick->setSecondLife(false);
   }
 }
 
-void Games::handleBallRebound(Point& direction, int hitSide) {
+void GameModel::handleBallRebound(Point& direction, int hitSide) {
   if (hitSide == 1) {
     direction.x *= -1;
   } else if (hitSide == 0) {
@@ -167,10 +144,9 @@ void Games::handleBallRebound(Point& direction, int hitSide) {
   ball.setDirection(direction);
 }
 
+// Helper methods
 
-// ###################  Helper methods  ###################
-
-[[gnu::pure]] vector<Point> Games::_collisionPoints(const Point& pos) {
+[[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
     {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Haut-Droite
@@ -181,29 +157,52 @@ void Games::handleBallRebound(Point& direction, int hitSide) {
   return collisionPoints;
 }
 
+bool GameModel::checkDirectionChanged(Point& tempDirection) {
+  const Point& currentDirection = ball.getDirection();
+  constexpr float eps = numeric_limits<float>::epsilon();
+  if (fabs(currentDirection.x - tempDirection.x) > eps ||
+      fabs(currentDirection.y - tempDirection.y) > eps) {
+    tempDirection = currentDirection;
+    return true;
+  }
+  return false;
+}
 
-// ###################  File management  ###################
+// File-Score management
 
-void Games::saveHighScore() const {
-  json settings = openJsonFile("./data/settings.json");
+void GameModel::saveHighScore() const {
+  json settings = openJsonFile("./assets/data/settings.json");
   int highscore = settings["highscore"].get<int>();
   if (score >= highscore) { 
-    writeJsonFile("./data/settings.json", "highscore", score);
+    writeJsonFile("./assets/data/settings.json", "highscore", score);
   }
 }
 
-void Games::resetHighScore() const {
-  writeJsonFile("./data/settings.json", "highscore", 0);
+void GameModel::resetHighScore() const {
+  writeJsonFile("./assets/data/settings.json", "highscore", 0);
 }
 
+void GameModel::resetScore() { 
+  score = 0; 
+}
 
-// ###################  Getters  ###################
+// Getters
 
-[[gnu::pure]] bool Games::lose()         const { return spaceship.isDeath();                                          }
-[[gnu::pure]] int  Games::getScore()     const { return score;                                                        }
-[[gnu::pure]] int  Games::getHighScore() const { return readJsonFile("./data/settings.json", "highscore").get<int>(); }
+[[gnu::pure]] int  GameModel::getScore()          const { return score; }
+[[gnu::pure]] int  GameModel::getHighScore()      const { return readJsonFile("./assets/data/settings.json", "highscore").get<int>(); }
+[[gnu::pure]] Point GameModel::getBallDirection() const { return ball.getDirection();}
 
-[[gnu::pure]] bool Games::win() const {
+[[gnu::pure]] const Ball& GameModel::getBall()             const { return ball;      }
+[[gnu::pure]] const Spaceship& GameModel::getSpaceship()   const { return spaceship; }
+[[gnu::pure]] Ball& GameModel::getBall()                         { return ball;      }
+[[gnu::pure]] Spaceship& GameModel::getSpaceship()               { return spaceship; }
+
+[[gnu::pure]] const vector<Brick>& GameModel::getBricks()  const { return bricks;    }
+[[gnu::pure]] const vector<Bonus>& GameModel::getBonuses() const { return bonuses;   }
+
+
+[[gnu::pure]] bool GameModel::lose() const { return spaceship.isDeath(); }
+[[gnu::pure]] bool GameModel::win()  const {
   for (auto& brick : bricks) if (!brick.isDestroyed() && brick.getScore() != 0) return false;
   return true;
 }

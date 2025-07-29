@@ -1,9 +1,6 @@
 #pragma once
-#ifndef SPACESHIP_HPP
-#define SPACESHIP_HPP
-
-#include "common.hpp"
-#include "rectangle.hpp"
+#include "model/utils.hpp"
+#include "Rectangle.hpp"
 
 
 class Spaceship : public Rectangle {
@@ -12,21 +9,16 @@ class Spaceship : public Rectangle {
 
  public:
   Spaceship();
-  Spaceship(const Point& position, float w, float h, int vitesse, int health,
-            const ALLEGRO_COLOR& frameColor, const ALLEGRO_COLOR& fillColor);
+  Spaceship(const Point& position, float w, float h, int vitesse, int health);
 
   // Methods
   void move(int direction);
   void move(const Point& mousePosition);
+  
   bool validPosition(const Point& position) const;
   void damage();
 
   // Getters
-  Point getPosition() const;
-  float getWidth()    const;
-  float getHeight()   const;
   int getHealth()     const;
   bool isDeath()      const;
 };
-
-#endif

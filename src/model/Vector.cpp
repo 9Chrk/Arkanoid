@@ -1,5 +1,5 @@
 using namespace std;
-#include "vector.hpp"
+#include "Vector.hpp"
 
 
 Vector::Vector(const Point& position, float w, float h)
@@ -13,8 +13,7 @@ Vector::Vector(const Point& position, float w, float h)
   lines = {top, bottom, left, right};
 }
 
-
-// ###################  Update methods  ###################
+// Update methods
 
 void Vector::updateEdges() {
   Point top_left     = {position.x - w/2, position.y - h/2};
@@ -35,10 +34,9 @@ void Vector::updateLines() {
   right  = calculateLineEquation(right_vec.first, right_vec.second);
 }
 
+// Internal geometric tools
 
-// ###################  Internal geometric tools  ###################
-
-[[gnu::pure]] Line Vector::calculateLineEquation(const Point& p, const Point& q) const {
+[[gnu::pure]] Vector::Line Vector::calculateLineEquation(const Point& p, const Point& q) const {
   float slope, y_intercept;
   constexpr float eps = numeric_limits<float>::epsilon();
   if (fabs(p.x - q.x) <= eps) {
@@ -56,8 +54,7 @@ void Vector::updateLines() {
   return (fabs(line_1.m - line_2.m) <= eps && fabs(line_1.b - line_2.b) <= eps);
 }
 
-
-// ###################  Intersection detection  ###################
+// Intersection detection
 
 pair<Point, int> Vector::intersection(const pair<Point, Point>& deplacement_vec) {
   Line deplacement = calculateLineEquation(deplacement_vec.first, deplacement_vec.second);
@@ -106,8 +103,7 @@ pair<Point, int> Vector::intersection(const pair<Point, Point>& deplacement_vec)
   return min_point;
 }
 
-
-// ###################  Helper methods  ###################
+//  Helper methods
 
 bool Vector::_intersection(const Line& deplacement, const Line& edge, const pair<Point, Point>& deplacement_vec, const pair<Point, Point>& edge_vec) {
   constexpr float eps = numeric_limits<float>::epsilon();
@@ -130,8 +126,7 @@ bool Vector::_intersection(const Line& deplacement, const Line& edge, const pair
          isOnSegment(edge_vec.first, edge_vec.second, intersectionPoint);
 }
 
-
-// ###################  Static utility functions  ###################
+//  Static utility functions
 
 [[gnu::pure]] float Vector::distance(const Point& p, const Point& q) {
   return hypot(q.x - p.x, q.y - p.y);

@@ -10,12 +10,12 @@
     "width": 25
   },
   "bonus_colors": {
-    "CATCH": "GREEN",
-    "EXPAND": "BLUE",
-    "EXTRA_LIFE": "GREEN",
-    "LASER": "RED",
-    "SLOW_DOWN": "ORANGE",
-    "SPLIT": "CYAN"
+    "CT": "GREEN",
+    "EX": "BLUE",
+    "EL": "GREEN",
+    "LS": "RED",
+    "SD": "ORANGE",
+    "SP": "CYAN"
   },
   "brick": {
     "height": 15,
