@@ -2,7 +2,6 @@
 #include "view/utils.hpp"
 #include "GameModel.hpp"
 #include "GameView.hpp"
-#include "UIConfig.hpp"
 
 
 class GameController {

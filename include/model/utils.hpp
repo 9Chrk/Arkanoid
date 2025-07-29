@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <ranges>
 #include <vector>
 #include <utility>
@@ -17,6 +18,11 @@ using json = nlohmann::json;
 inline constexpr float GameWidth     = 550.f;
 inline constexpr float GameHeight    = 500.f;
 inline constexpr float PlayableRatio = 1.0f/3.0f;
+
+
+// Resource initialization
+void must_init(bool test, const std::string& description);
+void must_init(void* test, const std::string& description);
 
 
 // JSON functions

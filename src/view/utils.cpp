@@ -1,27 +1,26 @@
-using namespace std;
 #include "view/utils.hpp"
 
 
 // Allegro error handling 
 
-void checkBitmap(ALLEGRO_BITMAP* bitmap, const string& fileName) {
-  if (!bitmap) throw runtime_error("Failed to load image: " + fileName);
+void checkBitmap(ALLEGRO_BITMAP* bitmap, const std::string& fileName) {
+  if (!bitmap) throw std::runtime_error("Failed to load image: " + fileName);
 }
 
-void checkSample(ALLEGRO_SAMPLE* sample, const string& fileName) {
-  if (!sample) throw runtime_error("Failed to load sound: " + fileName);
+void checkSample(ALLEGRO_SAMPLE* sample, const std::string& fileName) {
+  if (!sample) throw std::runtime_error("Failed to load sound: " + fileName);
 }
 
 // Allegro resource loading
 
-ALLEGRO_BITMAP* loadBitmap(const string& filename) {
+ALLEGRO_BITMAP* loadBitmap(const std::string& filename) {
   ALLEGRO_BITMAP* bmp = al_load_bitmap(filename.c_str());
   checkBitmap(bmp, filename);
   al_convert_bitmap(bmp);
   return bmp;
 }
 
-ALLEGRO_SAMPLE* loadSample(const string& filename) {
+ALLEGRO_SAMPLE* loadSample(const std::string& filename) {
   ALLEGRO_SAMPLE* sample = al_load_sample(filename.c_str());
   checkSample(sample, filename);
   return sample;
@@ -29,7 +28,7 @@ ALLEGRO_SAMPLE* loadSample(const string& filename) {
 
 // Color utility function
 
-[[gnu::pure]] ALLEGRO_COLOR getColor(const string& colorName) {
+[[gnu::pure]] ALLEGRO_COLOR getColor(const std::string& colorName) {
   if      (colorName == "WHITE")   return WHITE;
   else if (colorName == "GREY")    return GREY;
   else if (colorName == "BLACK")   return BLACK;

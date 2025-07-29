@@ -1,4 +1,3 @@
-using namespace std;
 #include "Bonus.hpp"
 
 
@@ -13,7 +12,7 @@ void Bonus::update() {
 
 // Bonus type management
 
-[[gnu::pure]] string Bonus::getAbbreviation(const BonusType& bonusType) {
+[[gnu::pure]] std::string Bonus::getAbbreviation(const BonusType& bonusType) {
   if      (bonusType == BonusType::CATCH)      return "CT";
   else if (bonusType == BonusType::EXPAND)     return "EX";
   else if (bonusType == BonusType::EXTRA_LIFE) return "EL";
@@ -23,7 +22,7 @@ void Bonus::update() {
   else { return ""; }
 }
 
-[[gnu::pure]] BonusType Bonus::fromAbbreviation(const string& bonusName) {
+[[gnu::pure]] BonusType Bonus::fromAbbreviation(const std::string& bonusName) {
   if      (bonusName == "CT") return BonusType::CATCH;
   else if (bonusName == "EX") return BonusType::EXPAND;
   else if (bonusName == "EL") return BonusType::EXTRA_LIFE;

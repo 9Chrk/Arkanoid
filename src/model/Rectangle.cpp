@@ -1,4 +1,3 @@
-using namespace std;
 #include "Rectangle.hpp"
 
 
@@ -15,7 +14,7 @@ Rectangle::Rectangle(const Point& position, float w, float h)
 
 // Methods
 
-[[gnu::pure]] pair<Point, Point> Rectangle::diag_coor() const {
+[[gnu::pure]] std::pair<Point, Point> Rectangle::diag_coor() const {
   Point up_left    = {position.x - w/2, position.y - h/2};
   Point down_right = {position.x + w/2, position.y + h/2};
   return {up_left, down_right};

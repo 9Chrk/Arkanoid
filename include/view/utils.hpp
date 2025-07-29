@@ -18,6 +18,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
+
 #include "model/utils.hpp"
 
 static const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
@@ -34,11 +35,7 @@ static const ALLEGRO_COLOR MAGENTA = al_map_rgb(235, 37, 174);
 static const ALLEGRO_COLOR SILVER  = al_map_rgb(224, 224, 224);
 static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 
-inline constexpr double refreshPerSecond = 60;  
-
-// Resource initialization
-void must_init(bool test, const string& description);
-void must_init(void* test, const string& description);
+inline constexpr double refreshPerSecond = 60;
 
 // Allegro error handling 
 void checkBitmap(ALLEGRO_BITMAP* bitmap, const std::string& fileName); 

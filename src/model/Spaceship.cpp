@@ -1,4 +1,3 @@
-using namespace std;
 #include "Spaceship.hpp"
 
 
@@ -13,7 +12,7 @@ Spaceship::Spaceship(const Point& position, float w, float h, int vitesse, int h
 void Spaceship::move(int direction) {
   Point newPos = position;
   newPos.x += (direction == 0 ? -static_cast<float>(vitesse) : static_cast<float>(vitesse));
-  position.x = clamp(newPos.x, w/2, GameWidth - w/2);
+  position.x = std::clamp(newPos.x, w/2, GameWidth - w/2);
 }
 
 void Spaceship::move(const Point& mousePosition) {

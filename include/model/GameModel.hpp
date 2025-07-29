@@ -1,5 +1,5 @@
 #pragma once
-#include "view/utils.hpp"
+#include "model/utils.hpp"
 #include "Brick.hpp"
 #include "Ball.hpp"
 #include "Spaceship.hpp"
