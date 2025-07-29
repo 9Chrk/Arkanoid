@@ -2,6 +2,7 @@
 #include "view/utils.hpp"
 #include "GameController.hpp"
 #include "GameModel.hpp"
+#include "UIConfig.hpp"
 
 class Engine {
  private:
