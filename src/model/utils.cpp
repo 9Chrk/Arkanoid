@@ -1,21 +1,20 @@
-using namespace std;
 #include "model/utils.hpp"
 
 // Resource initialization
-void must_init(bool test, const string& description) {
-  if (!test) throw runtime_error("Failed to initialize: " + description);
+void must_init(bool test, const std::string& description) {
+  if (!test) throw std::runtime_error("Failed to initialize: " + description);
 }
 
-void must_init(void* test, const string& description) {
+void must_init(void* test, const std::string& description) {
   must_init(test != nullptr, description);
 }
 
 // JSON functions
 
-json openJsonFile(const string& fileName) {
-  ifstream file(fileName);
+json openJsonFile(const std::string& fileName) {
+  std::ifstream file(fileName);
   if (!file.is_open()) {
-    throw runtime_error("Cannot open file: " + fileName);
+    throw std::runtime_error("Cannot open file: " + fileName);
   }
   json data;
   file >> data;
@@ -23,24 +22,24 @@ json openJsonFile(const string& fileName) {
   return data;
 }
 
-json readJsonFile(const string& fileName, const string& key) {
+json readJsonFile(const std::string& fileName, const std::string& key) {
   json data = openJsonFile(fileName);
   if (!data.contains(key)) {
-    throw invalid_argument("Key not found :" + key);
+    throw std::invalid_argument("Key not found :" + key);
   }
   return data[key];
 }
 
-void writeJsonFile(const string& fileName, const string& key, const json& value) {
+void writeJsonFile(const std::string& fileName, const std::string& key, const json& value) {
   json data = openJsonFile(fileName);
   data[key] = value;
   writeJsonFile(fileName, data);
 }
 
-void writeJsonFile(const string& fileName, const json& data) {
-  ofstream newFile(fileName);
+void writeJsonFile(const std::string& fileName, const json& data) {
+  std::ofstream newFile(fileName);
   if (!newFile.is_open()) {
-    throw runtime_error("Cannot write to :" + fileName);
+    throw std::runtime_error("Cannot write to :" + fileName);
   }
   newFile << data.dump(2);
   newFile.close();
@@ -48,16 +47,16 @@ void writeJsonFile(const string& fileName, const json& data) {
 
 // System commands
 
-vector<string> executeCommand(const string& command) { // donnée par chatGPT
-  vector<string> output;
-  unique_ptr<FILE, int(*)(FILE*)> pipe(popen(command.c_str(), "r"), pclose);
+std::vector<std::string> executeCommand(const std::string& command) { // donnée par chatGPT
+  std::vector<std::string> output;
+  std::unique_ptr<FILE, int(*)(FILE*)> pipe(popen(command.c_str(), "r"), pclose);
   
   if (!pipe) {
-    throw runtime_error("Error during command execution.");
+    throw std::runtime_error("Error during command execution.");
   }
   char buffer[128];
   while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
-    string line(buffer);
+    std::string line(buffer);
     if (!line.empty() && line.back() == '\n') {
       line.pop_back();
     }

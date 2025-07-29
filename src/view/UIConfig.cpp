@@ -1,4 +1,3 @@
-using namespace std;
 #include "UIConfig.hpp"
 
 UIConfig::UIConfig()
@@ -9,7 +8,7 @@ UIConfig::UIConfig()
     buttonYes(),
     buttonNo()
 {
-  string filepath = "./assets/data/settings.json";
+  std::string filepath = "./assets/data/settings.json";
   json displayButton = readJsonFile(filepath, "display_button");
   json display_score  = readJsonFile(filepath, "display_score");
 
