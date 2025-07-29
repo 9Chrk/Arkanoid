@@ -52,7 +52,7 @@ bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller
   if (model->win()) {
     view.stopSound(&soundID);
     printWin(model->getScore(), model->getHighScore());
-    view.menu(allegroConfig->win_png, "Press any key to continue...");
+    view.menu(allegroConfig->win_png.get(), "Press any key to continue...");
     index++;
     restartGame = true;
     gameScore = model->getScore();
@@ -61,9 +61,9 @@ bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller
 
   if (model->lose()) {
     view.stopSound(&soundID);
-    view.playSound(allegroConfig->lose_wav);
+    view.playSound(allegroConfig->lose_wav.get());
     printLose(model->getScore(), model->getHighScore());
-    view.menuButton(allegroConfig->lose_png, restartGame, uiConfig->buttonYes, uiConfig->buttonNo);
+    view.menuButton(allegroConfig->lose_png.get(), restartGame, uiConfig->buttonYes, uiConfig->buttonNo);
     gameScore = 0;
     index = 0;
     return false;
@@ -89,7 +89,7 @@ void Engine::run() {
 
   while (true) {
     if (showMenu) {
-      view.menuButton(allegroConfig->start_png, done, uiConfig->buttonExit, uiConfig->buttonPlay);
+      view.menuButton(allegroConfig->start_png.get(), done, uiConfig->buttonExit, uiConfig->buttonPlay);
       if (done) break;
       showMenu = false;
     }
@@ -104,7 +104,7 @@ void Engine::run() {
     }
 
     ALLEGRO_SAMPLE_ID soundGameID;
-    view.playSound(allegroConfig->Street_Fighter_wav, &soundGameID);
+    view.playSound(allegroConfig->Street_Fighter_wav.get(), &soundGameID);
 
     while (!done) {
       ALLEGRO_EVENT event = allegroConfig->event;
@@ -121,6 +121,6 @@ void Engine::run() {
 
   if (finish) {
     printFinish(model->getScore(), model->getHighScore());
-    view.menu(allegroConfig->finish_png, "Press any key to exit...");
+    view.menu(allegroConfig->finish_png.get(), "Press any key to exit...");
   }
 }

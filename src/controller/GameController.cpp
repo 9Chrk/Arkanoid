@@ -101,7 +101,7 @@ void GameController::update() {
 
   if (model->checkDirectionChanged(tempDirection)) {
     if (auto allegroConfig = view.getAllegroConfig()) {
-      view.playSound(allegroConfig->bip_wav);
+      view.playSound(allegroConfig->bip_wav.get());
     }
   }
 }

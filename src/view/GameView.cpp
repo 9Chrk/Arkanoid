@@ -87,13 +87,13 @@ void GameView::drawBonusAbbreviation(const Brick& brick) const {
 
   if (bonus != BonusType::NONE) {
     string txt = Bonus::getAbbreviation(bonus);
-    float textWidth  = static_cast<float>(al_get_text_width(allegroConfig->fontBonus, txt.c_str()));
-    float textHeight = static_cast<float>(al_get_font_line_height(allegroConfig->fontBonus));
+    float textWidth  = static_cast<float>(al_get_text_width(allegroConfig->fontBonus.get(), txt.c_str()));
+    float textHeight = static_cast<float>(al_get_font_line_height(allegroConfig->fontBonus.get()));
 
     float drawX = position.x - textWidth/2;
     float drawY = position.y - textHeight/2;
 
-    al_draw_text(allegroConfig->fontBonus, BLACK, drawX, drawY, 0, txt.c_str());
+    al_draw_text(allegroConfig->fontBonus.get(), BLACK, drawX, drawY, 0, txt.c_str());
   }
 }
 
@@ -125,7 +125,7 @@ void GameView::drawBonuses() const {
 
 void GameView::render() const {
   al_clear_to_color(WHITE);
-  al_draw_bitmap(allegroConfig->background_png, 0, 0, 0);
+  al_draw_bitmap(allegroConfig->background_png.get(), 0, 0, 0);
   displayHUD();
   drawBall();    
   drawBricks();
@@ -145,10 +145,10 @@ void GameView::displayImage(ALLEGRO_BITMAP* bmp) const {
 }
 
 void GameView::displayScore() const {
-  al_draw_bitmap(allegroConfig->score_png, 0, 0, 0);
-  al_draw_bitmap(allegroConfig->highScore_png, 0, 0, 0);
-  al_draw_text(allegroConfig->font, WHITE, uiConfig->scorePos.x, uiConfig->scorePos.y, ALLEGRO_ALIGN_CENTER, to_string(model->getScore()).c_str());
-  al_draw_text(allegroConfig->font, WHITE, uiConfig->highscorePos.x, uiConfig->highscorePos.y, ALLEGRO_ALIGN_CENTER, to_string(model->getHighScore()).c_str());
+  al_draw_bitmap(allegroConfig->score_png.get(), 0, 0, 0);
+  al_draw_bitmap(allegroConfig->highScore_png.get(), 0, 0, 0);
+  al_draw_text(allegroConfig->font.get(), WHITE, uiConfig->scorePos.x, uiConfig->scorePos.y, ALLEGRO_ALIGN_CENTER, to_string(model->getScore()).c_str());
+  al_draw_text(allegroConfig->font.get(), WHITE, uiConfig->highscorePos.x, uiConfig->highscorePos.y, ALLEGRO_ALIGN_CENTER, to_string(model->getHighScore()).c_str());
 }
 
 void GameView::displayHUD() const {
@@ -161,11 +161,11 @@ void GameView::displaySpaceship() const {
   Point spaceshipPos = spaceship.getPosition();
   float spaceshipWidth = spaceship.getWidth();
   
-  float imgW = static_cast<float>(al_get_bitmap_width(allegroConfig->spaceship_png));
-  float imgH = static_cast<float>(al_get_bitmap_height(allegroConfig->spaceship_png));
+  float imgW = static_cast<float>(al_get_bitmap_width(allegroConfig->spaceship_png.get()));
+  float imgH = static_cast<float>(al_get_bitmap_height(allegroConfig->spaceship_png.get()));
   float spaceshipHeight = imgH;
   
-  al_draw_scaled_bitmap(allegroConfig->spaceship_png, 0, 0, imgW, imgH, 
+  al_draw_scaled_bitmap(allegroConfig->spaceship_png.get(), 0, 0, imgW, imgH,
     spaceshipPos.x - spaceshipWidth/2, spaceshipPos.y - spaceshipHeight/2, spaceshipWidth, spaceshipHeight, 0);
 }
   
@@ -173,9 +173,9 @@ void GameView::displaySpaceship() const {
 
 [[gnu::pure]] ALLEGRO_BITMAP* GameView::chooseHeartFile() const {
   int lives = model->getSpaceship().getHealth();
-  if      (lives == 1) { return allegroConfig->heart_1_png; }
-  else if (lives == 2) { return allegroConfig->heart_2_png; }
-  else { return allegroConfig->heart_3_png; }
+  if      (lives == 1) { return allegroConfig->heart_1_png.get(); }
+  else if (lives == 2) { return allegroConfig->heart_2_png.get(); }
+  else { return allegroConfig->heart_3_png.get(); }
 }
 
 void GameView::handleButtonHover(ALLEGRO_BITMAP* image_png, bool hoverPlay, bool hoverExit, 
@@ -185,7 +185,7 @@ void GameView::handleButtonHover(ALLEGRO_BITMAP* image_png, bool hoverPlay, bool
   
   if (hoverPlay || hoverExit) {
     pair<Point, Point> temp = hoverPlay? buttonON.diag_coor() : buttonOFF.diag_coor();
-    playSound(allegroConfig->button_wav);
+    playSound(allegroConfig->button_wav.get());
     al_draw_rectangle(temp.first.x, temp.first.y, temp.second.x, temp.second.y, WHITE, 1);
   }
   al_flip_display();
@@ -228,11 +228,11 @@ void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, bool showScor
   else { cout << "Score display (UI) disabled " << endl; }
 
   al_flip_display();
-  playSound(allegroConfig->menu_wav, &soundMenuID);
+  playSound(allegroConfig->menu_wav.get(), &soundMenuID);
   al_rest(4.0);
 
-  float fontHeight = static_cast<float>(al_get_font_line_height(allegroConfig->font));
-  al_draw_text(allegroConfig->font, WHITE, GameWidth * 1/3, GameHeight - fontHeight, ALLEGRO_ALIGN_CENTER, text.c_str());
+  float fontHeight = static_cast<float>(al_get_font_line_height(allegroConfig->font.get()));
+  al_draw_text(allegroConfig->font.get(), WHITE, GameWidth * 1/3, GameHeight - fontHeight, ALLEGRO_ALIGN_CENTER, text.c_str());
   al_flip_display();
 
   while (!pressAnyButton) { 
@@ -253,7 +253,7 @@ void GameView::menuButton(ALLEGRO_BITMAP* image_png, bool &done, const Rectangle
   displayImage(image_png);
   al_flip_display();
   ALLEGRO_SAMPLE_ID soundMenuID;
-  playSound(allegroConfig->menu_wav, &soundMenuID);
+  playSound(allegroConfig->menu_wav.get(), &soundMenuID);
   
   while (!clickOnButton) {
     al_flush_event_queue(allegroConfig->queue);

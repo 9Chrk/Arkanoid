@@ -1,37 +1,42 @@
 #pragma once
 #include "view/utils.hpp"
+#include <memory>
 
 
 struct AllegroConfig {
+  using BitmapPtr = std::unique_ptr<ALLEGRO_BITMAP, decltype(&al_destroy_bitmap)>;
+  using FontPtr   = std::unique_ptr<ALLEGRO_FONT,   decltype(&al_destroy_font)>;
+  using SamplePtr = std::unique_ptr<ALLEGRO_SAMPLE, decltype(&al_destroy_sample)>;
+
   ALLEGRO_EVENT event;
   // components
-  ALLEGRO_TIMER* timer                = nullptr;
-  ALLEGRO_DISPLAY* display            = nullptr;
-  ALLEGRO_FONT* font                  = nullptr;
-  ALLEGRO_FONT* fontBonus             = nullptr;
-  ALLEGRO_EVENT_QUEUE* queue          = nullptr;
+  ALLEGRO_TIMER* timer     = nullptr;
+  ALLEGRO_DISPLAY* display = nullptr;
+  FontPtr    font{nullptr, al_destroy_font};
+  FontPtr    fontBonus{nullptr, al_destroy_font};
+  ALLEGRO_EVENT_QUEUE* queue = nullptr;
   // images
-  ALLEGRO_BITMAP* start_png           = nullptr;
-  ALLEGRO_BITMAP* background_png      = nullptr;
-  ALLEGRO_BITMAP* lose_png            = nullptr;
-  ALLEGRO_BITMAP* win_png             = nullptr;
-  ALLEGRO_BITMAP* spaceship_png       = nullptr;
-  ALLEGRO_BITMAP* heart_1_png         = nullptr;
-  ALLEGRO_BITMAP* heart_2_png         = nullptr;
-  ALLEGRO_BITMAP* heart_3_png         = nullptr;
-  ALLEGRO_BITMAP* score_png           = nullptr;
-  ALLEGRO_BITMAP* highScore_png       = nullptr;
-  ALLEGRO_BITMAP* finish_png          = nullptr;
+  BitmapPtr start_png{nullptr, al_destroy_bitmap};
+  BitmapPtr background_png{nullptr, al_destroy_bitmap};
+  BitmapPtr lose_png{nullptr, al_destroy_bitmap};
+  BitmapPtr win_png{nullptr, al_destroy_bitmap};
+  BitmapPtr spaceship_png{nullptr, al_destroy_bitmap};
+  BitmapPtr heart_1_png{nullptr, al_destroy_bitmap};
+  BitmapPtr heart_2_png{nullptr, al_destroy_bitmap};
+  BitmapPtr heart_3_png{nullptr, al_destroy_bitmap};
+  BitmapPtr score_png{nullptr, al_destroy_bitmap};
+  BitmapPtr highScore_png{nullptr, al_destroy_bitmap};
+  BitmapPtr finish_png{nullptr, al_destroy_bitmap};
   // sounds
-  ALLEGRO_SAMPLE* bip_wav             = nullptr;
-  ALLEGRO_SAMPLE* bonus_wav           = nullptr;
-  ALLEGRO_SAMPLE* button_wav          = nullptr;
-  ALLEGRO_SAMPLE* fall_wav            = nullptr;
-  ALLEGRO_SAMPLE* lose_wav            = nullptr;
-  ALLEGRO_SAMPLE* Street_Fighter_wav  = nullptr;
-  ALLEGRO_SAMPLE* win_wav             = nullptr;
-  ALLEGRO_SAMPLE* menu_wav            = nullptr;
-  ALLEGRO_SAMPLE* finish_wav          = nullptr;
+  SamplePtr bip_wav{nullptr, al_destroy_sample};
+  SamplePtr bonus_wav{nullptr, al_destroy_sample};
+  SamplePtr button_wav{nullptr, al_destroy_sample};
+  SamplePtr fall_wav{nullptr, al_destroy_sample};
+  SamplePtr lose_wav{nullptr, al_destroy_sample};
+  SamplePtr Street_Fighter_wav{nullptr, al_destroy_sample};
+  SamplePtr win_wav{nullptr, al_destroy_sample};
+  SamplePtr menu_wav{nullptr, al_destroy_sample};
+  SamplePtr finish_wav{nullptr, al_destroy_sample};
 
   AllegroConfig();
   ~AllegroConfig();
