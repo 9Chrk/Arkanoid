@@ -5,7 +5,7 @@ using namespace std;
 GameView::GameView(shared_ptr<GameModel> model)
   : model(model),
     uiConfig(make_shared<UIConfig>()),
-    allegroConfig(make_shared<AllegroConfig>()) 
+    allegroConfig(nullptr)
 {
   must_init(al_init(),              "allegro");
   must_init(al_install_keyboard(),  "keyboard");
@@ -18,6 +18,8 @@ GameView::GameView(shared_ptr<GameModel> model)
   must_init(al_init_font_addon(),  "font");
   must_init(al_init_ttf_addon(),   "ttf");
   must_init(al_init_primitives_addon(), "primitives");
+
+  allegroConfig = make_shared<AllegroConfig>();
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -39,8 +41,9 @@ shared_ptr<UIConfig> GameView::getUIConfig() const {
 
 // Sounds methods
 
-void GameView::playSound(ALLEGRO_SAMPLE* sound, ALLEGRO_SAMPLE_ID* id) const {
-  al_play_sample(sound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, id);
+void GameView::playSound(ALLEGRO_SAMPLE* sound, ALLEGRO_SAMPLE_ID* id, bool loop) const {
+  ALLEGRO_PLAYMODE mode = loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE;
+  al_play_sample(sound, 1.0, 0.0, 1.0, mode, id);
 }
 
 void GameView::stopSound(ALLEGRO_SAMPLE_ID* id) const {
@@ -65,8 +68,7 @@ void GameView::drawBall() const {
 }
 
 void GameView::drawBrick(const Brick& brick) const {
-  json brickColors = readJsonFile("./assets/data/settings.json", "brick_colors");
-  ALLEGRO_COLOR fillColor = getColor(brickColors[to_string(brick.getScore())].get<string>());
+  ALLEGRO_COLOR fillColor = uiConfig->brickColors.at(brick.getScore());
   ALLEGRO_COLOR frameColor =  (brick.getScore() == 200 && !brick.getSecondLife()) ? RED : BLACK;
 
   auto [upLeft, downRight] = brick.diag_coor();
@@ -218,7 +220,7 @@ bool GameView::processMenuMouseEvent(const ALLEGRO_EVENT& event, ALLEGRO_BITMAP*
 
 // Menu methods
 
-void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, bool showScore) {
+void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, ALLEGRO_SAMPLE* sound, bool soundLoop, bool showScore) {
   ALLEGRO_EVENT event = allegroConfig->event;
   ALLEGRO_SAMPLE_ID soundMenuID;
   bool pressAnyButton = false;
@@ -228,7 +230,7 @@ void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, bool showScor
   else { cout << "Score display (UI) disabled " << endl; }
 
   al_flip_display();
-  playSound(allegroConfig->menu_wav, &soundMenuID);
+  playSound(sound, &soundMenuID, soundLoop);
   al_rest(4.0);
 
   float fontHeight = static_cast<float>(al_get_font_line_height(allegroConfig->font));
@@ -253,7 +255,7 @@ void GameView::menuButton(ALLEGRO_BITMAP* image_png, bool &done, const Rectangle
   displayImage(image_png);
   al_flip_display();
   ALLEGRO_SAMPLE_ID soundMenuID;
-  playSound(allegroConfig->menu_wav, &soundMenuID);
+  playSound(allegroConfig->menu_wav, &soundMenuID, true);
   
   while (!clickOnButton) {
     al_flush_event_queue(allegroConfig->queue);

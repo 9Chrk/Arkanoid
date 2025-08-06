@@ -2,18 +2,25 @@ using namespace std;
 #include "GameController.hpp"
 
 
-GameController::GameController(shared_ptr<GameModel> model, int levelIndex, const vector<string>& levelFiles, int totalScore)
-    : model(model), view(GameView(model)), levelFiles(levelFiles), totalScore(totalScore), levelIndex(levelIndex), tempDirection({0, -1}) {}
+GameController::GameController(shared_ptr<GameModel> model, const vector<string>& levelFiles)
+    : model(model), view(nullptr), levelFiles(levelFiles), gameScore(0), index(0), tempDirection({0, -1}) 
+{
+  view = make_shared<GameView>(model);
+}
 
 // Getters
- 
-GameView& GameController::getView() {
-  return view;
-}
 
-shared_ptr<GameModel> GameController::getModel() {
-  return model;
-}
+[[gnu::pure]] int GameController::getIndex()                   { return index;     }
+[[gnu::pure]] int GameController::getGameScore()               { return gameScore; }
+[[gnu::pure]] shared_ptr<GameView> GameController::getView()   { return view;      }
+[[gnu::pure]] shared_ptr<GameModel> GameController::getModel() { return model;     }
+
+// Setters
+
+void GameController::incrementIndex()  { index++;   }
+void GameController::resetIndex()      { index = 0; }
+void GameController::resetGameScore()  { gameScore = 0; }
+void GameController::updateGameScore() { gameScore = model->getScore(); }
 
 // Helper methods
 
@@ -55,14 +62,14 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
       case ALLEGRO_KEY_0: case ALLEGRO_KEY_1: case ALLEGRO_KEY_2:
       case ALLEGRO_KEY_3: case ALLEGRO_KEY_4: case ALLEGRO_KEY_5:
       case ALLEGRO_KEY_6: case ALLEGRO_KEY_7: case ALLEGRO_KEY_8: {
-        int level = event.keyboard.keycode - ALLEGRO_KEY_0;
-        if (level >= 0 && level < static_cast<int>(levelFiles.size())) {
-          *model = GameModel(levelFiles[static_cast<size_t>(level)], totalScore);
+        index = event.keyboard.keycode - ALLEGRO_KEY_0;
+        if (index >= 0 && index < static_cast<int>(levelFiles.size())) {
+          updateGameScore();
           resetTempDirection();
+          *model = GameModel(levelFiles[static_cast<size_t>(index)], gameScore);
         }
         break;
       }
-
       default:
         break;
     }
@@ -77,6 +84,7 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
 // Advance the game simulation
 
 void GameController::update() {
+  shared_ptr<AllegroConfig> allegroConfig = view->getAllegroConfig();
   Spaceship& spaceship = model->getSpaceship();
   Ball& ball = model->getBall();
 
@@ -86,6 +94,8 @@ void GameController::update() {
     spaceship.damage();
     ball.reset();
     ball.setFalling(false);
+    if (spaceship.getHealth()) { view->playSound(allegroConfig->fall_wav); }
+    resetTempDirection();
   }
 
   if (ball.inMouvement()) {
@@ -97,11 +107,9 @@ void GameController::update() {
               spaceship.getHeight());
   }
 
-  view.render();
+  view->render();
 
   if (model->checkDirectionChanged(tempDirection)) {
-    if (auto allegroConfig = view.getAllegroConfig()) {
-      view.playSound(allegroConfig->bip_wav);
-    }
+    view->playSound(allegroConfig->bip_wav);
   }
 }

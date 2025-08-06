@@ -11,8 +11,8 @@
   },
   "bonus_colors": {
     "CT": "GREEN",
-    "EX": "BLUE",
     "EL": "GREEN",
+    "EX": "BLUE",
     "LS": "RED",
     "SD": "ORANGE",
     "SP": "CYAN"
@@ -75,7 +75,7 @@
     "score.x": 140,
     "score.y": 24
   },
-  "highscore": 0,
+  "highscore": 80,
   "spaceship": {
     "fillColor": "BLACK",
     "frameColor": "BLACK",

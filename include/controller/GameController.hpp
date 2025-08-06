@@ -8,21 +8,31 @@
 class GameController {
  private:
   std::shared_ptr<GameModel> model;
-  GameView view;
+  std::shared_ptr<GameView> view;
 
   const std::vector<std::string>& levelFiles;
-  int totalScore;
-  int levelIndex;
-
+  int gameScore, index;
   Point tempDirection;
 
  public:
-  GameController(std::shared_ptr<GameModel> model, int levelIndex, const std::vector<std::string>& levelFiles, int totalScore);
+  GameController(std::shared_ptr<GameModel> model, const std::vector<std::string>& levelFiles);
 
-  void resetTempDirection();
+  // Methods
   void handleEvent(const ALLEGRO_EVENT& event);
   void update();
+  
+  // Helpers
+  void resetTempDirection();
 
-  GameView& getView();
+  // Getters
   std::shared_ptr<GameModel> getModel();
+  std::shared_ptr<GameView> getView();
+  int getIndex();
+  int getGameScore();
+
+  // Setters
+  void resetGameScore();
+  void updateGameScore();
+  void resetIndex();
+  void incrementIndex();
 };

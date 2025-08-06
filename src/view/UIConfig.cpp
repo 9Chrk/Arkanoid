@@ -7,7 +7,8 @@ UIConfig::UIConfig()
     buttonPlay(),
     buttonExit(),
     buttonYes(),
-    buttonNo()
+    buttonNo(),
+    brickColors()
 {
   string filepath = "./assets/data/settings.json";
   json displayButton = readJsonFile(filepath, "display_button");
@@ -15,6 +16,11 @@ UIConfig::UIConfig()
 
   scorePos     = {display_score["score.x"].get<float>(),     display_score["score.y"].get<float>()};
   highscorePos = {display_score["highscore.x"].get<float>(), display_score["highscore.y"].get<float>()};
+
+  json colors = readJsonFile("./assets/data/settings.json","brick_colors");
+  for (auto& [score,colorName] : colors.items()) {
+    brickColors[stoi(score)] = getColor(colorName.get<string>()); 
+  }
 
   buttonPlay   = Rectangle({displayButton["button_play"]["position.x"].get<float>(), displayButton["button_play"]["position.y"].get<float>()},
                              displayButton["button_play"]["width"].get<float>(),

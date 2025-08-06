@@ -41,14 +41,14 @@ class GameView {
   GameView(shared_ptr<GameModel> model);
 
   // Sounds methods
-  void playSound(ALLEGRO_SAMPLE* sound, ALLEGRO_SAMPLE_ID* id=nullptr) const;
+  void playSound(ALLEGRO_SAMPLE* sound, ALLEGRO_SAMPLE_ID* id=nullptr, bool loop=false) const;
   void stopSound(ALLEGRO_SAMPLE_ID* id) const;
 
   // Render methods
   void render() const;
 
   // Menu methods
-  void menu(ALLEGRO_BITMAP* image_png, const std::string& text, bool showScore = false);
+  void menu(ALLEGRO_BITMAP* image_png, const std::string& text, ALLEGRO_SAMPLE* sound, bool soundLoop=false, bool showScore=false);
   void menuButton(ALLEGRO_BITMAP* image_png, bool& done, const Rectangle& buttonON, const Rectangle& buttonOFF);
   
   // Getters

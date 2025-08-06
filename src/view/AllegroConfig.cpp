@@ -5,7 +5,6 @@ using namespace std;
 AllegroConfig::AllegroConfig() : event{} {
   try {
     // components
-    
     queue     = al_create_event_queue();
     timer     = al_create_timer(1.0/refreshPerSecond);
     display   = al_create_display(GameWidth, GameHeight);
@@ -55,7 +54,8 @@ AllegroConfig::AllegroConfig() : event{} {
   }
 }
 
-AllegroConfig::~AllegroConfig() { 
+AllegroConfig::~AllegroConfig() {
+  al_stop_samples(); 
   // components
   al_destroy_font(font);
   al_destroy_font(fontBonus);
@@ -84,5 +84,4 @@ AllegroConfig::~AllegroConfig() {
   al_destroy_sample(win_wav);
   al_destroy_sample(menu_wav);
   al_destroy_sample(finish_wav);
-  al_uninstall_audio();
 }
