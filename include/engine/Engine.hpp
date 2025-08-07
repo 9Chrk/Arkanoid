@@ -16,11 +16,12 @@ class Engine {
   // Print methods
   void printWin(int score, int highscore);
   void printLose(int score, int highscore);
+  
   void printFinish(int score, int highscore);
   void printScore(int score, int highscore);
 
   // Handle Allegro event
-  bool processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID soundID);
+  bool processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
 
  public:
   Engine();

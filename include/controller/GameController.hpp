@@ -15,7 +15,7 @@ class GameController {
   Point tempDirection;
 
  public:
-  GameController(std::shared_ptr<GameModel> model, const std::vector<std::string>& levelFiles);
+  GameController(const std::shared_ptr<GameModel>& model, const std::vector<std::string>& levelFiles);
 
   // Methods
   void handleEvent(const ALLEGRO_EVENT& event);

@@ -15,9 +15,12 @@ class GameView {
   // Draw methods
   void drawCircle(const Point& position, float radius, ALLEGRO_COLOR color) const;
   void drawRectangle(const Point& upLeft, const Point& downRight, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR frameColor) const;
+
   void drawBall() const;
+
   void drawBrick(const Brick& brick) const;
   void drawBricks() const;
+
   void drawBonusAbbreviation(const Brick& brick) const;
   void drawBonus(const Bonus& bonus) const;
   void drawBonuses() const;
@@ -38,7 +41,7 @@ class GameView {
                            const Rectangle& buttonON, const Rectangle& buttonOFF);
 
  public:
-  GameView(shared_ptr<GameModel> model);
+  GameView(const shared_ptr<GameModel>& model);
 
   // Sounds methods
   void playSound(ALLEGRO_SAMPLE* sound, ALLEGRO_SAMPLE_ID* id=nullptr, bool loop=false) const;

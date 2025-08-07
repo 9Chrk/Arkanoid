@@ -10,6 +10,7 @@ Engine::Engine() : gameLevels(executeCommand("./research_jsonFile.sh ./assets/da
 }
 
 Engine::~Engine() {
+  allegroConfig.reset();
   al_uninstall_audio();
 }
 
@@ -37,7 +38,7 @@ void Engine::printScore(int score, int highscore) {
 
 // Handle Allegro Events
 
-bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID soundID) {
+bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
   shared_ptr<GameView> view = controller.getView();
   shared_ptr<GameModel> model = controller.getModel();
 

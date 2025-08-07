@@ -7,7 +7,7 @@
 
 class GameModel {
  private:
-  int score;
+  int score, highscore;
   string levelFile;
 
   Ball           ball;
@@ -45,8 +45,8 @@ class GameModel {
   // Methods
   void checkCollisions();
 
-  void saveHighScore()  const;
-  void resetHighScore() const;
+  void saveHighScore();
+  void resetHighScore();
   void resetScore();
 
   // Helper methods
@@ -65,7 +65,6 @@ class GameModel {
 
   const std::vector<Brick>& getBricks() const;
   const std::vector<Bonus>& getBonuses() const;
-
 
   bool win()  const;
   bool lose() const;

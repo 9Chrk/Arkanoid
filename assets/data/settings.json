@@ -75,7 +75,7 @@
     "score.x": 140,
     "score.y": 24
   },
-  "highscore": 80,
+  "highscore": 0,
   "spaceship": {
     "fillColor": "BLACK",
     "frameColor": "BLACK",

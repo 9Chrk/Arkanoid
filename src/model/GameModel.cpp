@@ -3,7 +3,8 @@ using namespace std;
 
 
 GameModel::GameModel(const string& levelFile, int score)
-         : score(score), levelFile(levelFile), ball(), spaceship(), bricks(), bonuses() {
+         : score(score), highscore(readJsonFile("./assets/data/settings.json", "highscore").get<int>()),
+           levelFile(levelFile), ball(), spaceship(), bricks(), bonuses() {
   initializeBall();
   initializeSpaceship();
   initializeBricks();
@@ -170,16 +171,16 @@ bool GameModel::checkDirectionChanged(Point& tempDirection) {
 
 // File-Score management
 
-void GameModel::saveHighScore() const {
-  json settings = openJsonFile("./assets/data/settings.json");
-  int highscore = settings["highscore"].get<int>();
-  if (score >= highscore) { 
-    writeJsonFile("./assets/data/settings.json", "highscore", score);
+void GameModel::saveHighScore() {
+  if (score >= highscore) {
+    highscore = score;
+    writeJsonFile("./assets/data/settings.json", "highscore", highscore);
   }
 }
 
-void GameModel::resetHighScore() const {
-  writeJsonFile("./assets/data/settings.json", "highscore", 0);
+void GameModel::resetHighScore() {
+  highscore = 0;
+  writeJsonFile("./assets/data/settings.json", "highscore", highscore);
 }
 
 void GameModel::resetScore() { 
@@ -188,18 +189,18 @@ void GameModel::resetScore() {
 
 // Getters
 
-[[gnu::pure]] int  GameModel::getScore()          const { return score; }
-[[gnu::pure]] int  GameModel::getHighScore()      const { return readJsonFile("./assets/data/settings.json", "highscore").get<int>(); }
+[[gnu::pure]] int GameModel::getScore()           const { return score; }
+[[gnu::pure]] int GameModel::getHighScore()       const { return highscore; }
 [[gnu::pure]] Point GameModel::getBallDirection() const { return ball.getDirection();}
 
-[[gnu::pure]] const Ball& GameModel::getBall()             const { return ball;      }
-[[gnu::pure]] const Spaceship& GameModel::getSpaceship()   const { return spaceship; }
-[[gnu::pure]] Ball& GameModel::getBall()                         { return ball;      }
-[[gnu::pure]] Spaceship& GameModel::getSpaceship()               { return spaceship; }
+[[gnu::pure]] const Ball& GameModel::getBall()           const { return ball; }
+[[gnu::pure]] const Spaceship& GameModel::getSpaceship() const { return spaceship; }
 
-[[gnu::pure]] const vector<Brick>& GameModel::getBricks()  const { return bricks;    }
-[[gnu::pure]] const vector<Bonus>& GameModel::getBonuses() const { return bonuses;   }
+[[gnu::pure]] Ball& GameModel::getBall() { return ball; }
+[[gnu::pure]] Spaceship& GameModel::getSpaceship() { return spaceship; }
 
+[[gnu::pure]] const vector<Brick>& GameModel::getBricks()  const { return bricks;  }
+[[gnu::pure]] const vector<Bonus>& GameModel::getBonuses() const { return bonuses; }
 
 [[gnu::pure]] bool GameModel::lose() const { return spaceship.isDeath(); }
 [[gnu::pure]] bool GameModel::win()  const {

@@ -41,12 +41,12 @@ void must_init(bool test, const string& description);
 void must_init(void* test, const string& description);
 
 // Allegro error handling 
-void checkBitmap(ALLEGRO_BITMAP* bitmap, const std::string& fileName); 
-void checkSample(ALLEGRO_SAMPLE* sample, const std::string& fileName); 
+void checkBitmap(ALLEGRO_BITMAP* bitmap, const std::string& fileName);
+void checkSample(ALLEGRO_SAMPLE* sample, const std::string& fileName);
 
 // Allegro resource loading
-ALLEGRO_BITMAP* loadBitmap(const std::string& filename);                     
-ALLEGRO_SAMPLE* loadSample(const std::string& filename);                     
+ALLEGRO_BITMAP* loadBitmap(const std::string& filename);
+ALLEGRO_SAMPLE* loadSample(const std::string& filename);
 
 // Color utility function
 ALLEGRO_COLOR getColor(const std::string& colorName); 

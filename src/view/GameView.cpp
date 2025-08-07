@@ -2,7 +2,7 @@ using namespace std;
 #include "GameView.hpp"
 
 
-GameView::GameView(shared_ptr<GameModel> model)
+GameView::GameView(const shared_ptr<GameModel>& model)
   : model(model),
     uiConfig(make_shared<UIConfig>()),
     allegroConfig(nullptr)
@@ -31,11 +31,11 @@ GameView::GameView(shared_ptr<GameModel> model)
 
 // Getters
 
-shared_ptr<AllegroConfig> GameView::getAllegroConfig() const {
+[[gnu::pure]] shared_ptr<AllegroConfig> GameView::getAllegroConfig() const {
   return allegroConfig;
 }
 
-shared_ptr<UIConfig> GameView::getUIConfig() const {
+[[gnu::pure]] shared_ptr<UIConfig> GameView::getUIConfig() const {
   return uiConfig;
 }
 
