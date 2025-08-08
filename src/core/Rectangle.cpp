@@ -1,5 +1,5 @@
 using namespace std;
-#include "Rectangle.hpp"
+#include "core/Rectangle.hpp"
 
 
 Rectangle::Rectangle() : position({0, 0}), w(0), h(0) {}

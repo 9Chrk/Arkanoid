@@ -1,6 +1,8 @@
 #pragma once
-#include "model/utils.hpp"
 
+#include <cmath>
+#include <limits>
+#include <utility>
 
 struct Point {
   float x, y;

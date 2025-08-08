@@ -1,5 +1,6 @@
 using namespace std;
 #include "UIConfig.hpp"
+#include "view/utils.hpp"
 
 UIConfig::UIConfig()
   : scorePos(),

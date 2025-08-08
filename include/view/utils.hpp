@@ -18,7 +18,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
-#include "model/utils.hpp"
+#include "core/utils.hpp"
 
 static const ALLEGRO_COLOR WHITE   = al_map_rgb(255, 255, 255);
 static const ALLEGRO_COLOR GREY    = al_map_rgb(192, 192, 192);
