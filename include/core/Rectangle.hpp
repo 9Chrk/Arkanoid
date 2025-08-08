@@ -4,6 +4,7 @@
 #include <limits>
 #include <utility>
 
+
 struct Point {
   float x, y;
   Point(float x=0, float y=0) : x(x), y(y) {}

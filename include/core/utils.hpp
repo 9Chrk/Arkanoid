@@ -20,6 +20,7 @@ inline constexpr float GameWidth     = 550.f;
 inline constexpr float GameHeight    = 500.f;
 inline constexpr float PlayableRatio = 1.0f/3.0f;
 
+
 // Resource initialization
 void must_init(bool test, const std::string& description);
 void must_init(const void* test, const std::string& description);
