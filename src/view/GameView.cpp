@@ -1,12 +1,16 @@
 using namespace std;
 #include "GameView.hpp"
 
+// Implementation of the graphical view of the game.  This file contains
+// rendering helpers, sound utilities and simple menu handling.
 
+// Construct the view and initialize all Allegro subsystems and resources.
 GameView::GameView(const shared_ptr<GameModel>& model)
   : model(model),
     uiConfig(make_shared<UIConfig>()),
     allegroConfig(nullptr)
 {
+  // Load core modules
   must_init(al_init(),                                  "allegro");
   must_init(al_install_keyboard(),                      "keyboard");
   must_init(al_install_mouse(),                         "mouse");
@@ -14,59 +18,72 @@ GameView::GameView(const shared_ptr<GameModel>& model)
   must_init(al_init_acodec_addon(),                     "acodec");
   must_init(al_reserve_samples(AUDIO_RESERVED_SAMPLES), "reserve samples");
 
+  // Enable useful add-ons
   must_init(al_init_image_addon(),      "image");
   must_init(al_init_font_addon(),       "font");
   must_init(al_init_ttf_addon(),        "ttf");
   must_init(al_init_primitives_addon(), "primitives");
 
+  // Load bitmaps, fonts, sounds and event queue
   allegroConfig = make_shared<AllegroConfig>();
 
+  // Configure the display before creating bitmaps
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, ANTIALIASING_SAMPLES, ALLEGRO_SUGGEST);
   al_set_new_display_flags(ALLEGRO_WINDOWED);
   al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_CONVERT_BITMAP);
 
+  // Start the main timer used to refresh the game
   al_start_timer(allegroConfig->timer);
 }
 
 // Getters
 
+// Retrieve the Allegro configuration containing resources and event queue.
 [[gnu::pure]] shared_ptr<AllegroConfig> GameView::getAllegroConfig() const {
   return allegroConfig;
 }
 
+// Retrieve the UI configuration with positions and colors.
 [[gnu::pure]] shared_ptr<UIConfig> GameView::getUIConfig() const {
   return uiConfig;
 }
 
 // Sounds methods
 
+// Play a sound sample.  When loop is true the sound is played repeatedly
+// until stopSound is called.
 void GameView::playSound(ALLEGRO_SAMPLE* sound, ALLEGRO_SAMPLE_ID* id, bool loop) const {
   ALLEGRO_PLAYMODE mode = loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE;
   al_play_sample(sound, 1.0, 0.0, 1.0, mode, id);
 }
 
+// Stop a previously started sound.
 void GameView::stopSound(ALLEGRO_SAMPLE_ID* id) const {
   al_stop_sample(id);
 }
 
 // Draw methods
 
+// Draw a simple filled circle at a position with a given radius and color.
 void GameView::drawCircle(const Point& position, float radius, ALLEGRO_COLOR color) const {
   al_draw_filled_circle(position.x, position.y, radius, color);
 }
 
+// Draw a filled rectangle with an optional frame around it.
 void GameView::drawRectangle(const Point& upLeft, const Point& downRight, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR frameColor) const {
   al_draw_filled_rectangle(upLeft.x, upLeft.y, downRight.x, downRight.y, fillColor);
   al_draw_rectangle(upLeft.x, upLeft.y, downRight.x, downRight.y, frameColor, FRAME_THICKNESS);
 }
 
+// Render the ball based on its position and radius from the model.
 void GameView::drawBall() const {
   const Ball& ball = model->getBall();
   Point position = ball.getPosition();
   drawCircle(position, ball.getRadius(), WHITE);
 }
 
+// Render a single brick and its bonus abbreviation when needed.
 void GameView::drawBrick(const Brick& brick) const {
   ALLEGRO_COLOR fillColor = getColor(uiConfig->settings["brick_colors"][to_string(brick.getScore())].get<string>());
   ALLEGRO_COLOR frameColor =  (brick.getScore() == SECOND_LIFE && !brick.getSecondLife()) ? RED : BLACK;
@@ -76,6 +93,7 @@ void GameView::drawBrick(const Brick& brick) const {
   drawBonusAbbreviation(brick);
 }
 
+// Draw every non destroyed brick on the board.
 void GameView::drawBricks() const {
   const vector<Brick>& bricks = model->getBricks();
   for (const auto& brick : bricks) {
@@ -83,6 +101,7 @@ void GameView::drawBricks() const {
   }
 }
 
+// Draw the abbreviation of the bonus contained in a brick.
 void GameView::drawBonusAbbreviation(const Brick& brick) const {
   Point position = brick.getPosition();
   const BonusType& bonus = brick.getBonus();
@@ -99,7 +118,8 @@ void GameView::drawBonusAbbreviation(const Brick& brick) const {
   }
 }
 
-void GameView::drawBonus(const Bonus& bonus) const { 
+// Render the shape of a bonus.
+void GameView::drawBonus(const Bonus& bonus) const {
   ALLEGRO_COLOR color = getColor(uiConfig->settings["bonus_colors"][Bonus::getAbbreviation(bonus.getType())].get<string>());
 
   float w = bonus.getWidth();
@@ -115,6 +135,7 @@ void GameView::drawBonus(const Bonus& bonus) const {
   drawRectangle(upLeft, downRight, color, BLACK);
 }
 
+// Draw each active bonus falling on the playfield.
 void GameView::drawBonuses() const {
   const vector<Bonus>& bonuses = model->getBonuses();
   for (const auto& bonus : bonuses) {
@@ -124,6 +145,7 @@ void GameView::drawBonuses() const {
 
 // Display all game elements
 
+// Render the whole frame: background, HUD and all moving elements.
 void GameView::render() const {
   al_clear_to_color(WHITE);
   al_draw_bitmap(allegroConfig->background_png, 0, 0, 0);
@@ -137,6 +159,7 @@ void GameView::render() const {
 
 // Display methods
 
+// Show a full screen image (used for menus and transitions).
 void GameView::displayImage(ALLEGRO_BITMAP* bmp) const {
   if (bmp) {
     al_clear_to_color(WHITE);
@@ -145,6 +168,7 @@ void GameView::displayImage(ALLEGRO_BITMAP* bmp) const {
   }
 }
 
+// Draw the score and high score on the screen.
 void GameView::displayScore() const {
   al_draw_bitmap(allegroConfig->score_png, 0, 0, 0);
   al_draw_bitmap(allegroConfig->highScore_png, 0, 0, 0);
@@ -152,11 +176,13 @@ void GameView::displayScore() const {
   al_draw_text(allegroConfig->font, WHITE, uiConfig->highscorePos.x, uiConfig->highscorePos.y, ALLEGRO_ALIGN_CENTER, to_string(model->getHighScore()).c_str());
 }
 
+// Display the HUD including current lives.
 void GameView::displayHUD() const {
   displayScore();
   al_draw_bitmap(chooseHeartFile(), 0, 0, 0);
 }
 
+// Render the player's spaceship scaled to the model size.
 void GameView::displaySpaceship() const {
   const Spaceship& spaceship = model->getSpaceship();
   Point spaceshipPos = spaceship.getPosition();
@@ -166,12 +192,13 @@ void GameView::displaySpaceship() const {
   float imgH = static_cast<float>(al_get_bitmap_height(allegroConfig->spaceship_png));
   float spaceshipHeight = imgH;
   
-  al_draw_scaled_bitmap(allegroConfig->spaceship_png, 0, 0, imgW, imgH, 
+  al_draw_scaled_bitmap(allegroConfig->spaceship_png, 0, 0, imgW, imgH,
     spaceshipPos.x - spaceshipWidth/2, spaceshipPos.y - spaceshipHeight/2, spaceshipWidth, spaceshipHeight, 0);
 }
-  
+
 // Helper methods
 
+// Select the heart image according to remaining lives.
 [[gnu::pure]] ALLEGRO_BITMAP* GameView::chooseHeartFile() const {
   int lives = model->getSpaceship().getHealth();
   if      (lives == 1) { return allegroConfig->heart_1_png; }
@@ -179,8 +206,9 @@ void GameView::displaySpaceship() const {
   else { return allegroConfig->heart_3_png; }
 }
 
-void GameView::handleButtonHover(ALLEGRO_BITMAP* image_png, bool hoverPlay, bool hoverExit, 
-                                const Rectangle& buttonON, const Rectangle& buttonOFF) 
+// Highlight the button currently hovered with the mouse.
+void GameView::handleButtonHover(ALLEGRO_BITMAP* image_png, bool hoverPlay, bool hoverExit,
+                                const Rectangle& buttonON, const Rectangle& buttonOFF)
 {
   displayImage(image_png);
   
@@ -192,9 +220,10 @@ void GameView::handleButtonHover(ALLEGRO_BITMAP* image_png, bool hoverPlay, bool
   al_flip_display();
 }
 
+// Handle mouse events on the menu: hovering and clicking buttons.
 bool GameView::processMenuMouseEvent(const ALLEGRO_EVENT& event, ALLEGRO_BITMAP* image_png,
                                      bool& hoverPlay, bool& hoverExit, bool& done,
-                                     const Rectangle& buttonON, const Rectangle& buttonOFF) 
+                                     const Rectangle& buttonON, const Rectangle& buttonOFF)
 {
   if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
     Point mousePos = {static_cast<float>(event.mouse.x), static_cast<float>(event.mouse.y)};
@@ -219,6 +248,7 @@ bool GameView::processMenuMouseEvent(const ALLEGRO_EVENT& event, ALLEGRO_BITMAP*
 
 // Menu methods
 
+// Display a text based menu and wait for the player to press a key.
 void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, ALLEGRO_SAMPLE* sound, bool soundLoop, bool showScore) {
   ALLEGRO_EVENT event = allegroConfig->event;
   ALLEGRO_SAMPLE_ID soundMenuID;
@@ -243,9 +273,10 @@ void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, ALLEGRO_SAMPL
   al_stop_sample(&soundMenuID);
 }
 
+// Display a menu with Play/Exit buttons and handle the user's selection.
 void GameView::menuButton(ALLEGRO_BITMAP* image_png, bool &done, const Rectangle& buttonON, const Rectangle& buttonOFF) {
   ALLEGRO_EVENT event = allegroConfig->event;
-  
+
   bool clickOnButton = false;
   bool hoverPlay = false;
   bool hoverExit = false;
