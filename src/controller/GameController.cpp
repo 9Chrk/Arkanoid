@@ -4,9 +4,7 @@ using namespace std;
 GameController::GameController(const shared_ptr<GameModel>& model,
                                const shared_ptr<GameView>& view,
                                const vector<string>& levelFiles)
-    : model(model), view(view), levelFiles(levelFiles), gameScore(0), index(0), tempDirection({0, -1})
-{
-}
+    : model(model), view(view), levelFiles(levelFiles), gameScore(0), index(0), tempDirection({0, -1}) {}
 
 // Getters
 
