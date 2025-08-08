@@ -12,10 +12,10 @@ class GameModel {
   int score, highscore;
   string levelFile;
 
-  Ball           ball;
-  Spaceship      spaceship;
-  vector<Brick>  bricks;
-  vector<Bonus>  bonuses;
+  Ball          ball;
+  Spaceship     spaceship;
+  vector<Brick> bricks;
+  vector<Bonus> bonuses;
 
   struct CollisionResult {
     Brick* hitBrick;

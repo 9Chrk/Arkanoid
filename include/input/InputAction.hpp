@@ -13,8 +13,8 @@ enum class InputActionType {
 };
 
 struct InputAction {
-    InputActionType type;
-    // Action data
-    int x = 0;
-    int y = 0;
+  InputActionType type;
+  // Action data
+  int x = 0;
+  int y = 0;
 };
