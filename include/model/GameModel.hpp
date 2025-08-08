@@ -29,12 +29,12 @@ class GameModel {
   void initializeBricks();
 
   // Helper methods
-  vector<Point> _collisionPoints(const Point& pos);
+  vector<Point> _collisionPoints(const Point& pos) const;
 
   // Collision detection methods
-  bool shouldSkipCollisionCheck(const Point& pos, float speed);
+  bool shouldSkipCollisionCheck(const Point& pos, float speed) const;
   CollisionResult findClosestCollision(const Point& pos, const Point& direction, float speed);
-  CollisionResult checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed);
+  CollisionResult checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) const;
   
   void handleBrickHit(Brick* hitBrick);
   void handleBallRebound(Point& direction, int hitSide);
@@ -50,7 +50,7 @@ class GameModel {
   void resetScore();
 
   // Helper methods
-  bool checkDirectionChanged(Point& tempDirection);
+  bool checkDirectionChanged(Point& tempDirection) const;
 
   // Getters
   int getScore()           const;

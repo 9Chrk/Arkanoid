@@ -8,7 +8,7 @@
 class GameController {
  private:
   std::shared_ptr<GameModel> model;
-  std::shared_ptr<GameView> view;
+  std::shared_ptr<GameView>  view;
 
   const std::vector<std::string>& levelFiles;
   int gameScore, index;
@@ -25,10 +25,10 @@ class GameController {
   void resetTempDirection();
 
   // Getters
-  std::shared_ptr<GameModel> getModel();
-  std::shared_ptr<GameView> getView();
-  int getIndex();
-  int getGameScore();
+  std::shared_ptr<GameModel> getModel() const;
+  std::shared_ptr<GameView> getView()   const;
+  int getIndex()     const;
+  int getGameScore() const;
 
   // Setters
   void resetGameScore();

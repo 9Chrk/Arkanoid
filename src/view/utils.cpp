@@ -4,11 +4,11 @@ using namespace std;
 
 // Allegro error handling 
 
-void checkBitmap(ALLEGRO_BITMAP* bitmap, const string& fileName) {
+void checkBitmap(const ALLEGRO_BITMAP* bitmap, const string& fileName) {
   if (!bitmap) throw runtime_error("Failed to load image: " + fileName);
 }
 
-void checkSample(ALLEGRO_SAMPLE* sample, const string& fileName) {
+void checkSample(const ALLEGRO_SAMPLE* sample, const string& fileName) {
   if (!sample) throw runtime_error("Failed to load sound: " + fileName);
 }
 

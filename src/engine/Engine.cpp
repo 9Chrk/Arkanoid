@@ -16,22 +16,22 @@ Engine::~Engine() {
 
 // Print methods
 
-void Engine::printWin(int score, int highscore) {
+void Engine::printWin(int score, int highscore) const {
   cout << "\nCongratulations! You've broken every brick! 🎇" << endl;
   printScore(score, highscore);
 }
 
-void Engine::printLose(int score, int highscore) {
+void Engine::printLose(int score, int highscore) const {
   cout << "\nGame Over... The bricks have won this time. 🧱" << endl;
   printScore(score, highscore);
 }
 
-void Engine::printFinish(int score, int highscore) {
+void Engine::printFinish(int score, int highscore) const {
   cout << "\nYou have finished ARKANOID !!!" << endl;
   printScore(score, highscore);
 }
 
-void Engine::printScore(int score, int highscore) {
+void Engine::printScore(int score, int highscore) const {
   cout << "Score achieved : " << score << endl;
   cout << "Highscore      : " << highscore << "\n" << endl;
 }

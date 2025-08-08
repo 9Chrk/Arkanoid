@@ -10,10 +10,10 @@ GameController::GameController(const shared_ptr<GameModel>& model, const vector<
 
 // Getters
 
-[[gnu::pure]] int GameController::getIndex()                   { return index;     }
-[[gnu::pure]] int GameController::getGameScore()               { return gameScore; }
-[[gnu::pure]] shared_ptr<GameView> GameController::getView()   { return view;      }
-[[gnu::pure]] shared_ptr<GameModel> GameController::getModel() { return model;     }
+[[gnu::pure]] int GameController::getIndex()                   const { return index;     }
+[[gnu::pure]] int GameController::getGameScore()               const { return gameScore; }
+[[gnu::pure]] shared_ptr<GameView> GameController::getView()   const { return view;      }
+[[gnu::pure]] shared_ptr<GameModel> GameController::getModel() const { return model;     }
 
 // Setters
 

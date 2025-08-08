@@ -36,13 +36,10 @@ static const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 
 inline constexpr double refreshPerSecond = 60;  
 
-// Resource initialization
-void must_init(bool test, const string& description);
-void must_init(void* test, const string& description);
 
 // Allegro error handling 
-void checkBitmap(ALLEGRO_BITMAP* bitmap, const std::string& fileName);
-void checkSample(ALLEGRO_SAMPLE* sample, const std::string& fileName);
+void checkBitmap(const ALLEGRO_BITMAP* bitmap, const std::string& fileName);
+void checkSample(const ALLEGRO_SAMPLE* sample, const std::string& fileName);
 
 // Allegro resource loading
 ALLEGRO_BITMAP* loadBitmap(const std::string& filename);

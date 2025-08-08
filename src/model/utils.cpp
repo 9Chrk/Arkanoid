@@ -7,7 +7,7 @@ void must_init(bool test, const string& description) {
   if (!test) throw runtime_error("Failed to initialize: " + description);
 }
 
-void must_init(void* test, const string& description) {
+void must_init(const void* test, const string& description) {
   must_init(test != nullptr, description);
 }
 

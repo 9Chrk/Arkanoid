@@ -82,7 +82,7 @@ void GameModel::checkCollisions() {
   handleBallRebound(direction, collision.hitSide);                         // Bounce management
 }
 
-bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) {
+bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) const {
   const Brick &last = bricks.back();
   return pos.y >= last.getPosition().y + (last.getHeight()/2) + (speed * speed);
 }
@@ -102,7 +102,7 @@ GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, con
   return result;
 }
 
-GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) {
+GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) const {
   CollisionResult result;
   
   for (const Point &p : collisionPoints) {
@@ -147,7 +147,7 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
 
 // Helper methods
 
-[[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) {
+[[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) const {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
     {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Haut-Droite
@@ -158,7 +158,7 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
   return collisionPoints;
 }
 
-bool GameModel::checkDirectionChanged(Point& tempDirection) {
+bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   const Point& currentDirection = ball.getDirection();
   constexpr float eps = numeric_limits<float>::epsilon();
   if (fabs(currentDirection.x - tempDirection.x) > eps ||
