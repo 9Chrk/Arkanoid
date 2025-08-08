@@ -8,10 +8,10 @@ GameModel::GameModel(const string& levelFile, int score)
   initializeBall();
   initializeSpaceship();
   initializeBricks();
-  // InitializeBonuses
+  // Initialisation des bonus
 }
 
-// Initialization methods
+// Méthodes d'initialisation
 
 void GameModel::initializeBall() 
 {
@@ -48,7 +48,7 @@ void GameModel::initializeBricks()
   const float offset_x          = static_cast<float>(width + margin);
   const float offset_y          = static_cast<float>(height + margin);
   const float total_width       = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
-  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GAME_WIDTH - total_width)/2.0f;
+  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GAME_WIDTH - total_width)/2.0f; // centre la grille si aucun décalage
   const float offset_start_y    = static_cast<float>(_offset_start_y);
 
   for (size_t index = 0; index < bricks_data.size(); ++index) {
@@ -66,19 +66,19 @@ void GameModel::initializeBricks()
   }
 }
 
-// Collision management
+// Gestion des collisions
 
 void GameModel::checkCollisions() {
   Point pos = ball.getPosition();
   float speed = ball.getSpeed();
   Point direction = Vector::normalize(ball.getDirection());
   
-  if (shouldSkipCollisionCheck(pos, speed)) return;                        // Quick check if the ball is too far away
-  CollisionResult collision = findClosestCollision(pos, direction, speed); // Collision search
-  
-  if (!collision.hitBrick) return;                                         // No collision found, just move the ball
-  handleBrickHit(collision.hitBrick);                                      // Score and destruction management
-  handleBallRebound(direction, collision.hitSide);                         // Bounce management
+  if (shouldSkipCollisionCheck(pos, speed)) return;                        // évite une recherche inutile
+  CollisionResult collision = findClosestCollision(pos, direction, speed); // recherche de la première collision
+
+  if (!collision.hitBrick) return;                                         // aucune collision, déplacement simple
+  handleBrickHit(collision.hitBrick);                                      // mise à jour du score
+  handleBallRebound(direction, collision.hitSide);                         // gestion du rebond
 }
 
 bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) const {
@@ -144,7 +144,7 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
   ball.setDirection(direction);
 }
 
-// Helper methods
+// Méthodes utilitaires
 
 [[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) const {
   vector<Point> collisionPoints = {
@@ -159,7 +159,7 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
 
 bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   const Point& currentDirection = ball.getDirection();
-  constexpr float eps = numeric_limits<float>::epsilon();
+  constexpr float eps = numeric_limits<float>::epsilon(); // tolérance flottante
   if (fabs(currentDirection.x - tempDirection.x) > eps ||
       fabs(currentDirection.y - tempDirection.y) > eps) {
     tempDirection = currentDirection;
@@ -168,7 +168,7 @@ bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   return false;
 }
 
-// File-Score management
+// Gestion des scores
 
 void GameModel::saveHighScore() {
   if (score >= highscore) {
@@ -186,7 +186,7 @@ void GameModel::resetScore() {
   score = 0; 
 }
 
-// Getters
+// Accesseurs
 
 [[gnu::pure]] int GameModel::getScore()           const { return score; }
 [[gnu::pure]] int GameModel::getHighScore()       const { return highscore; }
