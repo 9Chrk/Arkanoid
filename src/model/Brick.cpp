@@ -3,7 +3,7 @@
 
 
 Brick::Brick(const Point& position, float w, float h, int score, BonusType bonus)
-     : Rectangle(position, w, h), score(score), destroyed(false), secondLife(score == 200),
+     : Rectangle(position, w, h), score(score), destroyed(false), secondLife(score == SECOND_LIFE),
        bonus(bonus), vec(position, w, h) {}
 
 // Methods

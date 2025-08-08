@@ -69,7 +69,7 @@ void GameView::drawBall() const {
 
 void GameView::drawBrick(const Brick& brick) const {
   ALLEGRO_COLOR fillColor = uiConfig->brickColors.at(brick.getScore());
-  ALLEGRO_COLOR frameColor =  (brick.getScore() == 200 && !brick.getSecondLife()) ? RED : BLACK;
+  ALLEGRO_COLOR frameColor =  (brick.getScore() == SECOND_LIFE && !brick.getSecondLife()) ? RED : BLACK;
 
   auto [upLeft, downRight] = brick.diag_coor();
   drawRectangle(upLeft, downRight, fillColor, frameColor);
