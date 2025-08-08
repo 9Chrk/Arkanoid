@@ -3,7 +3,7 @@ using namespace std;
 
 
 GameModel::GameModel(const string& levelFile, int score)
-         : score(score), highscore(readJsonFile("./assets/data/settings.json", "highscore").get<int>()),
+         : score(score), highscore(loadSettings()["highscore"].get<int>()),
            levelFile(levelFile), ball(), spaceship(), bricks(), bonuses() {
   initializeBall();
   initializeSpaceship();
@@ -15,7 +15,7 @@ GameModel::GameModel(const string& levelFile, int score)
 
 void GameModel::initializeBall() 
 {
-  json _ball                    = readJsonFile("./assets/data/settings.json", "ball");
+  json _ball                    = loadSettings()["ball"];
   float radius                  = _ball["radius"].get<float>();
   float speed                   = _ball["speed"].get<float>();
   ball                          = Ball(radius, speed);
@@ -23,7 +23,7 @@ void GameModel::initializeBall()
 
 void GameModel::initializeSpaceship() 
 {
-  json _spaceship               = readJsonFile("./assets/data/settings.json", "spaceship");
+  json _spaceship               = loadSettings()["spaceship"];
   float position_x              = _spaceship["position.x"].get<float>();
   float position_y              = _spaceship["position.y"].get<float>();
   float width                   = _spaceship["width"].get<float>();
@@ -35,8 +35,8 @@ void GameModel::initializeSpaceship()
 
 void GameModel::initializeBricks() 
 {
+  json settings                 = loadSettings();
   json level                    = openJsonFile("./assets/data/" + levelFile);
-  json settings                 = openJsonFile("./assets/data/settings.json");
   vector<string> bricks_data    = level["bricks"].get<vector<string>>();
   const int dim_x               = level["dim_x"].get<int>();
   const int width               = settings["brick"]["width"].get<int>();

@@ -34,8 +34,6 @@ inline const ALLEGRO_COLOR MAGENTA = al_map_rgb(235, 37, 174);
 inline const ALLEGRO_COLOR SILVER  = al_map_rgb(224, 224, 224);
 inline const ALLEGRO_COLOR GOLD    = al_map_rgb(255, 215, 0);
 
-inline constexpr double refreshPerSecond = 60;  
-
 
 // Allegro error handling 
 void checkBitmap(const ALLEGRO_BITMAP* bitmap, const std::string& fileName);

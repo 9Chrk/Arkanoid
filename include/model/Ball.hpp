@@ -47,8 +47,8 @@ class Ball : public Circle {
   Point getDirection() const;
   float getSpeed()     const;
 
-  bool inMouvement()   const;
-  bool isFalling()     const;
+  bool isMoving()  const;
+  bool isFalling() const;
 
   // Setters
   void setMoving(bool isMoving);

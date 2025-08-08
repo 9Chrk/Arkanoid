@@ -7,22 +7,22 @@ GameView::GameView(const shared_ptr<GameModel>& model)
     uiConfig(make_shared<UIConfig>()),
     allegroConfig(nullptr)
 {
-  must_init(al_init(),              "allegro");
-  must_init(al_install_keyboard(),  "keyboard");
-  must_init(al_install_mouse(),     "mouse");
-  must_init(al_install_audio(),     "audio");
-  must_init(al_init_acodec_addon(), "acodec");
-  must_init(al_reserve_samples(32), "reserve samples");
+  must_init(al_init(),                                  "allegro");
+  must_init(al_install_keyboard(),                      "keyboard");
+  must_init(al_install_mouse(),                         "mouse");
+  must_init(al_install_audio(),                         "audio");
+  must_init(al_init_acodec_addon(),                     "acodec");
+  must_init(al_reserve_samples(AUDIO_RESERVED_SAMPLES), "reserve samples");
 
-  must_init(al_init_image_addon(), "image");
-  must_init(al_init_font_addon(),  "font");
-  must_init(al_init_ttf_addon(),   "ttf");
+  must_init(al_init_image_addon(),      "image");
+  must_init(al_init_font_addon(),       "font");
+  must_init(al_init_ttf_addon(),        "ttf");
   must_init(al_init_primitives_addon(), "primitives");
 
   allegroConfig = make_shared<AllegroConfig>();
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
-  al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
+  al_set_new_display_option(ALLEGRO_SAMPLES, ANTIALIASING_SAMPLES, ALLEGRO_SUGGEST);
   al_set_new_display_flags(ALLEGRO_WINDOWED);
   al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_CONVERT_BITMAP);
 
@@ -100,8 +100,8 @@ void GameView::drawBonusAbbreviation(const Brick& brick) const {
 }
 
 void GameView::drawBonus(const Bonus& bonus) const { 
-  json bonus_colors = readJsonFile("./assets/data/settings.json", "bonus_colors");
-  ALLEGRO_COLOR color = getColor(bonus_colors[Bonus::getAbbreviation(bonus.getType())].get<string>());
+  json settings = loadSettings();
+  ALLEGRO_COLOR color = getColor(settings["bonus_colors"][Bonus::getAbbreviation(bonus.getType())].get<string>());
 
   float w = bonus.getWidth();
   float h = bonus.getHeight();

@@ -6,10 +6,10 @@ AllegroConfig::AllegroConfig() : event{} {
   try {
     // components
     queue     = al_create_event_queue();
-    timer     = al_create_timer(1.0/refreshPerSecond);
+    timer     = al_create_timer(1.0/REFRESH_PER_SECOND);
     display   = al_create_display(GAME_WIDTH, GAME_HEIGHT);
-    font      = al_load_font("./assets/fonts/Distant_galaxy.ttf", 20, 0);
-    fontBonus = al_load_font("./assets/fonts/Pixeled.ttf", 6, 0);
+    font      = al_load_font("./assets/fonts/Distant_galaxy.ttf", FONT_SIZE, 0);
+    fontBonus = al_load_font("./assets/fonts/Pixeled.ttf", FONT_BONUS_SIZE, 0);
 
     // check components
     must_init(display,   "display");

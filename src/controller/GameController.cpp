@@ -97,7 +97,7 @@ void GameController::update() {
     resetTempDirection();                    // prepare for next launch
   }
 
-  if (ball.inMouvement()) {
+  if (ball.isMoving()) {
     ball.move(spaceship.getPosition(),
               spaceship.getWidth(),
               spaceship.getHeight());
