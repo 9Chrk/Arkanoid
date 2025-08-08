@@ -190,7 +190,7 @@ void GameModel::resetScore() {
 
 [[gnu::pure]] int GameModel::getScore()           const { return score; }
 [[gnu::pure]] int GameModel::getHighScore()       const { return highscore; }
-[[gnu::pure]] Point GameModel::getBallDirection() const { return ball.getDirection();}
+[[gnu::pure]] Point GameModel::getBallDirection() const { return ball.getDirection(); }
 
 [[gnu::pure]] const Ball& GameModel::getBall()           const { return ball; }
 [[gnu::pure]] const Spaceship& GameModel::getSpaceship() const { return spaceship; }
@@ -202,6 +202,7 @@ void GameModel::resetScore() {
 [[gnu::pure]] const vector<Bonus>& GameModel::getBonuses() const { return bonuses; }
 
 [[gnu::pure]] bool GameModel::lose() const { return spaceship.isDeath(); }
+
 [[gnu::pure]] bool GameModel::win()  const {
   for (auto& brick : bricks) if (!brick.isDestroyed() && brick.getScore() != 0) return false;
   return true;

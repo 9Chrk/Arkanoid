@@ -1,6 +1,7 @@
 using namespace std;
 #include "GameController.hpp"
 
+
 GameController::GameController(const shared_ptr<GameModel>& model,
                                const shared_ptr<GameView>& view,
                                const vector<string>& levelFiles)
@@ -51,7 +52,7 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
         break;
 
       case ALLEGRO_KEY_R:
-        ball.reset();                     // restart level
+        ball.reset();
         model->resetScore();
         model->resetHighScore();
         resetTempDirection();
@@ -62,7 +63,7 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
       case ALLEGRO_KEY_6: case ALLEGRO_KEY_7: case ALLEGRO_KEY_8: {
         index = event.keyboard.keycode - ALLEGRO_KEY_0;
         if (index >= 0 && index < static_cast<int>(levelFiles.size())) {
-          updateGameScore();               // save score before loading
+          updateGameScore();              // save score before loading
           resetTempDirection();
           *model = GameModel(levelFiles[static_cast<size_t>(index)], gameScore); // load chosen level
         }
@@ -75,7 +76,7 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
   else if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
     float mx = static_cast<float>(event.mouse.x);
     float my = static_cast<float>(event.mouse.y);
-    spaceship.move({mx, my});            // follow mouse position
+    spaceship.move({mx, my}); // follow mouse position
   }
 }
 
@@ -88,12 +89,12 @@ void GameController::update() {
 
   model->checkCollisions();
 
-  if (ball.isFalling()) {               // ball missed the paddle
-    spaceship.damage();                 // remove a life
+  if (ball.isFalling()) {                    // ball missed the paddle
+    spaceship.damage();                      // remove a life
     ball.reset();
     ball.setFalling(false);
     if (spaceship.getHealth()) { view->playSound(allegroConfig->fall_wav); }
-    resetTempDirection();               // prepare for next launch
+    resetTempDirection();                    // prepare for next launch
   }
 
   if (ball.inMouvement()) {
@@ -102,8 +103,8 @@ void GameController::update() {
               spaceship.getHeight());
   }
   else {
-    ball.move(spaceship.getPosition(),
-              spaceship.getHeight()); // keep ball above spaceship
+    ball.move(spaceship.getPosition(),       // keep ball above spaceship
+              spaceship.getHeight());
   }
 
   if (model->checkDirectionChanged(tempDirection)) {

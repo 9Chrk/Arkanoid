@@ -12,9 +12,9 @@ UIConfig::UIConfig()
     buttonNo(),
     brickColors()
 {
-  json settings       = loadSettings();
-  json displayButton  = settings["display_button"];
-  json display_score  = settings["display_score"];
+  json settings      = loadSettings();
+  json displayButton = settings["display_button"];
+  json display_score = settings["display_score"];
 
   scorePos     = {display_score["score.x"].get<float>(),     display_score["score.y"].get<float>()};
   highscorePos = {display_score["highscore.x"].get<float>(), display_score["highscore.y"].get<float>()};
