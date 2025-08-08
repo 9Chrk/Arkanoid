@@ -19,7 +19,8 @@
 using json = nlohmann::json;
 
 
-// Initialisation des ressources
+/* ############## Initialisation des ressources ############## */
+
 /// @brief Lève une erreur si l'initialisation échoue.
 /// @param test Résultat de l'initialisation.
 /// @param description Nom de la ressource.
@@ -32,7 +33,9 @@ void must_init(bool test, const std::string& description);
 /// @throws std::runtime_error si test est nul.
 void must_init(const void* test, const std::string& description);
 
-// Fonctions JSON
+
+/* ############## Fonctions JSON ############## */
+
 /// @brief Charge un fichier JSON.
 /// @param fileName Chemin vers le fichier.
 /// @return Données JSON du fichier.
@@ -63,7 +66,9 @@ void writeJsonFile(const std::string& fileName, const json& data);
 /// @return Données de configuration.
 json loadSettings();
 
-// Commandes système
+
+/* ############## Commandes système ############## */
+
 /// @brief Liste les fichiers de niveaux.
 /// @param dir Répertoire à explorer.
 /// @return Noms triés des fichiers.

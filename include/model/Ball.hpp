@@ -14,7 +14,9 @@ class Ball : public Circle {
   Ball();
   Ball(float radius, float speed);
 
-  // Mouvement
+
+  /* ############## Mouvement ############## */ 
+  
   /// @brief Place la balle au-dessus du vaisseau.
   /// @param spaceship Centre du vaisseau.
   /// @param h Hauteur du vaisseau.
@@ -26,7 +28,9 @@ class Ball : public Circle {
   /// @param h Hauteur du vaisseau.
   void move(const Point& spaceship, float w, float h);
 
-  // Gestion des collisions et de l'état
+
+  /* ######## Gestion des collisions et de l'état ######## */
+  
   /// @brief Rebonds sur murs et vaisseau.
   /// @param spaceship Centre du vaisseau.
   /// @param w Largeur du vaisseau.
@@ -39,14 +43,14 @@ class Ball : public Circle {
   /// @brief Réinitialise direction et mouvement.
   void reset();
 
-  // Accesseurs
+  // Getters
   Point getDirection() const;
   float getSpeed()     const;
 
   bool inMouvement()   const;
   bool isFalling()     const;
 
-  // Mutateurs
+  // Setters
   void setMoving(bool isMoving);
   void setFalling(bool isFalling);
   void setDirection(const Point& newDirection);

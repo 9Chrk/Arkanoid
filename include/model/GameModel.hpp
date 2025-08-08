@@ -29,13 +29,17 @@ class GameModel {
   void initializeSpaceship();
   void initializeBricks();
 
-  // Méthodes utilitaires
+  
+  /* ############## Méthodes utilitaires ############## */
+
   /// @brief Génère les points de test autour de la balle.
   /// @param pos Position centrale de la balle.
   /// @return Liste de points à vérifier.
   vector<Point> _collisionPoints(const Point& pos) const;
 
-  // Détection de collision
+
+  /* ############## Détection de collision ############## */
+ 
   /// @brief Ignore la recherche si la balle est hors zone utile.
   /// @param pos Position actuelle de la balle.
   /// @param speed Vitesse de déplacement.
@@ -79,7 +83,9 @@ class GameModel {
   void resetHighScore();
   void resetScore();
 
-  // Méthodes utilitaires
+   
+  /* ############## Méthodes utilitaires ############## */
+  
   /// @brief Indique si la direction de la balle a changé.
   /// @param tempDirection Direction précédente, mise à jour en sortie.
   /// @return true si un changement a eu lieu.

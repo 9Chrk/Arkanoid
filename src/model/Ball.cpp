@@ -59,14 +59,14 @@ void Ball::reset() {
   moving = false;
 }
 
-// Accesseurs
+// Getters
 
 [[gnu::pure]] Point Ball::getDirection() const { return direction; }
 [[gnu::pure]] float Ball::getSpeed()     const { return speed;     }
 [[gnu::pure]] bool  Ball::inMouvement()  const { return moving;    }
 [[gnu::pure]] bool  Ball::isFalling()    const { return falling;   }
 
-// Mutateurs
+// Setters
 
 void Ball::setMoving(bool isMoving)   { moving = isMoving;   }
 void Ball::setFalling(bool isFalling) { falling = isFalling; }

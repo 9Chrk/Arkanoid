@@ -16,18 +16,17 @@ class Brick : public Rectangle {
  public:
   Brick(const Point& position, float w, float h, int score, BonusType bonus = BonusType::NONE);
 
-  // Méthodes
   /// @brief Marque la brique comme détruite.
   void destroy();
 
-  // Accesseurs
+  // Getters
   bool isDestroyed()   const;
   bool getSecondLife() const;
   int getScore()       const;
   BonusType getBonus() const;
   Vector getVector()   const;
 
-  // Mutateurs
+  // Setters
   void setSecondLife(bool cas);
   void setBonus(BonusType bonusType);
 };

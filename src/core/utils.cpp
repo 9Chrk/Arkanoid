@@ -3,6 +3,7 @@ using namespace std;
 
 
 // Resource initialization
+
 void must_init(bool test, const string& description) {
   if (!test) throw runtime_error("Failed to initialize: " + description);
 }

@@ -186,7 +186,7 @@ void GameModel::resetScore() {
   score = 0; 
 }
 
-// Accesseurs
+// Getters
 
 [[gnu::pure]] int GameModel::getScore()           const { return score; }
 [[gnu::pure]] int GameModel::getHighScore()       const { return highscore; }
