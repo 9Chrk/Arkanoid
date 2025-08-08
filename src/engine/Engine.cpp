@@ -12,53 +12,66 @@ Engine::~Engine() {
 
 // Handle Allegro Events
 
-bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
-  shared_ptr<GameView> view  = controller.getView();   // current view
-  shared_ptr<GameModel> model = controller.getModel(); // game state
-
-  // Quit if the user closes the window or hits Escape
-  if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ||
-     (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)) {
-    return false;
-  }
-
-  // Forward keyboard and mouse events to the controller
-  if (event.type == ALLEGRO_EVENT_KEY_DOWN || event.type == ALLEGRO_EVENT_MOUSE_AXES) {
-    controller.handleEvent(event);
-  }
-
-  // Timer event: advance simulation and redraw frame
-  if (event.type == ALLEGRO_EVENT_TIMER) {
-    controller.update();
-    view->render();
-  }
-
-  // Player completed current level
+bool Engine::handleWin(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
   if (model->win()) {
     view->stopSound(&soundID);
     view->menu(allegroConfig->win_png, "Press any key to continue...", allegroConfig->win_wav);
     controller.incrementIndex();
     controller.updateGameScore();
-    restartGame = true; // next level should start
-    return false;
+    restartGame = true;
+    return true;
   }
+  return false;
+}
 
-  // Player lost all lives
+bool Engine::handleLose(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
   if (model->lose()) {
     view->stopSound(&soundID);
     view->playSound(allegroConfig->lose_wav);
     view->menuButton(allegroConfig->lose_png, restartGame, uiConfig->buttonYes, uiConfig->buttonNo);
     controller.resetGameScore();
     controller.resetIndex();
-    return false; // back to menu
+    return true;
   }
+  return false;
+}
 
-  return true; // keep processing events
+bool Engine::processAction(const InputAction& action, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
+  shared_ptr<GameView> view  = controller.getView();
+  shared_ptr<GameModel> model = controller.getModel();
+
+  switch (action.type) {
+    case InputActionType::Quit:
+      return false;
+
+    case InputActionType::TimerTick:
+      controller.update();
+      view->render();
+      break;
+
+    case InputActionType::MoveLeft:
+    case InputActionType::MoveRight:
+    case InputActionType::Launch:
+    case InputActionType::Reset:
+    case InputActionType::MouseMove:
+    case InputActionType::LevelChange:
+      controller.handleAction(action);
+      break;
+
+    default: break;
+  }
+  if (handleWin(view, model, controller, soundID) || handleLose(view, model, controller, soundID)) { 
+    return false; 
+  }
+  return true;
 }
 
 // Game loop
 
 void Engine::run() {
+  ALLEGRO_EVENT event;
+  AllegroInputAdapter inputAdapter;
+
   auto model = make_shared<GameModel>(gameLevels.at(0), 0); // start with first level
   auto view  = make_shared<GameView>(model);
   GameController controller = GameController(model, view, gameLevels);
@@ -88,11 +101,11 @@ void Engine::run() {
       view->playSound(allegroConfig->street_Fighter_wav, &soundGameID, true); // background music
       done = restartGame = false;
 
+      event = allegroConfig->event;
       // Process events until level ends
       while (!done) {
-        ALLEGRO_EVENT event = allegroConfig->event;
         al_wait_for_event(allegroConfig->queue, &event); // wait for next event
-        done = !processEvent(event, controller, soundGameID);
+        if (auto act = inputAdapter.translate(event)) { done = !processAction(*act, controller, soundGameID); }
       }
 
       model->saveHighScore();

@@ -1,5 +1,6 @@
 #pragma once
 #include "view/utils.hpp"
+#include "AllegroInputAdapter.hpp"
 #include "GameController.hpp"
 #include "GameModel.hpp"
 
@@ -13,8 +14,10 @@ class Engine {
   shared_ptr<UIConfig>      uiConfig = nullptr;
   shared_ptr<AllegroConfig> allegroConfig = nullptr;
 
-  // Handle Allegro event
-  bool processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
+  // Handle Actions / Allegro event
+  bool handleWin(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
+  bool handleLose(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
+  bool processAction(const InputAction& action, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
 
  public:
   Engine();

@@ -5,6 +5,7 @@ CXXFLAGS += -pedantic -Wall -Wextra
 CXXFLAGS += -O2
 CXXFLAGS += -Ilibs
 CXXFLAGS += -Iinclude
+CXXFLAGS += -Iinclude/input
 CXXFLAGS += -Iinclude/core
 CXXFLAGS += -Iinclude/model      # Include JSON library
 CXXFLAGS += -Iinclude/view          

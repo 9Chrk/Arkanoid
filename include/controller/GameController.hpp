@@ -1,6 +1,7 @@
 #pragma once
 #include "GameModel.hpp"
 #include "GameView.hpp"
+#include "input/InputAction.hpp"
 
 
 class GameController {
@@ -12,13 +13,17 @@ class GameController {
   int gameScore, index;
   Point tempDirection;
 
+  // Helpers
+  void resetGame();
+  void forceLevelChange(int idx);
+
  public:
   GameController(const std::shared_ptr<GameModel>& model,
                  const std::shared_ptr<GameView>& view,
                  const std::vector<std::string>& levelFiles);
 
   // Methods
-  void handleEvent(const ALLEGRO_EVENT& event);
+  void handleAction(const InputAction& action);
   void update();
   
   // Helpers
