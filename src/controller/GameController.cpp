@@ -37,21 +37,21 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
       case ALLEGRO_KEY_LEFT:
       case ALLEGRO_KEY_A:
       case ALLEGRO_KEY_Q:
-        spaceship.move(Direction::Left);
+        spaceship.move(Direction::Left);  // move paddle to the left
         break;
 
       case ALLEGRO_KEY_RIGHT:
       case ALLEGRO_KEY_D:
       case ALLEGRO_KEY_P:
-        spaceship.move(Direction::Right);
+        spaceship.move(Direction::Right); // move paddle to the right
         break;
 
       case ALLEGRO_KEY_SPACE:
-        ball.setMoving(true);
+        ball.setMoving(true);             // launch the ball
         break;
 
       case ALLEGRO_KEY_R:
-        ball.reset();
+        ball.reset();                     // restart level
         model->resetScore();
         model->resetHighScore();
         resetTempDirection();
@@ -62,9 +62,9 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
       case ALLEGRO_KEY_6: case ALLEGRO_KEY_7: case ALLEGRO_KEY_8: {
         index = event.keyboard.keycode - ALLEGRO_KEY_0;
         if (index >= 0 && index < static_cast<int>(levelFiles.size())) {
-          updateGameScore();
+          updateGameScore();               // save score before loading
           resetTempDirection();
-          *model = GameModel(levelFiles[static_cast<size_t>(index)], gameScore);
+          *model = GameModel(levelFiles[static_cast<size_t>(index)], gameScore); // load chosen level
         }
         break;
       }
@@ -75,7 +75,7 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
   else if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
     float mx = static_cast<float>(event.mouse.x);
     float my = static_cast<float>(event.mouse.y);
-    spaceship.move({mx, my});
+    spaceship.move({mx, my});            // follow mouse position
   }
 }
 
@@ -88,12 +88,12 @@ void GameController::update() {
 
   model->checkCollisions();
 
-  if (ball.isFalling()) {
-    spaceship.damage();
+  if (ball.isFalling()) {               // ball missed the paddle
+    spaceship.damage();                 // remove a life
     ball.reset();
     ball.setFalling(false);
     if (spaceship.getHealth()) { view->playSound(allegroConfig->fall_wav); }
-    resetTempDirection();
+    resetTempDirection();               // prepare for next launch
   }
 
   if (ball.inMouvement()) {
@@ -107,6 +107,6 @@ void GameController::update() {
   }
 
   if (model->checkDirectionChanged(tempDirection)) {
-    view->playSound(allegroConfig->bip_wav);
+    view->playSound(allegroConfig->bip_wav); // play a sound on rebound
   }
 }
