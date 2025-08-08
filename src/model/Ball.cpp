@@ -10,7 +10,7 @@ Ball::Ball(float radius, float speed)
     : Circle({0, 0}, radius), direction(INITIAL_DIRECTION), speed(speed),
       moving(false), falling(false) {}
 
-// Mouvement
+// Movement
 
 void Ball::move(const Point& spaceship, float h) {
   position.x = spaceship.x;
@@ -22,7 +22,7 @@ void Ball::move(const Point& spaceship, float w, float h) {
   checkFall();
 }
 
-// Gestion des collisions et de l'état
+// Collision and state management
 
 void Ball::checkCollisions(const Point& spaceship, float w, float h) {
   Point newPos = {position.x + direction.x * speed, position.y + direction.y * speed};
@@ -35,23 +35,23 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
     newPos.x >= spaceship.x - w/2 - radius &&
     newPos.x <= spaceship.x + w/2 + radius) {
       
-      float x_rel = (newPos.x - spaceship.x) / (w/2);      // position relative sur le vaisseau
+      float x_rel = (newPos.x - spaceship.x) / (w/2);      // relative position on the spaceship
       x_rel = clamp(x_rel, -1.0f, 1.0f);
 
       float alpha = 30.0f + 120.0f * (1.0f - x_rel);
-      alpha = clamp(alpha, 30.0f, 150.0f);                 // évite rebonds verticaux parfaits
+      alpha = clamp(alpha, 30.0f, 150.0f);                 // prevent perfectly vertical bounces
       float theta = alpha * static_cast<float>(M_PI) / 180.0f;
       
       direction.x = cos(theta);
       direction.y = -sin(theta);
     }
     newPos.x = clamp(newPos.x, radius, GAME_WIDTH - radius);
-    newPos.y = clamp(newPos.y, radius, GAME_HEIGHT * 1.5f);
+    newPos.y = clamp(newPos.y, radius, GAME_HEIGHT * 1.5f); // keep within game area
     position = newPos;
 }
   
 void Ball::checkFall() {
-  falling = (position.y - radius > GAME_HEIGHT) ? true : false;
+  falling = (position.y - radius > GAME_HEIGHT) ? true : false; // ball fell below the screen
 }
   
 void Ball::reset() {

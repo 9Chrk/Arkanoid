@@ -4,7 +4,7 @@
 #include "Bonus.hpp"
 
 
-/// @brief Brique destructible pouvant contenir un bonus.
+/// @brief Destructible brick that can contain a bonus.
 class Brick : public Rectangle {
  private:
   int score;
@@ -16,7 +16,7 @@ class Brick : public Rectangle {
  public:
   Brick(const Point& position, float w, float h, int score, BonusType bonus = BonusType::NONE);
 
-  /// @brief Marque la brique comme détruite.
+  /// @brief Mark the brick as destroyed.
   void destroy();
 
   // Getters

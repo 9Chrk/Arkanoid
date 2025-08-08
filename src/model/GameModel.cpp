@@ -8,10 +8,10 @@ GameModel::GameModel(const string& levelFile, int score)
   initializeBall();
   initializeSpaceship();
   initializeBricks();
-  // Initialisation des bonus
+  // Bonus initialization
 }
 
-// Méthodes d'initialisation
+// Initialization methods
 
 void GameModel::initializeBall() 
 {
@@ -48,7 +48,7 @@ void GameModel::initializeBricks()
   const float offset_x          = static_cast<float>(width + margin);
   const float offset_y          = static_cast<float>(height + margin);
   const float total_width       = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
-  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GAME_WIDTH - total_width)/2.0f; // centre la grille si aucun décalage
+  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GAME_WIDTH - total_width)/2.0f; // center the grid if no offset
   const float offset_start_y    = static_cast<float>(_offset_start_y);
 
   for (size_t index = 0; index < bricks_data.size(); ++index) {
@@ -66,19 +66,19 @@ void GameModel::initializeBricks()
   }
 }
 
-// Gestion des collisions
+// Collision handling
 
 void GameModel::checkCollisions() {
   Point pos = ball.getPosition();
   float speed = ball.getSpeed();
   Point direction = Vector::normalize(ball.getDirection());
   
-  if (shouldSkipCollisionCheck(pos, speed)) return;                        // évite une recherche inutile
-  CollisionResult collision = findClosestCollision(pos, direction, speed); // recherche de la première collision
+  if (shouldSkipCollisionCheck(pos, speed)) return;                        // avoid unnecessary search
+  CollisionResult collision = findClosestCollision(pos, direction, speed); // find the first collision
 
-  if (!collision.hitBrick) return;                                         // aucune collision, déplacement simple
-  handleBrickHit(collision.hitBrick);                                      // mise à jour du score
-  handleBallRebound(direction, collision.hitSide);                         // gestion du rebond
+  if (!collision.hitBrick) return;                                         // no collision, move normally
+  handleBrickHit(collision.hitBrick);                                      // update score
+  handleBallRebound(direction, collision.hitSide);                         // handle bounce
 }
 
 bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) const {
@@ -144,22 +144,22 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
   ball.setDirection(direction);
 }
 
-// Méthodes utilitaires
+// Utility methods
 
 [[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) const {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
-    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Haut-Droite
-    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bas-Gauche
-    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bas-Droite
-    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}  // Haut-Gauche
+    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Top-Right
+    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bottom-Left
+    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bottom-Right
+    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}  // Top-Left
   };
   return collisionPoints;
 }
 
 bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   const Point& currentDirection = ball.getDirection();
-  constexpr float eps = numeric_limits<float>::epsilon(); // tolérance flottante
+  constexpr float eps = numeric_limits<float>::epsilon(); // floating-point tolerance
   if (fabs(currentDirection.x - tempDirection.x) > eps ||
       fabs(currentDirection.y - tempDirection.y) > eps) {
     tempDirection = currentDirection;
@@ -168,7 +168,7 @@ bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   return false;
 }
 
-// Gestion des scores
+// Score management
 
 void GameModel::saveHighScore() {
   if (score >= highscore) {

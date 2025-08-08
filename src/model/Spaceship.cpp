@@ -13,20 +13,20 @@ Spaceship::Spaceship(const Point& position, float w, float h, float speed, int h
 void Spaceship::move(Direction dir) {
   Point newPos = position;
   newPos.x += (dir == Direction::Left ? -speed : speed);
-  position.x = clamp(newPos.x, w/2, GAME_WIDTH - w/2);
+  position.x = clamp(newPos.x, w/2, GAME_WIDTH - w/2); // keep inside screen
 }
 
 void Spaceship::move(const Point& mousePosition) {
   Point newPos = position;
   newPos.x = mousePosition.x;
-  if (validPosition(newPos) && mousePosition.y >= GAME_HEIGHT * PLAYABLE_RATIO) { position = newPos; }
+  if (validPosition(newPos) && mousePosition.y >= GAME_HEIGHT * PLAYABLE_RATIO) { position = newPos; } // follow mouse in lower area
 }
 
 [[gnu::pure]] bool Spaceship::validPosition(const Point& newPos) const {
-  return (newPos.x - w/2 >= 0) && (newPos.x + w/2 <= GAME_WIDTH);
+  return (newPos.x - w/2 >= 0) && (newPos.x + w/2 <= GAME_WIDTH); // check horizontal bounds
 }
 
-void Spaceship::damage() { health--; }
+void Spaceship::damage() { health--; } // lose one life
 
 // Getters
 

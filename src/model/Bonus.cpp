@@ -8,7 +8,7 @@ Bonus::Bonus(const Point& position, float w, float h, BonusType type, float fall
 // Methods
 
 void Bonus::update() {
-  if (active) { position.y += fallSpeed; }
+  if (active) { position.y += fallSpeed; } // move downward when active
 }
 
 // Bonus type management

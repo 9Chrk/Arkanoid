@@ -3,7 +3,7 @@
 #include "core/Circle.hpp"
 
 
-/// @brief Balle gérant mouvement et collisions.
+/// @brief Ball handling movement and collisions.
 class Ball : public Circle {
  private:
   Point direction;
@@ -15,32 +15,32 @@ class Ball : public Circle {
   Ball(float radius, float speed);
 
 
-  /* ############## Mouvement ############## */ 
+  /* ############## Movement ############## */
   
-  /// @brief Place la balle au-dessus du vaisseau.
-  /// @param spaceship Centre du vaisseau.
-  /// @param h Hauteur du vaisseau.
+  /// @brief Place the ball above the spaceship.
+  /// @param spaceship Spaceship center.
+  /// @param h Spaceship height.
   void move(const Point& spaceship, float h);
 
-  /// @brief Déplace la balle et gère les collisions.
-  /// @param spaceship Centre du vaisseau.
-  /// @param w Largeur du vaisseau.
-  /// @param h Hauteur du vaisseau.
+  /// @brief Move the ball and handle collisions.
+  /// @param spaceship Spaceship center.
+  /// @param w Spaceship width.
+  /// @param h Spaceship height.
   void move(const Point& spaceship, float w, float h);
 
 
-  /* ######## Gestion des collisions et de l'état ######## */
+  /* ######## Collision and state management ######## */
   
-  /// @brief Rebonds sur murs et vaisseau.
-  /// @param spaceship Centre du vaisseau.
-  /// @param w Largeur du vaisseau.
-  /// @param h Hauteur du vaisseau.
+  /// @brief Bounce off walls and the spaceship.
+  /// @param spaceship Spaceship center.
+  /// @param w Spaceship width.
+  /// @param h Spaceship height.
   void checkCollisions(const Point& spaceship, float w, float h);
 
-  /// @brief Détecte la sortie de l'écran.
+  /// @brief Detects when the ball leaves the screen.
   void checkFall();
 
-  /// @brief Réinitialise direction et mouvement.
+  /// @brief Reset direction and movement.
   void reset();
 
   // Getters

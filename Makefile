@@ -1,4 +1,4 @@
-# Définition du compilateur et des options
+# Compiler and option definitions
 CXX = g++
 CXXFLAGS += -std=c++20
 CXXFLAGS += -pedantic -Wall -Wextra
@@ -6,7 +6,7 @@ CXXFLAGS += -O2
 CXXFLAGS += -Ilibs
 CXXFLAGS += -Iinclude
 CXXFLAGS += -Iinclude/core
-CXXFLAGS += -Iinclude/model      # Inclure la librairie lié à Json
+CXXFLAGS += -Iinclude/model      # Include JSON library
 CXXFLAGS += -Iinclude/view          
 CXXFLAGS += -Iinclude/controller    
 CXXFLAGS += -Iinclude/engine         
@@ -22,34 +22,34 @@ CXXFLAGS += -Walloc-zero -Wcast-align -Wconversion -Wctad-maybe-unsupported \
             -Wswitch-default -Wswitch-enum -Wundef -Wuseless-cast -Wvolatile \
             -Wzero-as-null-pointer-constant
 
-# Gestion des dépendances Allegro
+# Allegro dependency handling
 CXXFLAGS += $(shell pkg-config --cflags allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 allegro_ttf-5 allegro_audio-5 allegro_acodec-5)
 LDLIBS += $(shell pkg-config --libs allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 allegro_ttf-5 allegro_audio-5 allegro_acodec-5)
 
-# Dossiers
+# Directories
 SRC_DIR = src
 OBJ_DIR = obj
 MAIN = src/main.cpp
 
-# Récupération des .cpp récursivement
+# Retrieve .cpp files recursively
 SRCS = $(shell find $(SRC_DIR) -name '*.cpp')
 
-# Objets avec préservation des sous-dossiers
+# Objects with subdirectory preservation
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
-# Règle par défaut
+# Default rule
 all: clean $(OBJ_DIR) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o Arkanoid $(LDLIBS)
 
-# Règle de compilation : crée dossier si nécessaire
+# Compile rule: create folder if needed
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Création du dossier obj/ si manquant
+# Create obj/ directory if missing
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-# Nettoyage
+# Clean
 clean:
 	rm -rf $(OBJ_DIR) Arkanoid

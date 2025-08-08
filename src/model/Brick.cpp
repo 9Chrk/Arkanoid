@@ -8,7 +8,7 @@ Brick::Brick(const Point& position, float w, float h, int score, BonusType bonus
 
 // Methods
 
-void Brick::destroy() { destroyed = true; }
+void Brick::destroy() { destroyed = true; } // mark brick as destroyed
 
 // Getters
 
