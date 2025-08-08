@@ -19,6 +19,14 @@ class Engine {
   bool handleLose(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
   bool processAction(const InputAction& action, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
 
+  // Helpers
+  void showFinalScreen(shared_ptr<GameView> view);
+  bool initializeConfigs(shared_ptr<GameView> view);
+  bool handleStartMenu(shared_ptr<GameView> view);
+
+  bool runGameLevel(shared_ptr<GameModel> model, shared_ptr<GameView> view, GameController& controller, 
+                    AllegroInputAdapter& inputAdapter, int index);
+
  public:
   Engine();
   ~Engine();

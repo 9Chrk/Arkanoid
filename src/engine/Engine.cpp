@@ -66,61 +66,72 @@ bool Engine::processAction(const InputAction& action, GameController& controller
   return true;
 }
 
-// Game loop
+// Helpers for the RUN method
 
-void Engine::run() {
-  ALLEGRO_EVENT event;
-  AllegroInputAdapter inputAdapter;
-
-  auto model = make_shared<GameModel>(gameLevels.at(0), 0); // start with first level
-  auto view  = make_shared<GameView>(model);
-  GameController controller = GameController(model, view, gameLevels);
-
-  uiConfig      = view->getUIConfig();      // UI layout and graphics
-  allegroConfig = view->getAllegroConfig(); // Allegro resources
-
+bool Engine::initializeConfigs(shared_ptr<GameView> view) {
+  uiConfig = view->getUIConfig();
+  allegroConfig = view->getAllegroConfig();
   if (!uiConfig || !allegroConfig) {
     cerr << "Fatal Error: UIConfig or AllegroConfig is null.\n";
     exit(EXIT_FAILURE);
   }
+  return true;
+}
 
-  while (true) {
-    // Show start menu once at launch
-    if (showMenu) {
-      view->menuButton(allegroConfig->start_png, done, uiConfig->buttonExit, uiConfig->buttonPlay);
-      if (done) break;          // user chose to quit
-      showMenu = false;         // otherwise start game
-    }
+bool Engine::handleStartMenu(shared_ptr<GameView> view) {
+  view->menuButton(allegroConfig->start_png, done, uiConfig->buttonExit, uiConfig->buttonPlay);
+  if (done) return false;
+  showMenu = false;
+  return true;
+}
 
-    int index = controller.getIndex();
-    if (index < static_cast<int>(gameLevels.size())) {
-      *model = GameModel(gameLevels.at(static_cast<size_t>(index)), controller.getGameScore()); // load level
-      controller.resetTempDirection();
-
-      ALLEGRO_SAMPLE_ID soundGameID;
-      view->playSound(allegroConfig->street_Fighter_wav, &soundGameID, true); // background music
-      done = restartGame = false;
-
-      event = allegroConfig->event;
-      // Process events until level ends
-      while (!done) {
-        al_wait_for_event(allegroConfig->queue, &event); // wait for next event
-        if (auto act = inputAdapter.translate(event)) { done = !processAction(*act, controller, soundGameID); }
-      }
-
-      model->saveHighScore();
-      view->stopSound(&soundGameID);
-      if (!restartGame) break; // exit loop if player doesn't restart
-
-    } else {
-      // No more levels: show final screen
-      restartGame = false;
-      finish = done = true;
-      break;
+bool Engine::runGameLevel(shared_ptr<GameModel> model, shared_ptr<GameView> view, GameController& controller, 
+                          AllegroInputAdapter& inputAdapter, int index) 
+{
+  *model = GameModel(gameLevels.at(static_cast<size_t>(index)), controller.getGameScore());
+  controller.resetTempDirection();
+  
+  ALLEGRO_SAMPLE_ID soundGameID;
+  view->playSound(allegroConfig->street_Fighter_wav, &soundGameID, true);
+  done = restartGame = false;
+  
+  while (!done) {
+    al_wait_for_event(allegroConfig->queue, &allegroConfig->event);
+    if (auto act = inputAdapter.translate(allegroConfig->event)) {
+      done = !processAction(*act, controller, soundGameID);
     }
   }
+  
+  model->saveHighScore();
+  view->stopSound(&soundGameID);
+  return restartGame;
+}
 
-  if (finish) {
-    view->menu(allegroConfig->finish_png, "Press any key to exit...", allegroConfig->finish_wav, true); // goodbye screen
+void Engine::showFinalScreen(shared_ptr<GameView> view) {
+  restartGame = false;
+  finish = done = true;
+  view->menu(allegroConfig->finish_png, "Press any key to exit...", allegroConfig->finish_wav, true);
+}
+
+// Game loop
+
+void Engine::run() {
+  AllegroInputAdapter inputAdapter;
+  shared_ptr<GameModel> model = make_shared<GameModel>(gameLevels.at(0), 0);
+  shared_ptr<GameView> view = make_shared<GameView>(model);
+  GameController controller = GameController(model, view, gameLevels);
+  
+  if (!initializeConfigs(view)) return;
+  
+  while (true) {
+    if (showMenu && !handleStartMenu(view)) break;
+    
+    int index = controller.getIndex();
+    if (index >= static_cast<int>(gameLevels.size())) {
+      showFinalScreen(view);
+      break;
+    }
+    
+    if (!runGameLevel(model, view, controller, inputAdapter, index)) break;
   }
 }
