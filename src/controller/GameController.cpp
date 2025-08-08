@@ -1,11 +1,11 @@
 using namespace std;
 #include "GameController.hpp"
 
-
-GameController::GameController(const shared_ptr<GameModel>& model, const vector<string>& levelFiles)
-    : model(model), view(nullptr), levelFiles(levelFiles), gameScore(0), index(0), tempDirection({0, -1}) 
+GameController::GameController(const shared_ptr<GameModel>& model,
+                               const shared_ptr<GameView>& view,
+                               const vector<string>& levelFiles)
+    : model(model), view(view), levelFiles(levelFiles), gameScore(0), index(0), tempDirection({0, -1})
 {
-  view = make_shared<GameView>(model);
 }
 
 // Getters
