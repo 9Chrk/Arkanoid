@@ -82,8 +82,8 @@ bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller
 
 void Engine::run() {
   auto model = make_shared<GameModel>(gameLevels.at(0), 0);
-  GameController controller = GameController(model, gameLevels);
-  shared_ptr<GameView> view = controller.getView();
+  auto view = make_shared<GameView>(model);
+  GameController controller = GameController(model, view, gameLevels);
 
   uiConfig = view->getUIConfig();
   allegroConfig = view->getAllegroConfig();
