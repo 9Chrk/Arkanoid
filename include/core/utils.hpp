@@ -30,6 +30,7 @@ json  openJsonFile(const std::string& fileName);
 json  readJsonFile(const std::string& fileName, const std::string& key);
 void writeJsonFile(const std::string& fileName, const std::string& key, const json& value);
 void writeJsonFile(const std::string& fileName, const json& data);
+json loadSettings();
 
 // System commands
 std::vector<std::string> executeCommand(const std::string& command);

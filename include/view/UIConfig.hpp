@@ -1,7 +1,5 @@
 #pragma once
-#include <allegro5/color.h>
-#include <unordered_map>
-#include "core/utils.hpp"
+#include "view/utils.hpp"
 
 
 struct UIConfig {

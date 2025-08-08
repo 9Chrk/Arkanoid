@@ -1,6 +1,7 @@
 #include "UIConfig.hpp"
-#include "core/Settings.hpp"
+#include "core/utils.hpp"
 #include "view/utils.hpp"
+
 
 UIConfig::UIConfig()
   : scorePos(),

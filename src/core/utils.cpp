@@ -47,6 +47,11 @@ void writeJsonFile(const string& fileName, const json& data) {
   newFile.close();
 }
 
+json loadSettings() {
+  static const std::string filepath = "./assets/data/settings.json";
+  return openJsonFile(filepath);
+}
+
 // System commands
 
 vector<string> executeCommand(const string& command) { // donnée par chatGPT
