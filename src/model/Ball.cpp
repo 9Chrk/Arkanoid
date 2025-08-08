@@ -3,11 +3,11 @@ using namespace std;
 
 
 Ball::Ball()
-    : Circle({0, 0}, 0), direction({0, -1}), speed(0),
+    : Circle({0, 0}, 0), direction(INITIAL_DIRECTION), speed(0),
       moving(false), falling(false) {}
 
 Ball::Ball(float radius, float speed)
-    : Circle({0, 0}, radius), direction({0, -1}), speed(speed),
+    : Circle({0, 0}, radius), direction(INITIAL_DIRECTION), speed(speed),
       moving(false), falling(false) {}
 
 // Movement
@@ -27,7 +27,7 @@ void Ball::move(const Point& spaceship, float w, float h) {
 void Ball::checkCollisions(const Point& spaceship, float w, float h) {
   Point newPos = {position.x + direction.x * speed, position.y + direction.y * speed};
   
-  if (newPos.x - radius <= 0 || newPos.x + radius >= GameWidth) { direction.x *= -1; }
+  if (newPos.x - radius <= 0 || newPos.x + radius >= GAME_WIDTH) { direction.x *= -1; }
   if (newPos.y - radius <= 0) { direction.y *= -1; }
   
   if (newPos.y + radius >= spaceship.y - h/2 &&
@@ -45,17 +45,17 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
       direction.x = cos(theta);
       direction.y = -sin(theta);
     }
-    newPos.x = clamp(newPos.x, radius, GameWidth - radius);
-    newPos.y = clamp(newPos.y, radius, GameHeight * 1.5f);
+    newPos.x = clamp(newPos.x, radius, GAME_WIDTH - radius);
+    newPos.y = clamp(newPos.y, radius, GAME_HEIGHT * 1.5f);
     position = newPos;
 }
   
 void Ball::checkFall() {
-  falling = (position.y - radius > GameHeight) ? true : false;
+  falling = (position.y - radius > GAME_HEIGHT) ? true : false;
 }
   
 void Ball::reset() {
-  direction = {0, -1};
+  direction = INITIAL_DIRECTION;
   moving = false;
 }
 
@@ -68,6 +68,6 @@ void Ball::reset() {
 
 // Setters
 
-void Ball::setMouvement(bool cas)                  { moving = cas;             }
-void Ball::setFalling(bool cas)                    { falling = cas;            }
+void Ball::setMoving(bool isMoving)   { moving = isMoving;   }
+void Ball::setFalling(bool isFalling) { falling = isFalling; }
 void Ball::setDirection(const Point& newDirection) { direction = newDirection; }

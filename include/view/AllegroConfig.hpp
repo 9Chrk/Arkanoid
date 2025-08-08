@@ -28,7 +28,7 @@ struct AllegroConfig {
   ALLEGRO_SAMPLE* button_wav          = nullptr;
   ALLEGRO_SAMPLE* fall_wav            = nullptr;
   ALLEGRO_SAMPLE* lose_wav            = nullptr;
-  ALLEGRO_SAMPLE* Street_Fighter_wav  = nullptr;
+  ALLEGRO_SAMPLE* street_Fighter_wav  = nullptr;
   ALLEGRO_SAMPLE* win_wav             = nullptr;
   ALLEGRO_SAMPLE* menu_wav            = nullptr;
   ALLEGRO_SAMPLE* finish_wav          = nullptr;

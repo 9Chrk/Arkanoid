@@ -14,11 +14,9 @@
 
 #include "json.hpp"
 #include "Rectangle.hpp"
-using json = nlohmann::json;
+#include "constants.hpp"
 
-inline constexpr float GameWidth     = 550.f;
-inline constexpr float GameHeight    = 500.f;
-inline constexpr float PlayableRatio = 1.0f/3.0f;
+using json = nlohmann::json;
 
 
 // Resource initialization
@@ -33,4 +31,4 @@ void writeJsonFile(const std::string& fileName, const json& data);
 json loadSettings();
 
 // System commands
-std::vector<std::string> executeCommand(const std::string& command);
+std::vector<std::string> listLevels(const std::filesystem::path& dir);

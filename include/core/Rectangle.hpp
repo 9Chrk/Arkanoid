@@ -6,7 +6,7 @@
 
 struct Point {
   float x, y;
-  Point(float x=0, float y=0) : x(x), y(y) {}
+  constexpr Point(float x=0, float y=0) : x(x), y(y) {}
 
   bool operator==(const Point &other) const {
     constexpr float eps = std::numeric_limits<float>::epsilon();

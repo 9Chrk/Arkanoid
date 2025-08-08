@@ -28,7 +28,7 @@ void GameModel::initializeSpaceship()
   float position_y              = _spaceship["position.y"].get<float>();
   float width                   = _spaceship["width"].get<float>();
   float height                  = _spaceship["height"].get<float>();
-  int speed                     = _spaceship["speed"].get<int>();
+  float speed                   = _spaceship["speed"].get<float>();
   int health                    = _spaceship["health"].get<int>();
   spaceship                     = Spaceship({position_x, position_y}, width, height, speed, health);
 }
@@ -48,16 +48,15 @@ void GameModel::initializeBricks()
   const float offset_x          = static_cast<float>(width + margin);
   const float offset_y          = static_cast<float>(height + margin);
   const float total_width       = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
-  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GameWidth - total_width)/2.0f;
+  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GAME_WIDTH - total_width)/2.0f;
   const float offset_start_y    = static_cast<float>(_offset_start_y);
-
 
   for (size_t index = 0; index < bricks_data.size(); ++index) {
     size_t i = index / static_cast<size_t>(dim_x);
     size_t j = index % static_cast<size_t>(dim_x);
     int score = stoi(bricks_data.at(index));
 
-    if (score != -1) {
+    if (score != EMPTY_BRICK) {
       bricks.emplace_back(
         Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x/2,
                offset_start_y + offset_y * static_cast<float>(i) + offset_y/2}),
@@ -123,8 +122,8 @@ GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const ve
 }
 
 void GameModel::handleBrickHit(Brick* hitBrick) {
-  if (hitBrick->getScore() != 200 || !hitBrick->getSecondLife()) {
-    if (hitBrick->getScore() != 0) {
+  if (hitBrick->getScore() != SECOND_LIFE || !hitBrick->getSecondLife()) {
+    if (hitBrick->getScore() != GOLD_BRICK) {
       hitBrick->destroy();
       score += hitBrick->getScore();
     }

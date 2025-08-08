@@ -48,26 +48,17 @@ void writeJsonFile(const string& fileName, const json& data) {
 }
 
 json loadSettings() {
-  static const std::string filepath = "./assets/data/settings.json";
+  static const string filepath = "./assets/data/settings.json";
   return openJsonFile(filepath);
 }
 
 // System commands
 
-vector<string> executeCommand(const string& command) { // donnée par chatGPT
-  vector<string> output;
-  unique_ptr<FILE, int(*)(FILE*)> pipe(popen(command.c_str(), "r"), pclose);
-  
-  if (!pipe) {
-    throw runtime_error("Error during command execution.");
-  }
-  char buffer[128];
-  while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
-    string line(buffer);
-    if (!line.empty() && line.back() == '\n') {
-      line.pop_back();
-    }
-    output.push_back(line);
-  }
-  return output;
+vector<string> listLevels(const filesystem::path& dir) {
+  vector<string> out;
+  for (auto& e : filesystem::directory_iterator(dir))
+    if (e.path().filename().string().starts_with("level_") && e.path().extension()==".json")
+      out.push_back(e.path().filename().string());
+  sort(out.begin(), out.end());
+  return out;
 }

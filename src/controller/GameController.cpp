@@ -4,7 +4,7 @@ using namespace std;
 GameController::GameController(const shared_ptr<GameModel>& model,
                                const shared_ptr<GameView>& view,
                                const vector<string>& levelFiles)
-    : model(model), view(view), levelFiles(levelFiles), gameScore(0), index(0), tempDirection({0, -1}) {}
+    : model(model), view(view), levelFiles(levelFiles), gameScore(0), index(0), tempDirection(INITIAL_DIRECTION) {}
 
 // Getters
 
@@ -23,7 +23,7 @@ void GameController::updateGameScore() { gameScore = model->getScore(); }
 // Helper methods
 
 void GameController::resetTempDirection() {
-  tempDirection = {0, -1};
+  tempDirection = INITIAL_DIRECTION;
 }
 
 // Manage Allegro events
@@ -37,17 +37,17 @@ void GameController::handleEvent(const ALLEGRO_EVENT& event) {
       case ALLEGRO_KEY_LEFT:
       case ALLEGRO_KEY_A:
       case ALLEGRO_KEY_Q:
-        spaceship.move(0);
+        spaceship.move(Direction::Left);
         break;
 
       case ALLEGRO_KEY_RIGHT:
       case ALLEGRO_KEY_D:
       case ALLEGRO_KEY_P:
-        spaceship.move(1);
+        spaceship.move(Direction::Right);
         break;
 
       case ALLEGRO_KEY_SPACE:
-        ball.setMouvement(true);
+        ball.setMoving(true);
         break;
 
       case ALLEGRO_KEY_R:
@@ -100,12 +100,11 @@ void GameController::update() {
     ball.move(spaceship.getPosition(),
               spaceship.getWidth(),
               spaceship.getHeight());
-  } else {
+  } 
+  else {
     ball.move(spaceship.getPosition(),
               spaceship.getHeight());
   }
-
-  view->render();
 
   if (model->checkDirectionChanged(tempDirection)) {
     view->playSound(allegroConfig->bip_wav);

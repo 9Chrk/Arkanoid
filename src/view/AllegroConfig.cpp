@@ -7,7 +7,7 @@ AllegroConfig::AllegroConfig() : event{} {
     // components
     queue     = al_create_event_queue();
     timer     = al_create_timer(1.0/refreshPerSecond);
-    display   = al_create_display(GameWidth, GameHeight);
+    display   = al_create_display(GAME_WIDTH, GAME_HEIGHT);
     font      = al_load_font("./assets/fonts/Distant_galaxy.ttf", 20, 0);
     fontBonus = al_load_font("./assets/fonts/Pixeled.ttf", 6, 0);
 
@@ -37,7 +37,7 @@ AllegroConfig::AllegroConfig() : event{} {
     button_wav         = loadSample("./assets/sounds/button.wav");
     fall_wav           = loadSample("./assets/sounds/fall.wav");
     lose_wav           = loadSample("./assets/sounds/lose.wav");
-    Street_Fighter_wav = loadSample("./assets/sounds/Street_Fighter.wav");
+    street_Fighter_wav = loadSample("./assets/sounds/street_Fighter.wav");
     win_wav            = loadSample("./assets/sounds/win.wav");
     menu_wav           = loadSample("./assets/sounds/menu.wav");
     finish_wav         = loadSample("./assets/sounds/finish.wav");
@@ -80,8 +80,9 @@ AllegroConfig::~AllegroConfig() {
   al_destroy_sample(button_wav);
   al_destroy_sample(fall_wav);
   al_destroy_sample(lose_wav);
-  al_destroy_sample(Street_Fighter_wav);
+  al_destroy_sample(street_Fighter_wav);
   al_destroy_sample(win_wav);
   al_destroy_sample(menu_wav);
   al_destroy_sample(finish_wav);
+  al_uninstall_audio();
 }

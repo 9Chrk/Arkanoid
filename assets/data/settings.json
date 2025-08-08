@@ -1,6 +1,5 @@
 {
   "ball": {
-    "color": "WHITE",
     "radius": 7,
     "speed": 7
   },
@@ -37,28 +36,24 @@
   },
   "display_button": {
     "button_exit": {
-      "color": "WHITE",
       "height": 32,
       "position.x": 275,
       "position.y": 370,
       "width": 100
     },
     "button_no": {
-      "color": "WHITE",
       "height": 27,
       "position.x": 325,
       "position.y": 290,
       "width": 52
     },
     "button_play": {
-      "color": "WHITE",
       "height": 40,
       "position.x": 275,
       "position.y": 315,
       "width": 340
     },
     "button_yes": {
-      "color": "WHITE",
       "height": 29,
       "position.x": 232,
       "position.y": 290,
@@ -77,8 +72,6 @@
   },
   "highscore": 0,
   "spaceship": {
-    "fillColor": "BLACK",
-    "frameColor": "BLACK",
     "health": 3,
     "height": 15,
     "position.x": 250,

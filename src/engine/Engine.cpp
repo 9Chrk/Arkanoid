@@ -2,7 +2,7 @@ using namespace std;
 #include "Engine.hpp"
 
 
-Engine::Engine() : gameLevels(executeCommand("./research_jsonFile.sh ./assets/data level_")) {
+Engine::Engine() : gameLevels(listLevels("./assets/data")) {
   if (gameLevels.empty()) {
     cerr << "Error: no level found by research_jsonFile.sh\n";
     exit(EXIT_FAILURE);
@@ -11,29 +11,6 @@ Engine::Engine() : gameLevels(executeCommand("./research_jsonFile.sh ./assets/da
 
 Engine::~Engine() {
   allegroConfig.reset();
-  al_uninstall_audio();
-}
-
-// Print methods
-
-void Engine::printWin(int score, int highscore) const {
-  cout << "\nCongratulations! You've broken every brick! 🎇" << endl;
-  printScore(score, highscore);
-}
-
-void Engine::printLose(int score, int highscore) const {
-  cout << "\nGame Over... The bricks have won this time. 🧱" << endl;
-  printScore(score, highscore);
-}
-
-void Engine::printFinish(int score, int highscore) const {
-  cout << "\nYou have finished ARKANOID !!!" << endl;
-  printScore(score, highscore);
-}
-
-void Engine::printScore(int score, int highscore) const {
-  cout << "Score achieved : " << score << endl;
-  cout << "Highscore      : " << highscore << "\n" << endl;
 }
 
 // Handle Allegro Events
@@ -53,11 +30,11 @@ bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller
 
   if (event.type == ALLEGRO_EVENT_TIMER) {
     controller.update();
+    view->render();
   }
 
   if (model->win()) {
     view->stopSound(&soundID);
-    printWin(model->getScore(), model->getHighScore());
     view->menu(allegroConfig->win_png, "Press any key to continue...", allegroConfig->win_wav);
     controller.incrementIndex();
     controller.updateGameScore();
@@ -68,7 +45,6 @@ bool Engine::processEvent(const ALLEGRO_EVENT& event, GameController& controller
   if (model->lose()) {
     view->stopSound(&soundID);
     view->playSound(allegroConfig->lose_wav);
-    printLose(model->getScore(), model->getHighScore());
     view->menuButton(allegroConfig->lose_png, restartGame, uiConfig->buttonYes, uiConfig->buttonNo);
     controller.resetGameScore();
     controller.resetIndex();
@@ -106,7 +82,7 @@ void Engine::run() {
       controller.resetTempDirection();
       
       ALLEGRO_SAMPLE_ID soundGameID;
-      view->playSound(allegroConfig->Street_Fighter_wav, &soundGameID, true);
+      view->playSound(allegroConfig->street_Fighter_wav, &soundGameID, true);
       done = restartGame = false;
       
       while (!done) {
@@ -127,7 +103,6 @@ void Engine::run() {
   }
   
   if (finish) {
-    printFinish(model->getScore(), model->getHighScore());
     view->menu(allegroConfig->finish_png, "Press any key to exit...", allegroConfig->finish_wav, true);
   }
 }

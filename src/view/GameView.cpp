@@ -58,7 +58,7 @@ void GameView::drawCircle(const Point& position, float radius, ALLEGRO_COLOR col
 
 void GameView::drawRectangle(const Point& upLeft, const Point& downRight, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR frameColor) const {
   al_draw_filled_rectangle(upLeft.x, upLeft.y, downRight.x, downRight.y, fillColor);
-  al_draw_rectangle(upLeft.x, upLeft.y, downRight.x, downRight.y, frameColor, 1);
+  al_draw_rectangle(upLeft.x, upLeft.y, downRight.x, downRight.y, frameColor, FRAME_THICKNESS);
 }
 
 void GameView::drawBall() const {
@@ -188,7 +188,7 @@ void GameView::handleButtonHover(ALLEGRO_BITMAP* image_png, bool hoverPlay, bool
   if (hoverPlay || hoverExit) {
     pair<Point, Point> temp = hoverPlay? buttonON.diag_coor() : buttonOFF.diag_coor();
     playSound(allegroConfig->button_wav);
-    al_draw_rectangle(temp.first.x, temp.first.y, temp.second.x, temp.second.y, WHITE, 1);
+    al_draw_rectangle(temp.first.x, temp.first.y, temp.second.x, temp.second.y, WHITE, FRAME_THICKNESS);
   }
   al_flip_display();
 }
@@ -227,14 +227,13 @@ void GameView::menu(ALLEGRO_BITMAP* image_png, const string& text, ALLEGRO_SAMPL
 
   displayImage(image_png);
   if (showScore) { displayScore(); }
-  else { cout << "Score display (UI) disabled " << endl; }
 
   al_flip_display();
   playSound(sound, &soundMenuID, soundLoop);
-  al_rest(4.0);
+  al_rest(PAUSE_SECONDS);
 
   float fontHeight = static_cast<float>(al_get_font_line_height(allegroConfig->font));
-  al_draw_text(allegroConfig->font, WHITE, GameWidth * 1/3, GameHeight - fontHeight, ALLEGRO_ALIGN_CENTER, text.c_str());
+  al_draw_text(allegroConfig->font, WHITE, GAME_WIDTH * PLAYABLE_RATIO, GAME_HEIGHT - fontHeight, ALLEGRO_ALIGN_CENTER, text.c_str());
   al_flip_display();
 
   while (!pressAnyButton) { 

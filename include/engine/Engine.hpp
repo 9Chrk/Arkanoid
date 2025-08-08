@@ -13,13 +13,6 @@ class Engine {
   shared_ptr<UIConfig>      uiConfig = nullptr;
   shared_ptr<AllegroConfig> allegroConfig = nullptr;
 
-  // Print methods
-  void printWin(int score, int highscore)    const;
-  void printLose(int score, int highscore)   const;
-  
-  void printFinish(int score, int highscore) const;
-  void printScore(int score, int highscore)  const;
-
   // Handle Allegro event
   bool processEvent(const ALLEGRO_EVENT& event, GameController& controller, ALLEGRO_SAMPLE_ID& soundID);
 

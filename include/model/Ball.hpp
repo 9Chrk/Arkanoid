@@ -30,7 +30,7 @@ class Ball : public Circle {
   bool isFalling()     const;
   
   // Setters
-  void setMouvement(bool cas);
-  void setFalling(  bool cas);
+  void setMoving(bool isMoving);
+  void setFalling(bool isFalling);
   void setDirection(const Point& newDirection);
 };
