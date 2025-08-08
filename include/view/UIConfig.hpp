@@ -1,8 +1,6 @@
 #pragma once
-#include "json.hpp"
-#include "model/utils.hpp"
-#include "view/utils.hpp"
-#include "Rectangle.hpp"
+#include <allegro5/color.h>
+#include "core/utils.hpp"
 
 
 struct UIConfig {

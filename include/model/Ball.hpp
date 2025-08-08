@@ -1,6 +1,6 @@
 #pragma once
-#include "model/utils.hpp"
-#include "Circle.hpp"
+#include "core/utils.hpp"
+#include "core/Circle.hpp"
 
 
 class Ball : public Circle {

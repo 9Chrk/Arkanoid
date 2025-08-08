@@ -1,6 +1,5 @@
 #pragma once
-#include "model/utils.hpp"
-#include "Rectangle.hpp"
+#include "core/utils.hpp"
 #include "Vector.hpp"
 #include "Bonus.hpp"
 

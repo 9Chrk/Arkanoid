@@ -13,6 +13,7 @@
 #include <unordered_map>
 
 #include "json.hpp"
+#include "Rectangle.hpp"
 using json = nlohmann::json;
 
 inline constexpr float GameWidth     = 550.f;
