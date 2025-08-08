@@ -1,5 +1,5 @@
-using namespace std;
 #include "UIConfig.hpp"
+#include "core/Settings.hpp"
 #include "view/utils.hpp"
 
 UIConfig::UIConfig()
@@ -11,16 +11,16 @@ UIConfig::UIConfig()
     buttonNo(),
     brickColors()
 {
-  string filepath = "./assets/data/settings.json";
-  json displayButton = readJsonFile(filepath, "display_button");
-  json display_score  = readJsonFile(filepath, "display_score");
+  json settings       = loadSettings();
+  json displayButton  = settings["display_button"];
+  json display_score  = settings["display_score"];
 
   scorePos     = {display_score["score.x"].get<float>(),     display_score["score.y"].get<float>()};
   highscorePos = {display_score["highscore.x"].get<float>(), display_score["highscore.y"].get<float>()};
 
-  json colors = readJsonFile("./assets/data/settings.json","brick_colors");
-  for (auto& [score,colorName] : colors.items()) {
-    brickColors[stoi(score)] = getColor(colorName.get<string>()); 
+  json colors = settings["brick_colors"];
+  for (auto& [score, colorName] : colors.items()) {
+    brickColors[std::stoi(score)] = getColor(colorName.get<std::string>());
   }
 
   buttonPlay   = Rectangle({displayButton["button_play"]["position.x"].get<float>(), displayButton["button_play"]["position.y"].get<float>()},
