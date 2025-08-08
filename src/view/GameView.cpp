@@ -1,10 +1,8 @@
 using namespace std;
 #include "GameView.hpp"
 
-// Implementation of the graphical view of the game.  This file contains
-// rendering helpers, sound utilities and simple menu handling.
 
-// Construct the view and initialize all Allegro subsystems and resources.
+/// @brief Construct the view and initialize all Allegro subsystems and resources.
 GameView::GameView(const shared_ptr<GameModel>& model)
   : model(model),
     uiConfig(make_shared<UIConfig>()),
@@ -39,12 +37,10 @@ GameView::GameView(const shared_ptr<GameModel>& model)
 
 // Getters
 
-// Retrieve the Allegro configuration containing resources and event queue.
 [[gnu::pure]] shared_ptr<AllegroConfig> GameView::getAllegroConfig() const {
   return allegroConfig;
 }
 
-// Retrieve the UI configuration with positions and colors.
 [[gnu::pure]] shared_ptr<UIConfig> GameView::getUIConfig() const {
   return uiConfig;
 }
