@@ -4,8 +4,7 @@ using namespace std;
 
 Engine::Engine() : gameLevels(listLevels("./assets/data")) {
   if (gameLevels.empty()) {
-    cerr << "Error: no level found by research_jsonFile.sh\n";
-    exit(EXIT_FAILURE);
+    throw runtime_error("No level files found.");
   }
 }
 

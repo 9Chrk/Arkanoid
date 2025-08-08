@@ -1,8 +1,14 @@
 using namespace std;
 #include "Engine.hpp"
 
+
 int main() {
-  Engine engine;  // central game manager
-  engine.run();   // start the main game loop
-  return 0;
+  try {
+    Engine{}.run();
+    return 0;
+  } 
+  catch (const exception& e) {
+    cerr << "Error: " << e.what() << endl;
+    return 1;
+  }
 }
