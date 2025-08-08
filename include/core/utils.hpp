@@ -19,57 +19,57 @@
 using json = nlohmann::json;
 
 
-/* ############## Initialisation des ressources ############## */
+/* ############## Resource initialization ############## */
 
-/// @brief Lève une erreur si l'initialisation échoue.
-/// @param test Résultat de l'initialisation.
-/// @param description Nom de la ressource.
-/// @throws std::runtime_error si test est faux.
+/// @brief Throw an error if initialization fails.
+/// @param test Result of the initialization.
+/// @param description Resource name.
+/// @throws std::runtime_error if test is false.
 void must_init(bool test, const std::string& description);
 
-/// @brief Variante pointeur de must_init.
-/// @param test Pointeur à contrôler.
-/// @param description Nom de la ressource.
-/// @throws std::runtime_error si test est nul.
+/// @brief Pointer variant of must_init.
+/// @param test Pointer to check.
+/// @param description Resource name.
+/// @throws std::runtime_error if test is null.
 void must_init(const void* test, const std::string& description);
 
 
-/* ############## Fonctions JSON ############## */
+/* ############## JSON functions ############## */
 
-/// @brief Charge un fichier JSON.
-/// @param fileName Chemin vers le fichier.
-/// @return Données JSON du fichier.
-/// @throws std::runtime_error si le fichier est inaccessible.
+/// @brief Load a JSON file.
+/// @param fileName Path to the file.
+/// @return JSON data from the file.
+/// @throws std::runtime_error if the file is inaccessible.
 json  openJsonFile(const std::string& fileName);
 
-/// @brief Lit une clé dans un fichier JSON.
-/// @param fileName Chemin vers le fichier.
-/// @param key Clé recherchée.
-/// @return Valeur associée à la clé.
-/// @throws std::invalid_argument si la clé est absente.
+/// @brief Read a key from a JSON file.
+/// @param fileName Path to the file.
+/// @param key Key to search for.
+/// @return Value associated with the key.
+/// @throws std::invalid_argument if the key is missing.
 json  readJsonFile(const std::string& fileName, const std::string& key);
 
-/// @brief Écrit une clé dans un fichier JSON existant.
-/// @param fileName Chemin vers le fichier.
-/// @param key Clé à modifier.
-/// @param value Valeur à sauvegarder.
-/// @throws std::runtime_error si l'écriture échoue.
+/// @brief Write a key to an existing JSON file.
+/// @param fileName Path to the file.
+/// @param key Key to modify.
+/// @param value Value to save.
+/// @throws std::runtime_error if writing fails.
 void writeJsonFile(const std::string& fileName, const std::string& key, const json& value);
 
-/// @brief Écrit des données JSON dans un fichier.
-/// @param fileName Chemin vers le fichier.
-/// @param data Données complètes.
-/// @throws std::runtime_error si l'écriture échoue.
+/// @brief Write full JSON data to a file.
+/// @param fileName Path to the file.
+/// @param data Complete data to save.
+/// @throws std::runtime_error if writing fails.
 void writeJsonFile(const std::string& fileName, const json& data);
 
-/// @brief Charge la configuration du jeu.
-/// @return Données de configuration.
+/// @brief Load game configuration.
+/// @return Configuration data.
 json loadSettings();
 
 
-/* ############## Commandes système ############## */
+/* ############## System commands ############## */
 
-/// @brief Liste les fichiers de niveaux.
-/// @param dir Répertoire à explorer.
-/// @return Noms triés des fichiers.
+/// @brief List available level files.
+/// @param dir Directory to explore.
+/// @return Sorted list of file names.
 std::vector<std::string> listLevels(const std::filesystem::path& dir);

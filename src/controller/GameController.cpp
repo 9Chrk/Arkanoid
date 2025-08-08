@@ -100,10 +100,10 @@ void GameController::update() {
     ball.move(spaceship.getPosition(),
               spaceship.getWidth(),
               spaceship.getHeight());
-  } 
+  }
   else {
     ball.move(spaceship.getPosition(),
-              spaceship.getHeight());
+              spaceship.getHeight()); // keep ball above spaceship
   }
 
   if (model->checkDirectionChanged(tempDirection)) {
