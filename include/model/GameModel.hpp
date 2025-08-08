@@ -8,6 +8,7 @@
 /// @brief Model containing game state and collision logic.
 class GameModel {
  private:
+  json settings;
   int score, highscore;
   string levelFile;
 

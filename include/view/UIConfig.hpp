@@ -3,10 +3,10 @@
 
 
 struct UIConfig {
+  json settings;
   Point scorePos;
   Point highscorePos;
   Rectangle buttonPlay, buttonExit, buttonYes, buttonNo;
-  std::unordered_map<int, ALLEGRO_COLOR> brickColors;
 
   UIConfig();
 };

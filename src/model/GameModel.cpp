@@ -3,7 +3,7 @@ using namespace std;
 
 
 GameModel::GameModel(const string& levelFile, int score)
-         : score(score), highscore(loadSettings()["highscore"].get<int>()),
+         : settings(loadSettings()), score(score), highscore(settings["highscore"].get<int>()),
            levelFile(levelFile), ball(), spaceship(), bricks(), bonuses() {
   initializeBall();
   initializeSpaceship();
@@ -15,7 +15,7 @@ GameModel::GameModel(const string& levelFile, int score)
 
 void GameModel::initializeBall() 
 {
-  json _ball                    = loadSettings()["ball"];
+  json _ball                    = settings["ball"];
   float radius                  = _ball["radius"].get<float>();
   float speed                   = _ball["speed"].get<float>();
   ball                          = Ball(radius, speed);
@@ -23,7 +23,7 @@ void GameModel::initializeBall()
 
 void GameModel::initializeSpaceship() 
 {
-  json _spaceship               = loadSettings()["spaceship"];
+  json _spaceship               = settings["spaceship"];
   float position_x              = _spaceship["position.x"].get<float>();
   float position_y              = _spaceship["position.y"].get<float>();
   float width                   = _spaceship["width"].get<float>();
@@ -35,7 +35,6 @@ void GameModel::initializeSpaceship()
 
 void GameModel::initializeBricks() 
 {
-  json settings                 = loadSettings();
   json level                    = openJsonFile("./assets/data/" + levelFile);
   vector<string> bricks_data    = level["bricks"].get<vector<string>>();
   const int dim_x               = level["dim_x"].get<int>();

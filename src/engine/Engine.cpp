@@ -3,9 +3,7 @@ using namespace std;
 
 
 Engine::Engine() : gameLevels(listLevels("./assets/data")) {
-  if (gameLevels.empty()) {
-    throw runtime_error("No level files found.");
-  }
+  if (gameLevels.empty()) throw runtime_error("No level files found.");
 }
 
 Engine::~Engine() {

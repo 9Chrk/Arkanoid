@@ -4,25 +4,19 @@
 
 
 UIConfig::UIConfig()
-  : scorePos(),
+  : settings(loadSettings()),
+    scorePos(),
     highscorePos(),
     buttonPlay(),
     buttonExit(),
     buttonYes(),
-    buttonNo(),
-    brickColors()
+    buttonNo()
 {
-  json settings      = loadSettings();
   json displayButton = settings["display_button"];
   json display_score = settings["display_score"];
 
   scorePos     = {display_score["score.x"].get<float>(),     display_score["score.y"].get<float>()};
   highscorePos = {display_score["highscore.x"].get<float>(), display_score["highscore.y"].get<float>()};
-
-  json colors = settings["brick_colors"];
-  for (auto& [score, colorName] : colors.items()) {
-    brickColors[std::stoi(score)] = getColor(colorName.get<std::string>());
-  }
 
   buttonPlay   = Rectangle({displayButton["button_play"]["position.x"].get<float>(), displayButton["button_play"]["position.y"].get<float>()},
                              displayButton["button_play"]["width"].get<float>(),

@@ -68,7 +68,7 @@ void GameView::drawBall() const {
 }
 
 void GameView::drawBrick(const Brick& brick) const {
-  ALLEGRO_COLOR fillColor = uiConfig->brickColors.at(brick.getScore());
+  ALLEGRO_COLOR fillColor = getColor(uiConfig->settings["brick_colors"][to_string(brick.getScore())].get<string>());
   ALLEGRO_COLOR frameColor =  (brick.getScore() == SECOND_LIFE && !brick.getSecondLife()) ? RED : BLACK;
 
   auto [upLeft, downRight] = brick.diag_coor();
@@ -100,8 +100,7 @@ void GameView::drawBonusAbbreviation(const Brick& brick) const {
 }
 
 void GameView::drawBonus(const Bonus& bonus) const { 
-  json settings = loadSettings();
-  ALLEGRO_COLOR color = getColor(settings["bonus_colors"][Bonus::getAbbreviation(bonus.getType())].get<string>());
+  ALLEGRO_COLOR color = getColor(uiConfig->settings["bonus_colors"][Bonus::getAbbreviation(bonus.getType())].get<string>());
 
   float w = bonus.getWidth();
   float h = bonus.getHeight();
