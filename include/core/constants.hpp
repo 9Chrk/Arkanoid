@@ -7,7 +7,7 @@ inline constexpr float  GAME_HEIGHT = 500.f;
 inline constexpr double REFRESH_PER_SECOND = 60;
 
 inline constexpr int   FONT_SIZE              = 20;
-inline constexpr int   FONT_BONUS_SIZE        = 6;
+inline constexpr int   FONT_BONUS_SIZE        = 8;
 inline constexpr int   AUDIO_RESERVED_SAMPLES = 32;
 inline constexpr int   ANTIALIASING_SAMPLES   = 8;
 

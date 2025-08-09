@@ -109,6 +109,7 @@ void GameView::drawBonusAbbreviation(const Brick& brick) const {
 
     float drawX = position.x - textWidth/2;
     float drawY = position.y - textHeight/2;
+    drawY -= 2.0f; // Correction of 2 pixels upwards due to borders
 
     al_draw_text(allegroConfig->fontBonus, BLACK, drawX, drawY, 0, txt.c_str());
   }

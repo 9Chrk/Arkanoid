@@ -8,7 +8,6 @@ GameModel::GameModel(const string& levelFile, int score)
   initializeBall();
   initializeSpaceship();
   initializeBricks();
-  // Bonus initialization
 }
 
 // Initialization methods
@@ -53,16 +52,25 @@ void GameModel::initializeBricks()
   for (size_t index = 0; index < bricks_data.size(); ++index) {
     size_t i = index / static_cast<size_t>(dim_x);
     size_t j = index % static_cast<size_t>(dim_x);
-    int score = stoi(bricks_data.at(index));
+    
+    pair<string, string> info = splitAtSeparator(bricks_data.at(index));
+    int score = stoi(info.first);
+    BonusType bonusType = (info.second.empty() ? BonusType::NONE : Bonus::fromAbbreviation(info.second));
 
     if (score != EMPTY_BRICK) {
       bricks.emplace_back(
         Point({offset_start_x + offset_x * static_cast<float>(j) + offset_x/2,
                offset_start_y + offset_y * static_cast<float>(i) + offset_y/2}),
-        width, height, score, BonusType::NONE
+        width, height, score, bonusType
       );
     }
   }
+}
+
+pair<string, string> GameModel::splitAtSeparator(const string& str) {
+  const size_t pos = str.find('|');
+  if (pos == string::npos) return {str, "" };
+  return {str.substr(0, pos), str.substr(pos + 1)};
 }
 
 // Collision handling

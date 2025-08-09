@@ -30,6 +30,9 @@ class GameModel {
   void initializeSpaceship();
   void initializeBricks();
 
+  // Helpers
+  std::pair<std::string, std::string> splitAtSeparator(const std::string& str);
+
   
   /* ############## Utility methods ############## */
 
