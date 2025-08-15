@@ -1,5 +1,5 @@
 #pragma once
-#include "view/utils.hpp"
+#include "utils.hpp"
 
 
 struct AllegroConfig {
