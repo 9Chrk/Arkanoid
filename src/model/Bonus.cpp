@@ -3,7 +3,7 @@ using namespace std;
 
 
 Bonus::Bonus(const Point& position, float w, float h, BonusType type, float fallSpeed)
-     : Rectangle(position, w, h), type(type), active(false), fallSpeed(fallSpeed) {}
+     : Rectangle(position, w, h), type(type), active(false), collected(false), fallSpeed(fallSpeed) {}
 
 // Methods
 
@@ -35,11 +35,13 @@ void Bonus::update() {
 
 // Getters
 
-[[gnu::pure]] bool      Bonus::isActive() const { return active;    }
-[[gnu::pure]] float     Bonus::getSpeed() const { return fallSpeed; }
-[[gnu::pure]] BonusType Bonus::getType()  const { return type;      }
+[[gnu::pure]] bool      Bonus::isActive()    const { return active;    }
+[[gnu::pure]] bool      Bonus::isCollected() const { return collected; }
+[[gnu::pure]] float     Bonus::getSpeed()    const { return fallSpeed; }
+[[gnu::pure]] BonusType Bonus::getType()     const { return type;      }
 
 // Setters
 
-void Bonus::setActive(bool isActive)  { active = isActive; }
-void Bonus::setFallSpeed(float speed) { fallSpeed = speed; }
+void Bonus::setActive(bool isActive)     { active = isActive;     }
+void Bonus::setCollected(bool hasBonus)  { collected = hasBonus;  }
+void Bonus::setFallSpeed(float speed)    { fallSpeed = speed;     }

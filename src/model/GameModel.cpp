@@ -1,5 +1,11 @@
 using namespace std;
 #include "model/GameModel.hpp"
+#include "model/Laser.hpp"
+#include "model/Expand.hpp"
+#include "model/Catch.hpp"
+#include "model/SlowDown.hpp"
+#include "model/Split.hpp"
+#include "model/ExtraLife.hpp"
 
 
 GameModel::GameModel(const string& levelFile, int score)
@@ -133,6 +139,7 @@ void GameModel::handleBrickHit(Brick* hitBrick) {
     if (hitBrick->getScore() != GOLD_BRICK) {
       hitBrick->destroy();
       score += hitBrick->getScore();
+      spawnBonus(*hitBrick);
     }
   } else {
     hitBrick->setSecondLife(false);
@@ -149,6 +156,47 @@ void GameModel::handleBallRebound(Point& direction, int hitSide) {
     direction.y *= -1;
   }
   ball.setDirection(direction);
+}
+
+void GameModel::spawnBonus(const Brick& brick) {
+  BonusType type = brick.getBonus();
+  if (type == BonusType::NONE) return;
+
+  json bonusSettings = settings["bonus"];
+  float width  = bonusSettings["width"].get<float>();
+  float height = bonusSettings["height"].get<float>();
+  float speed  = bonusSettings["speed"].get<float>();
+  Point position = brick.getPosition();
+
+  shared_ptr<Bonus> bonus;
+  switch (type) {
+    case BonusType::LASER:      bonus = make_shared<Laser>(position, width, height, speed); break;
+    case BonusType::EXPAND:     bonus = make_shared<Expand>(position, width, height, speed); break;
+    case BonusType::CATCH:      bonus = make_shared<Catch>(position, width, height, speed); break;
+    case BonusType::SLOW_DOWN:  bonus = make_shared<SlowDown>(position, width, height, speed); break;
+    case BonusType::SPLIT:      bonus = make_shared<Split>(position, width, height, speed); break;
+    case BonusType::EXTRA_LIFE: bonus = make_shared<ExtraLife>(position, width, height, speed); break;
+    default: return;
+  }
+
+  bonus->setActive(true);
+  bonuses.push_back(bonus);
+}
+
+void GameModel::updateBonuses() {
+  for (auto it = bonuses.begin(); it != bonuses.end(); ) {
+    shared_ptr<Bonus> bonus = *it;
+    if (bonus->isActive()) {
+      bonus->update();
+      if (bonus->intersects(spaceship)) {
+        bonus->setCollected(true);
+        bonus->applyEffect(*this);
+        it = bonuses.erase(it);
+        continue;
+      }
+    }
+    ++it;
+  }
 }
 
 // Utility methods
@@ -206,7 +254,7 @@ void GameModel::resetScore() {
 [[gnu::pure]] Spaceship& GameModel::getSpaceship() { return spaceship; }
 
 [[gnu::pure]] const vector<Brick>& GameModel::getBricks()  const { return bricks;  }
-[[gnu::pure]] const vector<Bonus>& GameModel::getBonuses() const { return bonuses; }
+[[gnu::pure]] const vector<shared_ptr<Bonus>>& GameModel::getBonuses() const { return bonuses; }
 
 [[gnu::pure]] bool GameModel::lose() const { return spaceship.isDeath(); }
 

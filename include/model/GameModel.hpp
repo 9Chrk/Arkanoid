@@ -3,6 +3,7 @@ using namespace std;
 #include "core/utils.hpp"
 #include "Brick.hpp"
 #include "Ball.hpp"
+#include "Bonus.hpp"
 #include "Spaceship.hpp"
 
 
@@ -13,10 +14,10 @@ class GameModel {
   int score, highscore;
   string levelFile;
 
-  Ball          ball;
-  Spaceship     spaceship;
-  vector<Brick> bricks;
-  vector<Bonus> bonuses;
+  Ball                                ball;
+  Spaceship                           spaceship;
+  vector<Brick>                       bricks;
+  vector<shared_ptr<Bonus>>           bonuses;
 
   struct CollisionResult {
     Brick* hitBrick;
@@ -70,6 +71,7 @@ class GameModel {
   /// @brief Update score and brick state upon hit.
   /// @param hitBrick Brick impacted.
   void handleBrickHit(Brick* hitBrick);
+  void spawnBonus(const Brick& brick);
 
   /// @brief Apply rebound based on the side hit.
   /// @param direction Ball direction to modify.
@@ -87,6 +89,8 @@ class GameModel {
   void saveHighScore();
   void resetHighScore();
   void resetScore();
+
+  void updateBonuses();
 
    
   /* ############## Utility methods ############## */
@@ -107,8 +111,8 @@ class GameModel {
   Spaceship& getSpaceship();
   const Spaceship& getSpaceship() const;
 
-  const std::vector<Brick>& getBricks() const;
-  const std::vector<Bonus>& getBonuses() const;
+  const std::vector<Brick>&              getBricks()   const;
+  const std::vector<shared_ptr<Bonus>>&  getBonuses() const;
 
   bool win()  const;
   bool lose() const;

@@ -26,3 +26,12 @@ Rectangle::Rectangle(const Point& position, float w, float h)
   return (up_left.x <= p.x && p.x <= down_right.x &&
           up_left.y <= p.y && p.y <= down_right.y);
 }
+
+[[gnu::pure]] bool Rectangle::intersects(const Rectangle& other) const {
+  auto [upLeftA, downRightA] = diag_coor();
+  auto [upLeftB, downRightB] = other.diag_coor();
+
+  bool noOverlap = downRightA.x < upLeftB.x || downRightB.x < upLeftA.x ||
+                   downRightA.y < upLeftB.y || downRightB.y < upLeftA.y;
+  return !noOverlap;
+}

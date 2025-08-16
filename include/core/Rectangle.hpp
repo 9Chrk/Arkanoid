@@ -34,6 +34,7 @@ class Rectangle {
 
   // Methods
   bool contains(const Point& p)       const;
+  bool intersects(const Rectangle& other) const;
   std::pair<Point, Point> diag_coor() const;
 
   // Getters

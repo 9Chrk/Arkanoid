@@ -134,9 +134,9 @@ void GameView::drawBonus(const Bonus& bonus) const {
 
 // Draw each active bonus falling on the playfield.
 void GameView::drawBonuses() const {
-  const vector<Bonus>& bonuses = model->getBonuses();
+  const vector<shared_ptr<Bonus>>& bonuses = model->getBonuses();
   for (const auto& bonus : bonuses) {
-    if (bonus.isActive()) drawBonus(bonus);
+    if (bonus->isActive()) drawBonus(*bonus);
   }
 }
 
