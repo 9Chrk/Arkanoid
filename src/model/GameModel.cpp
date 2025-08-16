@@ -1,11 +1,11 @@
 using namespace std;
 #include "model/GameModel.hpp"
 #include "model/Laser.hpp"
-#include "model/Expand.hpp"
+#include "../../include/model/Bonus/Expand.hpp"
 #include "model/Catch.hpp"
-#include "model/SlowDown.hpp"
+#include "../../include/model/Bonus/SlowDown.hpp"
 #include "model/Split.hpp"
-#include "model/ExtraLife.hpp"
+#include "../../include/model/Bonus/ExtraLife.hpp"
 
 
 GameModel::GameModel(const string& levelFile, int score)

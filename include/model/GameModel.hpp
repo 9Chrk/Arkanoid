@@ -3,7 +3,7 @@ using namespace std;
 #include "core/utils.hpp"
 #include "Brick.hpp"
 #include "Ball.hpp"
-#include "Bonus.hpp"
+#include "Bonus/Bonus.hpp"
 #include "Spaceship.hpp"
 
 

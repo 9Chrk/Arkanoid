@@ -1,7 +1,7 @@
 #pragma once
 #include "core/utils.hpp"
 #include "Vector.hpp"
-#include "Bonus.hpp"
+#include "Bonus/Bonus.hpp"
 
 
 /// @brief Destructible brick that can contain a bonus.

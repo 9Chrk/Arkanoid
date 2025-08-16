@@ -1,5 +1,5 @@
 using namespace std;
-#include "model/Bonus.hpp"
+#include "../../include/model/Bonus/Bonus.hpp"
 
 
 Bonus::Bonus(const Point& position, float w, float h, BonusType type, float fallSpeed)

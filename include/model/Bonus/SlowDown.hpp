@@ -1,5 +1,5 @@
 #pragma once
-#include "model/Bonus.hpp"
+#include "Bonus.hpp"
 
 class SlowDown : public Bonus {
  public:
