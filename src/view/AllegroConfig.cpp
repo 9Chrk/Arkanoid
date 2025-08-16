@@ -1,5 +1,5 @@
 using namespace std;
-#include "AllegroConfig.hpp"
+#include "view/AllegroConfig.hpp"
 
 
 AllegroConfig::AllegroConfig() : event{} {

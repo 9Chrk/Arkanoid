@@ -1,5 +1,5 @@
 
-#include "Brick.hpp"
+#include "model/Brick.hpp"
 
 
 Brick::Brick(const Point& position, float w, float h, int score, BonusType bonus)

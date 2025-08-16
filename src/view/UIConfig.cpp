@@ -1,4 +1,4 @@
-#include "UIConfig.hpp"
+#include "view/UIConfig.hpp"
 #include "core/utils.hpp"
 #include "view/utils.hpp"
 

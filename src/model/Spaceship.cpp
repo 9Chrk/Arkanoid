@@ -1,5 +1,5 @@
 using namespace std;
-#include "Spaceship.hpp"
+#include "model/Spaceship.hpp"
 
 
 Spaceship::Spaceship() : Rectangle({0.0f, 0.0f}, 0, 0), health(0), speed(0) {}

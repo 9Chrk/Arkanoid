@@ -1,8 +1,8 @@
 #pragma once
 #include "view/utils.hpp"
-#include "AllegroInputAdapter.hpp"
-#include "GameController.hpp"
-#include "GameModel.hpp"
+#include "view/AllegroInputAdapter.hpp"
+#include "controller/GameController.hpp"
+#include "model/GameModel.hpp"
 
 
 class Engine {

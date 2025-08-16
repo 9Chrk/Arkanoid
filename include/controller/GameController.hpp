@@ -1,6 +1,6 @@
 #pragma once
-#include "GameModel.hpp"
-#include "GameView.hpp"
+#include "model/GameModel.hpp"
+#include "view/GameView.hpp"
 #include "input/InputAction.hpp"
 
 

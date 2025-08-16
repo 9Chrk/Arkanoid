@@ -1,5 +1,5 @@
 using namespace std;
-#include "AllegroInputAdapter.hpp"
+#include "view/AllegroInputAdapter.hpp"
 
 
 optional<InputAction> AllegroInputAdapter::translate(const ALLEGRO_EVENT& event) const {

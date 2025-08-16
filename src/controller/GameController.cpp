@@ -1,5 +1,5 @@
 using namespace std;
-#include "GameController.hpp"
+#include "controller/GameController.hpp"
 
 
 GameController::GameController(const shared_ptr<GameModel>& model, const shared_ptr<GameView>& view, const vector<string>& levelFiles)

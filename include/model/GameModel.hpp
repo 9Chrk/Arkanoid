@@ -1,4 +1,5 @@
 #pragma once
+using namespace std;
 #include "core/utils.hpp"
 #include "Brick.hpp"
 #include "Ball.hpp"

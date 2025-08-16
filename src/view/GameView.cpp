@@ -1,5 +1,5 @@
 using namespace std;
-#include "GameView.hpp"
+#include "view/GameView.hpp"
 
 
 /// @brief Construct the view and initialize all Allegro subsystems and resources.

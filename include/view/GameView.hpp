@@ -1,7 +1,7 @@
 #pragma once
 #include "view/utils.hpp"
-#include "Bonus.hpp"
-#include "GameModel.hpp"
+#include "model/Bonus.hpp"
+#include "model/GameModel.hpp"
 #include "AllegroConfig.hpp"
 #include "UIConfig.hpp"
 

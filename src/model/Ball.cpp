@@ -1,5 +1,5 @@
 using namespace std;
-#include "Ball.hpp"
+#include "model/Ball.hpp"
 
 
 Ball::Ball()

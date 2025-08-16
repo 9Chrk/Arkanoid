@@ -1,5 +1,5 @@
 using namespace std;
-#include "GameModel.hpp"
+#include "model/GameModel.hpp"
 
 
 GameModel::GameModel(const string& levelFile, int score)
