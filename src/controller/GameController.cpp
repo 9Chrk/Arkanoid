@@ -1,16 +1,19 @@
-using namespace std;
+#include <cstddef>
+#include <memory>
+#include <vector>
+#include <string>
 #include "controller/GameController.hpp"
 
 
-GameController::GameController(const shared_ptr<GameModel>& model, const shared_ptr<GameView>& view, const vector<string>& levelFiles)
+GameController::GameController(const std::shared_ptr<GameModel>& model, const std::shared_ptr<GameView>& view, const std::vector<std::string>& levelFiles)
     : model(model), view(view), levelFiles(levelFiles), gameScore(0), index(0), tempDirection(INITIAL_DIRECTION) {}
 
 // Getters
 
 [[gnu::pure]] int GameController::getIndex()                   const { return index;     }
 [[gnu::pure]] int GameController::getGameScore()               const { return gameScore; }
-[[gnu::pure]] shared_ptr<GameView> GameController::getView()   const { return view;      }
-[[gnu::pure]] shared_ptr<GameModel> GameController::getModel() const { return model;     }
+[[gnu::pure]] std::shared_ptr<GameView> GameController::getView()   const { return view;      }
+[[gnu::pure]] std::shared_ptr<GameModel> GameController::getModel() const { return model;     }
 
 // Setters
 
@@ -38,7 +41,7 @@ void GameController::forceLevelChange(int idx) {
   if (index >= 0 && index < static_cast<int>(levelFiles.size())) {
     updateGameScore();    // save score before loading
     resetTempDirection();
-    *model = GameModel(levelFiles[static_cast<size_t>(index)], gameScore); // load chosen level
+    *model = GameModel(levelFiles[static_cast<std::size_t>(index)], gameScore); // load chosen level
   }
 }
 
@@ -85,7 +88,7 @@ void GameController::handleAction(const InputAction& action) {
 // Advance the game simulation
 
 void GameController::update() {
-  shared_ptr<AllegroConfig> allegroConfig = view->getAllegroConfig();
+  std::shared_ptr<AllegroConfig> allegroConfig = view->getAllegroConfig();
   Spaceship& spaceship = model->getSpaceship();
   Ball& ball = model->getBall();
 

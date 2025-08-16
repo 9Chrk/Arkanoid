@@ -1,9 +1,13 @@
-using namespace std;
+#include <cstddef>
+#include <cstdlib>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
 #include "engine/Engine.hpp"
 
 
 Engine::Engine() : gameLevels(listLevels("./assets/data")) {
-  if (gameLevels.empty()) throw runtime_error("No level files found.");
+  if (gameLevels.empty()) throw std::runtime_error("No level files found.");
 }
 
 Engine::~Engine() {
@@ -12,7 +16,7 @@ Engine::~Engine() {
 
 // Handle Allegro Events
 
-bool Engine::handleWin(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
+bool Engine::handleWin(std::shared_ptr<GameView> view, std::shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
   if (model->win()) {
     view->stopSound(&soundID);
     view->menu(allegroConfig->win_png, "Press any key to continue...", allegroConfig->win_wav);
@@ -24,7 +28,7 @@ bool Engine::handleWin(shared_ptr<GameView> view, shared_ptr<GameModel> model, G
   return false;
 }
 
-bool Engine::handleLose(shared_ptr<GameView> view, shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
+bool Engine::handleLose(std::shared_ptr<GameView> view, std::shared_ptr<GameModel> model, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
   if (model->lose()) {
     view->stopSound(&soundID);
     view->playSound(allegroConfig->lose_wav);
@@ -37,8 +41,8 @@ bool Engine::handleLose(shared_ptr<GameView> view, shared_ptr<GameModel> model, 
 }
 
 bool Engine::processAction(const InputAction& action, GameController& controller, ALLEGRO_SAMPLE_ID& soundID) {
-  shared_ptr<GameView> view  = controller.getView();
-  shared_ptr<GameModel> model = controller.getModel();
+  std::shared_ptr<GameView> view  = controller.getView();
+  std::shared_ptr<GameModel> model = controller.getModel();
 
   switch (action.type) {
     case InputActionType::Quit:
@@ -68,27 +72,27 @@ bool Engine::processAction(const InputAction& action, GameController& controller
 
 // Helpers for the RUN method
 
-bool Engine::initializeConfigs(shared_ptr<GameView> view) {
+bool Engine::initializeConfigs(std::shared_ptr<GameView> view) {
   uiConfig = view->getUIConfig();
   allegroConfig = view->getAllegroConfig();
   if (!uiConfig || !allegroConfig) {
-    cerr << "Fatal Error: UIConfig or AllegroConfig is null.\n";
-    exit(EXIT_FAILURE);
+    std::cerr << "Fatal Error: UIConfig or AllegroConfig is null.\n";
+    std::exit(EXIT_FAILURE);
   }
   return true;
 }
 
-bool Engine::handleStartMenu(shared_ptr<GameView> view) {
+bool Engine::handleStartMenu(std::shared_ptr<GameView> view) {
   view->menuButton(allegroConfig->start_png, done, uiConfig->buttonExit, uiConfig->buttonPlay);
   if (done) return false;
   showMenu = false;
   return true;
 }
 
-bool Engine::runGameLevel(shared_ptr<GameModel> model, shared_ptr<GameView> view, GameController& controller, 
-                          AllegroInputAdapter& inputAdapter, int index) 
+bool Engine::runGameLevel(std::shared_ptr<GameModel> model, std::shared_ptr<GameView> view, GameController& controller,
+                          AllegroInputAdapter& inputAdapter, int index)
 {
-  *model = GameModel(gameLevels.at(static_cast<size_t>(index)), controller.getGameScore());
+  *model = GameModel(gameLevels.at(static_cast<std::size_t>(index)), controller.getGameScore());
   controller.resetTempDirection();
   
   ALLEGRO_SAMPLE_ID soundGameID;
@@ -107,7 +111,7 @@ bool Engine::runGameLevel(shared_ptr<GameModel> model, shared_ptr<GameView> view
   return restartGame;
 }
 
-void Engine::showFinalScreen(shared_ptr<GameView> view) {
+void Engine::showFinalScreen(std::shared_ptr<GameView> view) {
   restartGame = false;
   finish = done = true;
   view->menu(allegroConfig->finish_png, "Press any key to exit...", allegroConfig->finish_wav, true);
@@ -117,8 +121,8 @@ void Engine::showFinalScreen(shared_ptr<GameView> view) {
 
 void Engine::run() {
   AllegroInputAdapter inputAdapter;
-  shared_ptr<GameModel> model = make_shared<GameModel>(gameLevels.at(0), 0);
-  shared_ptr<GameView> view = make_shared<GameView>(model);
+  std::shared_ptr<GameModel> model = std::make_shared<GameModel>(gameLevels.at(0), 0);
+  std::shared_ptr<GameView> view = std::make_shared<GameView>(model);
   GameController controller = GameController(model, view, gameLevels);
   
   if (!initializeConfigs(view)) return;
