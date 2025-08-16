@@ -54,4 +54,5 @@ class Ball : public Circle {
   void setMoving(bool isMoving);
   void setFalling(bool isFalling);
   void setDirection(const Point& newDirection);
+  void setSpeed(float newSpeed);
 };

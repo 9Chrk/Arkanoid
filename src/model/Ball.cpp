@@ -71,3 +71,4 @@ void Ball::reset() {
 void Ball::setMoving(bool isMoving)   { moving = isMoving;   }
 void Ball::setFalling(bool isFalling) { falling = isFalling; }
 void Ball::setDirection(const Point& newDirection) { direction = newDirection; }
+void Ball::setSpeed(float newSpeed) { speed = newSpeed; }

@@ -1,10 +1,12 @@
-#include "model/SlowDown.hpp"
+#include "model/Bonus/SlowDown.hpp"
+#include "model/GameModel.hpp"
 
 SlowDown::SlowDown(const Point& position, float w, float h, float fallSpeed)
      : Bonus(position, w, h, BonusType::SLOW_DOWN, fallSpeed) {}
 
 SlowDown::~SlowDown() = default;
 
-void SlowDown::applyEffect(GameModel& /*model*/) {
-  // TODO: implement slowdown effect
+void SlowDown::applyEffect(GameModel& model) {
+  Ball& ball = model.getBall();
+  ball.setSpeed(ball.getSpeed() * 0.8f);
 }
