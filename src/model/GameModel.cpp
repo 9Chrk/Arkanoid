@@ -4,7 +4,7 @@ using namespace std;
 #include "../../include/model/Bonus/Expand.hpp"
 #include "model/Catch.hpp"
 #include "../../include/model/Bonus/SlowDown.hpp"
-#include "model/Split.hpp"
+#include "../../include/model/Bonus/Split.hpp"
 #include "../../include/model/Bonus/ExtraLife.hpp"
 
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Bonus/Bonus.hpp"
+#include "Bonus.hpp"
 
 class Split : public Bonus {
  public:
