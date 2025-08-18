@@ -9,6 +9,7 @@ class Ball : public Circle {
   Point direction;
   float speed;
   bool moving, falling;
+  bool sticky;  // Indicates if the ball should stick to the spaceship on contact
 
  public:
   Ball();
@@ -49,10 +50,12 @@ class Ball : public Circle {
 
   bool isMoving()  const;
   bool isFalling() const;
+  bool isSticky()  const;
 
   // Setters
   void setMoving(bool isMoving);
   void setFalling(bool isFalling);
   void setDirection(const Point& newDirection);
   void setSpeed(float newSpeed);
+  void setSticky(bool shouldStick);
 };

@@ -8,7 +8,5 @@ Catch::~Catch() = default;
 
 void Catch::applyEffect(GameModel& model) {
   Ball& ball = model.getBall();
-  Spaceship& ship = model.getSpaceship();
-  ball.setMoving(false);
-  ball.move(ship.getPosition(), ship.getHeight());
+  ball.setSticky(true);
 }

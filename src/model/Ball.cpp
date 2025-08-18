@@ -4,11 +4,11 @@ using namespace std;
 
 Ball::Ball()
     : Circle({0, 0}, 0), direction(INITIAL_DIRECTION), speed(0),
-      moving(false), falling(false) {}
+      moving(false), falling(false), sticky(false) {}
 
 Ball::Ball(float radius, float speed)
     : Circle({0, 0}, radius), direction(INITIAL_DIRECTION), speed(speed),
-      moving(false), falling(false) {}
+      moving(false), falling(false), sticky(false) {}
 
 // Movement
 
@@ -34,14 +34,22 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
     newPos.y + radius <= spaceship.y - h/2 + speed &&
     newPos.x >= spaceship.x - w/2 - radius &&
     newPos.x <= spaceship.x + w/2 + radius) {
-      
+
+      if (sticky) {
+        moving = false;       // stop movement when sticking to the spaceship
+        sticky = false;       // consume sticky state
+        position.x = spaceship.x;
+        position.y = spaceship.y - h/2 - radius;
+        return;
+      }
+
       float x_rel = (newPos.x - spaceship.x) / (w/2); // relative position on the spaceship
       x_rel = clamp(x_rel, -1.0f, 1.0f);
 
       float alpha = BOUNCE_MIN_DEG + BOUNCE_RANGE_DEG * (1.0f - x_rel);
       alpha = clamp(alpha, BOUNCE_MIN_DEG, BOUNCE_MAX_DEG);                      // prevent perfectly vertical bounces
       float theta = alpha * static_cast<float>(M_PI) / 180.0f;
-      
+
       direction.x = cos(theta);
       direction.y = -sin(theta);
     }
@@ -57,6 +65,7 @@ void Ball::checkFall() {
 void Ball::reset() {
   direction = INITIAL_DIRECTION;
   moving = false;
+  sticky = false;
 }
 
 // Getters
@@ -65,6 +74,7 @@ void Ball::reset() {
 [[gnu::pure]] float Ball::getSpeed()     const { return speed;     }
 [[gnu::pure]] bool  Ball::isMoving()     const { return moving;    }
 [[gnu::pure]] bool  Ball::isFalling()    const { return falling;   }
+[[gnu::pure]] bool  Ball::isSticky()     const { return sticky;    }
 
 // Setters
 
@@ -72,3 +82,4 @@ void Ball::setMoving(bool isMoving)   { moving = isMoving;   }
 void Ball::setFalling(bool isFalling) { falling = isFalling; }
 void Ball::setDirection(const Point& newDirection) { direction = newDirection; }
 void Ball::setSpeed(float newSpeed) { speed = newSpeed; }
+void Ball::setSticky(bool shouldStick) { sticky = shouldStick; }
