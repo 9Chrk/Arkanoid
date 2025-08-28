@@ -22,9 +22,7 @@ GameModel::GameModel(const string& levelFile, int score)
   initializeBricks();
 }
 
-/**
- * @brief Initialize the ball with parameters from the configuration file
- */
+/// @brief Initialize the ball with parameters from the configuration file
 void GameModel::initializeBall()
 {
   json _ball                    = settings["ball"];
@@ -33,9 +31,7 @@ void GameModel::initializeBall()
   ball                          = Ball(radius, speed);
 }
 
-/**
- * @brief Initialize the spaceship with parameters from the configuration file
- */
+/// @brief Initialize the spaceship with parameters from the configuration file
 void GameModel::initializeSpaceship()
 {
   json _spaceship               = settings["spaceship"];
@@ -102,6 +98,7 @@ pair<string, string> GameModel::splitAtSeparator(const string& str) {
   return {str.substr(0, pos), str.substr(pos + 1)};
 }
 
+
 /* ############## Collision system ############## */
 
 /**
@@ -123,8 +120,8 @@ void GameModel::checkCollisions() {
   if (!collision.hitBrick) return;
 
   // Handle the impact
-  handleBrickHit(collision.hitBrick);       // Score and destruction
-  handleBallRebound(direction, collision.hitSide);  // Bounce
+  handleBrickHit(collision.hitBrick);              // Score and destruction
+  handleBallRebound(direction, collision.hitSide); // Bounce
 }
 
 /**
@@ -140,10 +137,7 @@ bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) const {
  * @brief Find the closest collision along the ball's trajectory
  * Iterates through all active bricks to find the first impact
  */
-GameModel::CollisionResult GameModel::findClosestCollision(
-    const Point& pos,
-    const Point& direction,
-    float speed) {
+GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, const Point& direction, float speed) {
   const vector<Point> collisionPoints = _collisionPoints(pos);
   CollisionResult result;
   
@@ -163,11 +157,7 @@ GameModel::CollisionResult GameModel::findClosestCollision(
  * @brief Test collision between a brick and the ball's trajectory
  * Uses multiple test points around the ball for precise detection
  */
-GameModel::CollisionResult GameModel::checkBrickCollision(
-    Brick& brick,
-    const vector<Point>& collisionPoints,
-    const Point& direction,
-    float speed) const {
+GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) const {
   CollisionResult result;
   
   // Test each collision point
@@ -255,33 +245,34 @@ void GameModel::spawnBonus(const Brick& brick) {
   bonuses.push_back(bonus);
 }
 
+
 /* ############## Bonus management ############## */
 
 /**
  * @brief Update all active bonuses and check collisions with the spaceship
  */
 void GameModel::updateBonuses() {
-    for (auto it = bonuses.begin(); it != bonuses.end(); ) {
-        shared_ptr<Bonus> bonus = *it;
-        if (bonus->isActive()) {
-            bonus->update();
-            if (bonus->intersects(spaceship)) {
-                // Disable the previous bonus before applying the new one
-                clearActiveBonus();
+  for (auto it = bonuses.begin(); it != bonuses.end(); ) {
+    shared_ptr<Bonus> bonus = *it;
+    if (bonus->isActive()) {
+      bonus->update();
+      if (bonus->intersects(spaceship)) {
+        // Disable the previous bonus before applying the new one
+        clearActiveBonus();
 
-                // Apply the new bonus
-                bonus->setCollected(true);
-                bonus->applyEffect(*this);
+        // Apply the new bonus
+        bonus->setCollected(true);
+        bonus->applyEffect(*this);
 
-                // Set this bonus as active
-                setActiveBonus(bonus->getType());
+        // Set this bonus as active
+        setActiveBonus(bonus->getType());
 
-                it = bonuses.erase(it);
-                continue;
-            }
-        }
-        ++it;
+        it = bonuses.erase(it);
+        continue;
+      }
     }
+    ++it;
+  }
 }
 
 /**
@@ -297,24 +288,25 @@ void GameModel::updateTimerBonuses() {
  * @brief Disable the current bonus and restore the normal state
  */
 void GameModel::clearActiveBonus() {
-    switch (activeBonus) {
-        case BonusType::EXPAND:
-            spaceship.setWidth(spaceship.getoriginalWidth());
-            spaceship.setExpandTimer(0);
-            break;
-        case BonusType::CATCH:
-            ball.setCatchActive(false);
-            ball.setCatchReleaseTimer(0);
-            break;
-        case BonusType::SLOW_DOWN:
-            ball.setSpeed(ball.getOriginalSpeed());
-            break;
-            // Add the other bonus types...
-        default:
-            break;
-    }
-    activeBonus = BonusType::NONE;
+  switch (activeBonus) {
+    case BonusType::EXPAND:
+      spaceship.setWidth(spaceship.getoriginalWidth());
+      spaceship.setExpandTimer(0);
+      break;
+    case BonusType::CATCH:
+      ball.setCatchActive(false);
+      ball.setCatchReleaseTimer(0);
+      break;
+    case BonusType::SLOW_DOWN:
+      ball.setSpeed(ball.getOriginalSpeed());
+      break;
+      // Add the other bonus types...
+    default:
+      break;
+  }
+  activeBonus = BonusType::NONE;
 }
+
 
 /* ############## Utility methods ############## */
 
@@ -352,11 +344,10 @@ bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   return false;
 }
 
+
 /* ############## Score management ############## */
 
-/**
- * @brief Save the high score if the current score is higher
- */
+/// @brief Save the high score if the current score is higher
 void GameModel::saveHighScore() {
   if (score >= highscore) {
     highscore = score;
@@ -364,24 +355,21 @@ void GameModel::saveHighScore() {
   }
 }
 
-/**
- * @brief Reset the high score
- */
+/// @brief Reset the high score
 void GameModel::resetHighScore() {
   highscore = 0;
   writeJsonFile("./assets/data/settings.json", "highscore", highscore);
 }
 
-/**
- * @brief Reset the current score
- */
+/// @brief Reset the current score
 void GameModel::resetScore() {
   score = 0; 
 }
 
+
 /* ############## Accessors ############## */
 
-// Simple getters
+// Getters
 [[gnu::pure]] int GameModel::getScore()           const { return score; }
 [[gnu::pure]] int GameModel::getHighScore()       const { return highscore; }
 [[gnu::pure]] Point GameModel::getBallDirection() const { return ball.getDirection(); }

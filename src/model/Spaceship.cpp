@@ -1,15 +1,17 @@
 using namespace std;
 #include "model/Spaceship.hpp"
 
+
 /* ############## Constructors ############## */
 
 Spaceship::Spaceship()
-    : Rectangle({0.0f, 0.0f}, 0, 0), health(0), speed(0), laserActive(false),
-      originalWidth(0), expandTimer(0) {}
+         : Rectangle({0.0f, 0.0f}, 0, 0), health(0), speed(0), laserActive(false),
+           originalWidth(0), expandTimer(0) {}
 
 Spaceship::Spaceship(const Point& position, float w, float h, float speed, int health)
-    : Rectangle(position, w, h), health(health), speed(speed), laserActive(false),
-      originalWidth(w), expandTimer(0) {}
+         : Rectangle(position, w, h), health(health), speed(speed), laserActive(false),
+           originalWidth(w), expandTimer(0) {}
+
 
 /* ############## Accessors ############## */
 
@@ -22,9 +24,8 @@ Spaceship::Spaceship(const Point& position, float w, float h, float speed, int h
 [[gnu::pure]] float Spaceship::getoriginalWidth() const { return originalWidth; }
 
 // Setters
-/**
- * @brief Change width while ensuring the spaceship stays within bounds
- */
+
+/// @brief Change width while ensuring the spaceship stays within bounds
 void Spaceship::setWidth(float newWidth) {
     w = newWidth;
     position.x = clamp(position.x, w/2, GAME_WIDTH - w/2);
@@ -32,6 +33,7 @@ void Spaceship::setWidth(float newWidth) {
 
 void Spaceship::setExpandTimer(float time) { expandTimer = time; }
 void Spaceship::setLaser(bool enabled)     { laserActive = enabled; }
+
 
 /* ############## Movement functions ############## */
 
@@ -57,16 +59,13 @@ void Spaceship::move(const Point& mousePosition) {
     }
 }
 
+
 /* ############## State management ############## */
 
-/**
- * @brief Add a life to the spaceship
- */
+/// @brief Add a life to the spaceship
 void Spaceship::addLife() { health++; }
 
-/**
- * @brief Decrease the spaceship's life
- */
+/// @brief Decrease the spaceship's life
 void Spaceship::damage()  { health--; }
 
 /**
@@ -82,9 +81,7 @@ void Spaceship::updateExpandTimer() {
     }
 }
 
-/**
- * @brief Check if the position is valid (within screen bounds)
- */
+/// @brief Check if the position is valid (within screen bounds)
 [[gnu::pure]] bool Spaceship::validPosition(const Point& newPos) const {
     return (newPos.x - w/2 >= 0) && (newPos.x + w/2 <= GAME_WIDTH);
 }

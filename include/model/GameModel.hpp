@@ -19,22 +19,18 @@ using namespace std;
  */
 class GameModel {
  private:
-  /* ############## Game data ############## */
-  json settings;                        // Game settings
-  int score, highscore;                 // Current score and high score
-  string levelFile;                     // Level file
+  json settings;          // Game settings
+  int score, highscore;   // Current score and high score
+  string levelFile;       // Level file
 
-  
-  /* ############## Game entities ############## */
-  Ball                                ball;       // Ball
-  Spaceship                           spaceship;  // Spaceship
-  vector<Brick>                       bricks;     // Bricks
-  vector<shared_ptr<Bonus>>           bonuses;    // Active bonuses
-  BonusType activeBonus = BonusType::NONE;        // Active bonus type
+  Ball                      ball;       // Ball
+  Spaceship                 spaceship;  // Spaceship
+  vector<Brick>             bricks;     // Bricks
+  vector<shared_ptr<Bonus>> bonuses;    // Active bonuses
+  BonusType activeBonus = BonusType::NONE; // Active bonus type
 
-  
+
   /// @brief Structure used to store collision results
- 
   struct CollisionResult {
     Brick* hitBrick;    // Hit brick
     int   hitSide;      // Side hit
@@ -45,90 +41,67 @@ class GameModel {
   
 
   /* ############## Initialization methods ############## */
+
   void initializeBall();        // Initialize the ball
   void initializeSpaceship();   // Initialize the spaceship
   void initializeBricks();      // Initialize the bricks
 
   
   /* ############## Utility methods ############## */
+
   std::pair<std::string, std::string> splitAtSeparator(const std::string& str);
 
-  
-  /**
-   * @brief Generate test points around the ball for collision detection
-   * @param pos Ball center position
-   * @return List of points to check
-   */
+  /// @brief Generate test points around the ball for collision detection
+  /// @param pos Ball center position
+  /// @return List of points to check
   vector<Point> _collisionPoints(const Point& pos) const;
 
 
   /* ############## Collision detection ############## */
 
-  /**
-   * @brief Check whether collision search can be skipped
-   * @param pos Current ball position
-   * @param speed Movement speed
-   * @return true if no collision is possible
-   */
+  /// @brief Check whether collision search can be skipped
+  /// @param pos Current ball position
+  /// @param speed Movement speed
+  /// @return true if no collision is possible
   bool shouldSkipCollisionCheck(const Point& pos, float speed) const;
 
-  /**
-   * @brief Find the first collision along the path
-   * @param pos Current position
-   * @param direction Normalized direction
-   * @param speed Ball speed
-   * @return Closest collision
-   * @complexity O(N) over the number of bricks
-   */
+  /// @brief Find the first collision along the path
+  /// @param pos Current position
+  /// @param direction Normalized direction
+  /// @param speed Ball speed
+  /// @return Closest collision
+  /// @complexity O(N) over the number of bricks
   CollisionResult findClosestCollision(const Point& pos, const Point& direction, float speed);
 
-  /**
-   * @brief Test the intersection between a brick and the trajectory
-   * @param brick Brick to test
-   * @param collisionPoints Sampling points
-   * @param direction Normalized direction
-   * @param speed Ball speed
-   * @return Potential collision with this brick
-   */
-  CollisionResult checkBrickCollision(Brick& brick,
-                                      const vector<Point>& collisionPoints,
-                                      const Point& direction,
-                                      float speed) const;
+  /// @brief Test the intersection between a brick and the trajectory
+  /// @param brick Brick to test
+  /// @param collisionPoints Sampling points
+  /// @param direction Normalized direction
+  /// @param speed Ball speed
+  /// @return Potential collision with this brick
+  CollisionResult checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) const;
 
-  /**
-   * @brief Update the score and brick state when an impact occurs
-   * @param hitBrick Hit brick
-   */
+  /// @brief Update the score and brick state when an impact occurs
+  /// @param hitBrick Hit brick
   void handleBrickHit(Brick* hitBrick);
 
-  /**
-   * @brief Create a bonus when a brick is destroyed
-   * @param brick Destroyed brick
-   */
+  /// @brief Create a bonus when a brick is destroyed
+  /// @param brick Destroyed brick
   void spawnBonus(const Brick& brick);
 
-  /**
-   * @brief Apply bounce depending on the side hit
-   * @param direction Ball direction to modify
-   * @param hitSide Brick side (0 horizontal, 1 vertical, otherwise a corner)
-   */
+  /// @brief Apply bounce depending on the side hit
+  /// @param direction Ball direction to modify
+  /// @param hitSide Brick side (0 horizontal, 1 vertical, otherwise a corner)  
   void handleBallRebound(Point& direction, int hitSide);
 
  public:
-  /**
-   * @brief Constructor
-   * @param levelFile Level file
-   * @param score Initial score
-   */
   GameModel(const string& levelFile, int score);
 
   
   /* ############## Game management methods ############## */
 
-  /**
-   * @brief Detect and handle current ball collisions
-   * @complexity O(N) over the number of active bricks
-   */
+  /// @brief Detect and handle current ball collisions
+  /// @complexity O(N) over the number of active bricks  
   void checkCollisions();
 
   /// @brief Score management
@@ -148,17 +121,15 @@ class GameModel {
    
   /* ############## Utility methods ############## */
 
-  /**
-   * @brief Indicate whether the ball's direction has changed
-   * @param tempDirection Previous direction, updated on output
-   * @return true if a change occurred
-   */
+  /// @brief Indicate whether the ball's direction has changed
+  /// @param tempDirection Previous direction, updated on output
+  /// @return true if a change occurred  
   bool checkDirectionChanged(Point& tempDirection) const;
 
   
   /* ############## Accessors ############## */
 
-  // Simple getters
+  // Getters
   int getScore()           const;
   int getHighScore()       const;
   Point getBallDirection() const;
@@ -174,7 +145,6 @@ class GameModel {
   const std::vector<shared_ptr<Bonus>>&  getBonuses() const;
 
   // Game state
-  bool win()  const;  // Check if the player has won
-  bool lose() const;  // Check if the player has lost
+  bool win()  const;
+  bool lose() const;
 };
-

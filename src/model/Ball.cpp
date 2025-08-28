@@ -1,9 +1,7 @@
 using namespace std;
 #include "model/Ball.hpp"
 
-/**
- * @brief Ball constructors
- */
+
 Ball::Ball()
     : Circle({0, 0}, 0), direction(INITIAL_DIRECTION), speed(0),
       originalSpeed(0), moving(false), falling(false),
@@ -14,30 +12,26 @@ Ball::Ball(float radius, float speed)
       originalSpeed(speed), moving(false), falling(false),
       catchActive(false), catchreleaseTimer(0) {}
 
+
 /* ############## Movement functions ############## */
 
-/**
- * @brief Place the ball above the spaceship when it is not moving
- */
+/// @brief Place the ball above the spaceship when it is not moving
 void Ball::move(const Point& spaceship, float h) {
   position.x = spaceship.x;
   position.y = spaceship.y - h/2 - radius;
 }
 
-/**
- * @brief Move the ball while taking collisions into account
- */
+/// @brief Move the ball while taking collisions into account
 void Ball::move(const Point& spaceship, float w, float h) {
   checkCollisions(spaceship, w, h);
   checkFall();
 }
 
+
 /* ############## Collision and state handling ############## */
 
-/**
- * @brief Check collisions with the borders and the spaceship
- * Modify the ball's direction based on the impact angle with the spaceship
- */
+/// @brief Check collisions with the borders and the spaceship
+/// Modify the ball's direction based on the impact angle with the spaceship
 void Ball::checkCollisions(const Point& spaceship, float w, float h) {
   Point newPos = {position.x + direction.x * speed, position.y + direction.y * speed};
   
@@ -77,24 +71,18 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
     position = newPos;
 }
   
-/**
- * @brief Check if the ball has fallen below the screen
- */
+/// @brief Check if the ball has fallen below the screen
 void Ball::checkFall() {
   falling = (position.y - radius > GAME_HEIGHT) ? true : false; // ball fell below the screen
 }
   
-/**
- * @brief Reset the direction and movement state
- */
+/// @brief Reset the direction and movement state
 void Ball::reset() {
   direction = INITIAL_DIRECTION;
   moving = false;
 }
 
-/**
- * @brief Manage the timer for catch mode
- */
+/// @brief Manage the timer for catch mode
 void Ball::updateCatchReleaseTimer() {
     if (catchActive && !moving && catchreleaseTimer > 0.0f) {
         catchreleaseTimer -= TIMER_DECREMENT;
@@ -105,9 +93,7 @@ void Ball::updateCatchReleaseTimer() {
     }
 }
 
-/**
- * @brief Gradually restore the original speed
- */
+/// @brief Gradually restore the original speed
 void Ball::updateSpeed() {
     if (speed < originalSpeed) {
         speed += originalSpeed * RESTORE_SPEED_RATE; // gradually restore speed
