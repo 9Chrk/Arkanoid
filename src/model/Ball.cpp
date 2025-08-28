@@ -66,7 +66,7 @@ void Ball::reset() {
 }
 void Ball::updateCatchReleaseTimer() {
     if (catchActive && !moving && catchreleaseTimer > 0.0f) {
-        catchreleaseTimer -= 0.1f;
+        catchreleaseTimer -= TIMER_DECREMENT;
         if (catchreleaseTimer <= 0.0f) {
             setMoving(true);
             setCatchActive(false);
