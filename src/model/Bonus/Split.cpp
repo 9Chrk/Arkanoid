@@ -8,4 +8,5 @@ Split::Split(const Point& position, float w, float h, float fallSpeed)
 Split::~Split() = default;
 
 void Split::applyEffect(GameModel& model) {
+  (void)model;
 }

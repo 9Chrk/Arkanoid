@@ -237,6 +237,7 @@ void GameModel::spawnBonus(const Brick& brick) {
     case BonusType::SLOW_DOWN:  bonus = make_shared<SlowDown>(position, width, height, speed); break;
     case BonusType::SPLIT:      bonus = make_shared<Split>(position, width, height, speed); break;
     case BonusType::EXTRA_LIFE: bonus = make_shared<ExtraLife>(position, width, height, speed); break;
+    case BonusType::NONE: break;
     default: return;
   }
 
@@ -300,9 +301,10 @@ void GameModel::clearActiveBonus() {
     case BonusType::SLOW_DOWN:
       ball.setSpeed(ball.getOriginalSpeed());
       break;
-      // Add the other bonus types...
-    default:
-      break;
+
+    case BonusType::LASER: case BonusType::SPLIT: case BonusType::EXTRA_LIFE: break;
+    case BonusType::NONE: break;
+    default: break;
   }
   activeBonus = BonusType::NONE;
 }

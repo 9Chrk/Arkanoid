@@ -9,7 +9,6 @@ Catch::~Catch() = default;
 
 void Catch::applyEffect(GameModel& model) {
   Ball& ball = model.getBall();
-  Spaceship& ship = model.getSpaceship();
   ball.setCatchActive(true);
   ball.setCatchReleaseTimer(CATCH_RELEASE_DURATION);
 }

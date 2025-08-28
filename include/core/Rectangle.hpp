@@ -31,6 +31,7 @@ class Rectangle {
  public:
   Rectangle();
   Rectangle(const Point& position, float w, float h);
+  virtual ~Rectangle() = default;
 
   // Methods
   bool contains(const Point& p)       const;
