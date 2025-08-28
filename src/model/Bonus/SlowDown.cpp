@@ -10,6 +10,6 @@ SlowDown::~SlowDown() = default;
 
 void SlowDown::applyEffect(GameModel& model) {
     Ball& ball = model.getBall();
-    // D'abord ralentir la balle
+    // First slow down the ball
     ball.setSpeed(ball.getSpeed() * SLOW_DOWN_FACTOR);
 }

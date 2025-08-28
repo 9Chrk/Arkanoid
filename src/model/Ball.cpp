@@ -2,7 +2,7 @@ using namespace std;
 #include "model/Ball.hpp"
 
 /**
- * @brief Constructeurs de la balle
+ * @brief Ball constructors
  */
 Ball::Ball()
     : Circle({0, 0}, 0), direction(INITIAL_DIRECTION), speed(0),
@@ -14,10 +14,10 @@ Ball::Ball(float radius, float speed)
       originalSpeed(speed), moving(false), falling(false),
       catchActive(false), catchreleaseTimer(0) {}
 
-/* ############## Fonctions de mouvement ############## */
+/* ############## Movement functions ############## */
 
 /**
- * @brief Place la balle au-dessus du vaisseau quand elle n'est pas en mouvement
+ * @brief Place the ball above the spaceship when it is not moving
  */
 void Ball::move(const Point& spaceship, float h) {
   position.x = spaceship.x;
@@ -25,40 +25,40 @@ void Ball::move(const Point& spaceship, float h) {
 }
 
 /**
- * @brief Déplace la balle en tenant compte des collisions
+ * @brief Move the ball while taking collisions into account
  */
 void Ball::move(const Point& spaceship, float w, float h) {
   checkCollisions(spaceship, w, h);
   checkFall();
 }
 
-/* ############## Gestion des collisions et états ############## */
+/* ############## Collision and state handling ############## */
 
 /**
- * @brief Vérifie les collisions avec les bords et le vaisseau
- * Modifie la direction de la balle selon l'angle d'impact avec le vaisseau
+ * @brief Check collisions with the borders and the spaceship
+ * Modify the ball's direction based on the impact angle with the spaceship
  */
 void Ball::checkCollisions(const Point& spaceship, float w, float h) {
   Point newPos = {position.x + direction.x * speed, position.y + direction.y * speed};
   
-  // Collisions avec les bords de l'écran
+  // Collisions with screen edges
   if (newPos.x - radius <= 0 || newPos.x + radius >= GAME_WIDTH) { direction.x *= -1; }
   if (newPos.y - radius <= 0) { direction.y *= -1; }
   
-  // Collision avec le vaisseau
+  // Collision with the spaceship
   if (newPos.y + radius >= spaceship.y - h/2 &&
     newPos.y + radius <= spaceship.y - h/2 + speed &&
     newPos.x >= spaceship.x - w/2 - radius &&
     newPos.x <= spaceship.x + w/2 + radius) {
 
-      // Gestion du mode capture
+      // Handle catch mode
       if (catchActive) {
           position = newPos;
           setMoving(false);
           return;
       }
       
-      // Calcul de l'angle de rebond selon la position d'impact
+      // Compute bounce angle based on impact position
       float x_rel = (newPos.x - spaceship.x) / (w/2); // relative position on the spaceship
       x_rel = clamp(x_rel, -1.0f, 1.0f);
 
@@ -66,26 +66,26 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
       alpha = clamp(alpha, BOUNCE_MIN_DEG, BOUNCE_MAX_DEG);                      // prevent perfectly vertical bounces
       float theta = alpha * static_cast<float>(M_PI) / 180.0f;
       
-      // Mise à jour de la direction
+      // Update direction
       direction.x = cos(theta);
       direction.y = -sin(theta);
     }
 
-    // Maintien de la balle dans les limites du jeu
+    // Keep the ball within game boundaries
     newPos.x = clamp(newPos.x, radius, GAME_WIDTH - radius);
     newPos.y = clamp(newPos.y, radius, GAME_HEIGHT * OUT_OF_BOUNDS_Y_FACTOR);    // keep within game area
     position = newPos;
 }
   
 /**
- * @brief Vérifie si la balle est tombée sous l'écran
+ * @brief Check if the ball has fallen below the screen
  */
 void Ball::checkFall() {
   falling = (position.y - radius > GAME_HEIGHT) ? true : false; // ball fell below the screen
 }
   
 /**
- * @brief Réinitialise la direction et l'état de mouvement
+ * @brief Reset the direction and movement state
  */
 void Ball::reset() {
   direction = INITIAL_DIRECTION;
@@ -93,7 +93,7 @@ void Ball::reset() {
 }
 
 /**
- * @brief Gestion du minuteur pour le mode capture
+ * @brief Manage the timer for catch mode
  */
 void Ball::updateCatchReleaseTimer() {
     if (catchActive && !moving && catchreleaseTimer > 0.0f) {
@@ -106,7 +106,7 @@ void Ball::updateCatchReleaseTimer() {
 }
 
 /**
- * @brief Restaure progressivement la vitesse d'origine
+ * @brief Gradually restore the original speed
  */
 void Ball::updateSpeed() {
     if (speed < originalSpeed) {
