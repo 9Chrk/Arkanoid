@@ -1,6 +1,7 @@
 #include "model/Bonus/Expand.hpp"
 #include "model/GameModel.hpp"
 
+
 Expand::Expand(const Point& position, float w, float h, float fallSpeed)
      : Bonus(position, w, h, BonusType::EXPAND, fallSpeed) {}
 

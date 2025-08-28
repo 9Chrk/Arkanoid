@@ -1,6 +1,7 @@
 #pragma once
 #include "core/utils.hpp"
 
+
 class GameModel;
 
 /// @brief Available types of bonuses.
@@ -18,7 +19,8 @@ class Bonus : public Rectangle {
  protected:
   BonusType type;
   bool active;
-  bool collected;float fallSpeed;
+  bool collected;
+  float fallSpeed;
 
  public:
   Bonus(const Point& position, float w, float h, BonusType type, float fallSpeed);

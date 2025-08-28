@@ -24,12 +24,14 @@ class GameModel {
   int score, highscore;                 // Score actuel et meilleur score
   string levelFile;                     // Fichier de niveau
 
+
   /* ############## Entités du jeu ############## */
   Ball                                ball;       // Balle
   Spaceship                           spaceship;  // Vaisseau
   vector<Brick>                       bricks;     // Briques
   vector<shared_ptr<Bonus>>           bonuses;    // Bonus actifs
   BonusType activeBonus = BonusType::NONE;        // Type de bonus actif
+
 
   /**
    * @brief Structure pour stocker les résultats de collision
@@ -42,10 +44,12 @@ class GameModel {
     CollisionResult() : hitBrick(nullptr), hitSide(-1), distance(INFINITY) {}
   };
   
+
   /* ############## Méthodes d'initialisation ############## */
   void initializeBall();        // Initialise la balle
   void initializeSpaceship();   // Initialise le vaisseau
   void initializeBricks();      // Initialise les briques
+
 
   /* ############## Méthodes utilitaires ############## */
   std::pair<std::string, std::string> splitAtSeparator(const std::string& str);
@@ -116,6 +120,7 @@ class GameModel {
    */
   GameModel(const string& levelFile, int score);
 
+
   /* ############## Méthodes de gestion du jeu ############## */
 
   /**
@@ -150,6 +155,7 @@ class GameModel {
    */
   bool checkDirectionChanged(Point& tempDirection) const;
 
+  
   /* ############## Accesseurs ############## */
 
   // Getters simples
@@ -165,7 +171,7 @@ class GameModel {
   const Spaceship& getSpaceship() const;
 
   const std::vector<Brick>&              getBricks()   const;
-  const std::vector<shared_ptr<Bonus>>&  getBonuses() const;
+  const std::vector<shared_ptr<Bonus>>&  getBonuses()  const;
 
   // État du jeu
   bool win()  const;  // Vérifie si le joueur a gagné

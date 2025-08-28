@@ -1,6 +1,7 @@
 #pragma once
 #include "Bonus.hpp"
 
+
 class Laser : public Bonus {
  public:
   Laser(const Point& position, float w, float h, float fallSpeed);

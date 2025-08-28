@@ -2,6 +2,7 @@
 #include "model/GameModel.hpp"
 #include "core/constants.hpp"
 
+
 SlowDown::SlowDown(const Point& position, float w, float h, float fallSpeed)
      : Bonus(position, w, h, BonusType::SLOW_DOWN, fallSpeed) {}
 

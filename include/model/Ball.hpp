@@ -18,16 +18,13 @@ class Ball : public Circle {
   float originalSpeed;   // Vitesse d'origine (pour restauration)
 
   // États de la balle
-  bool moving;           // En mouvement ou statique
-  bool falling;          // Tombe hors de l'écran
-  bool catchActive;      // Mode capture activé
+  bool moving;             // En mouvement ou statique
+  bool falling;            // Tombe hors de l'écran
+  bool catchActive;        // Mode capture activé
   float catchreleaseTimer; // Minuteur pour relâcher la balle
-  bool restoringSpeed;   // En cours de restauration de vitesse
+  bool restoringSpeed;     // En cours de restauration de vitesse
 
  public:
-  /**
-   * @brief Constructeurs
-   */
   Ball();
   Ball(float radius, float speed);
 
@@ -68,6 +65,7 @@ class Ball : public Circle {
   void startRestoreSpeed();        // Commence la restauration de vitesse
   void stopRestoreSpeed();         // Arrête la restauration de vitesse
 
+
   /* ############## Accesseurs ############## */
 
   // Getters
@@ -85,5 +83,5 @@ class Ball : public Circle {
   void setSpeed(float newSpeed);
   void setCatchActive(bool active);
   void setCatchReleaseTimer(float time);
-  void setOriginalSpeed(float origSpeed);
+  void setOriginalSpeed();
 };
