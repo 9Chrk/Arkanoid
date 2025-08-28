@@ -1,0 +1,441 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdftitle={Projet Arkanoid - Rapport},
+    pdfauthor={Jawad Cherkaoui},
+}
+\lstset{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bfseries\color{blue},
+    commentstyle=\itshape\color{gray},
+    stringstyle=\color{red},
+    frame=single,
+    numbers=none,
+    breaklines=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    captionpos=b,
+    columns=fixed
+}
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\scshape\LARGE Université Libre de Bruxelles \par}
+    \vspace{0.5cm}
+    {\Large Langages de programmation 2 -- INFO-F-202 \par}
+    \vspace{1.5cm}
+    {\huge\bfseries Projet Arkanoid - Rapport \par}
+
+    % Logo placé ici, juste après le titre
+    \vspace{1.5cm}
+    \includegraphics[width=0.4\linewidth]{logo.png}
+
+    \vspace{6cm}
+    {\Large Auteurs: Jawad Cherkaoui - Rayan Rabeh \\[0.5em]} \par
+    \vfill
+    {\large Année académique 2024-2025 \par}
+\end{titlepage}
+
+
+\tableofcontents
+\newpage
+
+% ==================================================================================
+
+
+
+\section{Introduction}
+Ce projet consiste en la réalisation d’un jeu vidéo inspiré d’Arkanoid (Taito, 1986), développé en C++ avec la bibliothèque Allegro. Le joueur contrôle une raquette pour renvoyer une balle et détruire des briques, avec pour objectif de toutes les éliminer sans perdre ses vies.
+Le développement a permis de mettre en pratique les principes de la programmation orientée objet au sein d’une architecture Modèle–Vue–Contrôleur (MVC).
+
+\paragraph{}Le rapport présente les fonctionnalités implémentées, la structure des classes principales, la logique de jeu ainsi que l’application du modèle MVC dans la conception
+
+
+% ==================================================================================
+
+
+
+\section{Tâches réalisées}
+
+\subsection{Tâches de base}
+
+Toutes les tâches de base ont été accomplies : le déplacement de la raquette au clavier et à la souris, la gestion de la trajectoire de la balle en fonction de la position de rebond, la mise en place d’une grille de 8 lignes et 14 briques, l’affichage et l’incrémentation du score, la gestion des trois vies avec affichage et message de défaite en cas de perte, ainsi que l’affichage de la victoire lorsque toutes les briques sont détruites.
+
+\subsection{Tâches additionnelles implémentées}
+
+Du côté des tâches additionnelles, tout a été implémenté à l’exception du bonus Interruption (Split) et du bonus Laser. Le projet intègre donc : la gestion de plusieurs niveaux encodés en fichiers JSON avec raccourcis clavier pour naviguer entre eux, le contrôle de la raquette par la souris, l’ajout de briques colorées attribuant des points différents, la sauvegarde et la réinitialisation du meilleur score, les briques argentées (nécessitant deux coups) et dorées (indestructibles), ainsi que les bonus Agrandir, Attraper, Ralentissement et Vie supplémentaire.
+
+L’ensemble de ces fonctionnalités a été intégré et testé, garantissant un jeu complet et fidèle aux objectifs fixés.
+
+% ==================================================================================
+
+
+\section{Description des classes}
+L’architecture du projet est organisée selon le modèle Modèle-Vue-Contrôleur, avec des classes réparties par responsabilité. Chaque classe principale est présentée ci-dessous avec son interface publique (les méthodes essentielles) et une description de son rôle et de ses relations avec les autres classes.
+
+\subsection{Classe \texttt{Engine (moteur de jeu)}}
+
+\begin{lstlisting}
+class Engine {
+ public:
+  Engine();
+  ~Engine();
+  void run();
+  // ...
+};
+
+\end{lstlisting}
+
+\subsubsection* {Rôle}
+
+La classe \colorbox{gray!20}{\texttt{Engine}} est le moteur principal du jeu. Elle initialise la configuration grâce à \colorbox{gray!20}{\texttt{AllegroConfig}} et \colorbox{gray!20}{\texttt{UIConfig}}, gère la boucle principale qui enchaîne les niveaux, les menus et la fin de partie, et centralise les événements du clavier, de la souris et du minuteur via \colorbox{gray!20}{\texttt{AllegroInputAdapter}}. Elle crée et pilote un \colorbox{gray!20}{\texttt{GameController}} pour la logique du jeu, interagit avec la \colorbox{gray!20}{\texttt{GameView}} pour l’affichage et les sons, et utilise le \colorbox{gray!20}{\texttt{GameModel}} pour gérer l’état des niveaux ainsi que la détection de la fin de partie.
+
+
+% ==================================================================================
+
+
+\subsection{Classe \texttt{GameModel (modèle du jeu)}}
+
+
+
+\begin{lstlisting}
+class GameModel {
+ public:
+  GameModel(const string& levelFile, int score);
+  void checkCollisions();
+  void updateBonuses();
+  void updateTimerBonuses();
+  // Getters (score, highScore, ball, spaceship, bricks, bonuses)
+  bool win() const;
+  bool lose() const;
+  // ...
+};
+\end{lstlisting}
+
+\subsubsection* {Rôle}
+La classe \colorbox{gray!20}{\texttt{GameModel}} représente le modèle du jeu et concentre tout l’état ainsi que la logique de progression. Elle maintient la balle, la raquette du joueur, la liste des briques du niveau courant, les bonus actifs, le score et le meilleur score. Lors de son initialisation, elle charge les données du niveau à partir d’un fichier et crée les objets \colorbox{gray!20}{\texttt{Ball}}, \colorbox{gray!20}{\texttt{Spaceship}} et la collection de \colorbox{gray!20}{\texttt{Brick}} correspondante. Elle gère aussi la logique des collisions et des rebonds, la mise à jour du score, l’apparition et la gestion des bonus, ainsi que les conditions de victoire et de défaite. \colorbox{gray!20}{\texttt{GameModel}} n’interagit pas directement avec l’affichage : il se limite à exposer l’état du jeu, qui est exploité par le \colorbox{gray!20}{\texttt{GameController}} pour relier la logique au rendu et aux entrées utilisateur.
+
+
+% ==================================================================================
+
+
+\subsection{Classe \texttt{GameController (contrôleur du jeu)}}
+
+
+\begin{lstlisting}
+class GameController {
+ public:
+  GameController(const shared_ptr<GameModel>& model,
+                 const shared_ptr<GameView>& view,
+                 const vector<string>& levelFiles);
+  void handleAction(const InputAction& action);
+  void update();
+  // Getters: getModel(), getView(), getIndex(), getGameScore()
+  // ... (setters for score/index reset/increment)
+};
+
+\end{lstlisting}
+\newpage
+\subsubsection* {Rôle}
+La classe \colorbox{gray!20}{\texttt{GameController}} joue le rôle de contrôleur dans l’architecture MVC en reliant les entrées utilisateur au modèle et à la vue. Elle maintient une référence vers le \colorbox{gray!20}{\texttt{GameModel}} courant et la \colorbox{gray!20}{\texttt{GameView}}, et traduit les actions reçues (par exemple déplacer la raquette, lancer la balle, réinitialiser un niveau ou passer de force au suivant) en appels appropriés sur le modèle. À chaque tick du jeu, sa méthode \colorbox{gray!20}{\texttt{update()}} coordonne l’évolution de la partie : elle demande au modèle de vérifier les collisions et de mettre à jour les bonus et leurs effets, contrôle la perte éventuelle d’une balle et la gestion des vies, détecte les changements de direction pour déclencher les sons correspondants, et met à jour la position de la balle en fonction de son état (lancée ou encore fixée à la raquette). 
+
+\paragraph{}
+Une fois l’état du modèle mis à jour, le contrôleur ordonne à la vue de rafraîchir l’affichage et de jouer les effets sonores nécessaires. Enfin, il gère aussi la progression entre les niveaux et l’accumulation du score global. En résumé, \colorbox{gray!20}{\texttt{GameController}} est l’intermédiaire qui synchronise actions utilisateur, logique de jeu et rendu graphique/sonore.
+
+
+
+% ==================================================================================
+
+
+\subsection{Classe \texttt{GameView (vue du jeu)}}
+
+\begin{lstlisting}
+class GameView {
+ public:
+  GameView(const shared_ptr<GameModel>& model);
+  void render();
+  void menu(ALLEGRO_BITMAP* image, const string& text, ...);
+  void menuButton(ALLEGRO_BITMAP* image, bool& resultFlag, ...);
+  void playSound(ALLEGRO_SAMPLE* sample, ALLEGRO_SAMPLE_ID* id = nullptr, bool loop=false);
+  void stopSound(ALLEGRO_SAMPLE_ID* id);
+  UIConfig* getUIConfig();
+  AllegroConfig* getAllegroConfig();
+  // ...
+};
+
+\end{lstlisting}
+
+
+\subsubsection* {Rôle}
+
+
+La classe \colorbox{gray!20}{\texttt{GameView}} correspond à la vue du jeu : elle s’occupe exclusivement de l’affichage graphique et de la restitution sonore. Reliée au \colorbox{gray!20}{\texttt{GameModel}}, elle consulte l’état courant de la partie (positions de la balle, de la raquette, des briques, score, vies et bonus) et, via sa méthode \colorbox{gray!20}{\texttt{render()}}, dessine à chaque frame la scène complète sans jamais modifier le modèle. Elle fournit aussi des méthodes dédiées à l’affichage des menus et écrans spéciaux (par exemple, écran de victoire, défaite ou menu principal), pouvant intégrer images, textes, boutons interactifs et musiques de fond. C’est également elle qui encapsule la gestion audio en jouant ou en arrêtant les sons et musiques, sur demande du contrôleur ou de l’\colorbox{gray!20}{\texttt{Engine}}. 
+
+\paragraph{}
+Enfin, la vue met à disposition la configuration de l’interface et les ressources Allegro (polices, images, sons, fenêtre, événements) de manière centralisée, afin que moteur et contrôleur puissent s’appuyer sur les mêmes éléments. En résumé, \colorbox{gray!20}{\texttt{GameView}} est responsable de tout ce qui est visuel et sonore, se contentant de refléter fidèlement l’état du modèle tel qu’orchestré par le contrôleur.
+
+
+
+
+% ==================================================================================
+
+
+
+\subsection{Classe \texttt{Spaceship (raquette du joueur)}}
+
+\begin{lstlisting}
+class Spaceship : public Rectangle {
+ public:
+  Spaceship(const Point& position, float w, float h, float speed, int health);
+  void move(Direction dir);
+  void setX(float x);
+  void damage();     // perd une vie
+  void addLife();    // gagne une vie
+  void setWidth(float w);
+  // Getters: getWidth(), getHeight(), ...
+  void setExpandTimer(float t);
+  void updateExpandTimer();
+  bool isLaserActive() const;
+  void setLaser(bool active);
+  // ...
+};
+
+\end{lstlisting}
+
+\subsubsection* {Rôle}
+La classe \colorbox{gray!20}{\texttt{Spaceship}} représente la raquette contrôlée par le joueur. Héritant de la classe utilitaire \colorbox{gray!20}{\texttt{Rectangle}}, elle dispose des propriétés géométriques nécessaires pour détecter les collisions avec la balle et les bonus, tout en se déplaçant uniquement de manière horizontale au bas de l’écran. Elle gère sa position, sa largeur et sa hauteur, sa vitesse de déplacement ainsi que son nombre de vies. Les déplacements sont assurés par la méthode \colorbox{gray!20}{\texttt{move()}} en fonction d’une direction, ou directement par \colorbox{gray!20}{\texttt{setX()}} pour suivre la souris. 
+\paragraph{}
+La raquette prend également en charge certains bonus : \colorbox{gray!20}{\texttt{EXPAND}} qui modifie temporairement sa largeur jusqu’à expiration d’un timer, \colorbox{gray!20}{\texttt{LASER}} qui active un mode de tir (prévu mais non implémenté en détail), et \colorbox{gray!20}{\texttt{EXTRA\_LIFE}} qui ajoute une vie. En cas de perte de balle, la méthode \colorbox{gray!20}{\texttt{damage()}} décrémente son compteur de vies. La raquette n’interagit pas directement avec la balle ni avec les briques ; elle se limite à maintenir son propre état et à fournir au \colorbox{gray!20}{\texttt{GameModel}} les informations nécessaires pour la gestion des collisions et des rebonds.
+
+
+
+
+% ==================================================================================
+
+
+
+
+
+
+\subsection{Classe \texttt{Ball (balle du jeu)}}
+
+\begin{lstlisting}
+class Ball : public Circle {
+ public:
+  Ball(float radius, float speed);
+  void move(const Point& spaceshipCenter, float spaceshipH);
+  void move(const Point& spaceshipCenter, float spaceshipW, float spaceshipH);
+  void checkCollisions(const Point& spaceshipCenter, float spaceshipW, float spaceshipH);
+  void checkFall();
+  void reset();
+  void setMoving(bool moving);
+  bool isMoving() const;
+  bool isFalling() const;
+  void setFalling(bool falling);
+  // Getters/Setters: getPosition(), getDirection(), setDirection(...),
+  //                  getSpeed(), setSpeed(...), getOriginalSpeed(), ...
+  void setCatchActive(bool active);
+  void setCatchReleaseTimer(float t);
+  void updateCatchReleaseTimer();
+  void updateSpeed();
+  // ...
+};
+
+\end{lstlisting}
+
+\subsubsection* {Rôle}
+
+La classe \colorbox{gray!20}{\texttt{Ball}} représente la balle du casse-briques et hérite de \colorbox{gray!20}{\texttt{Circle}} pour gérer sa position, son rayon et ses collisions circulaires de base. Elle maintient son vecteur de direction et sa vitesse, ainsi que plusieurs indicateurs d’état : \colorbox{gray!20}{\texttt{moving}} pour savoir si elle est lancée ou attachée à la raquette, \colorbox{gray!20}{\texttt{falling}} pour signaler une perte de balle, et \colorbox{gray!20}{\texttt{catchActive}} lorsqu’elle doit rester collée à la raquette sous l’effet du bonus CATCH. Elle se déplace soit en suivant la raquette lorsqu’elle est attachée, soit en avançant selon son vecteur de direction lorsqu’elle est en mouvement, en vérifiant à chaque tick ses collisions avec les murs et la raquette. 
+
+\paragraph{}
+Lors d’un rebond sur la raquette, l’angle de réflexion est ajusté en fonction du point d’impact pour diversifier la trajectoire. La balle détecte aussi si elle sort par le bas de l’écran et déclenche alors l’état de chute, ce qui signale au contrôleur de décrémenter une vie et de la réinitialiser sur la raquette. Elle propose des méthodes pour être relancée, réinitialisée, marquée en chute ou placée en mode CATCH, ce dernier étant géré par un timer de relâche automatique. Enfin, la balle prend en charge le retour progressif à sa vitesse initiale après un ralentissement causé par le bonus SLOW\_DOWN.
+
+\paragraph{}
+En résumé, \colorbox{gray!20}{\texttt{Ball}} encapsule la physique de la balle, ses états et ses effets spéciaux, tandis que la détection des collisions avec les briques reste de la responsabilité du \colorbox{gray!20}{\texttt{GameModel}}.
+
+
+
+% ==================================================================================
+
+
+\newpage
+\subsection{Classe \texttt{Brick (brique du jeu)}}
+
+\begin{lstlisting}
+class Brick : public Rectangle {
+ public:
+  Brick(const Point& position, float w, float h, int score, BonusType bonus = BonusType::NONE);
+  void destroy();
+  bool isDestroyed() const;
+  bool getSecondLife() const;
+  void setSecondLife(bool value);
+  int  getScore() const;
+  BonusType getBonusType() const;
+  // ...
+};
+
+\end{lstlisting}
+
+\subsubsection* {Rôle}
+La classe \colorbox{gray!20}{\texttt{Brick}} représente une brique du casse-briques et hérite de \colorbox{gray!20}{\texttt{Rectangle}} afin de bénéficier des fonctions de collision nécessaires pour détecter les impacts avec la balle. Chaque brique possède un score, un type de bonus éventuel, ainsi que deux indicateurs d’état : \colorbox{gray!20}{\texttt{destroyed}} pour savoir si elle est détruite et \colorbox{gray!20}{\texttt{secondLife}} pour gérer les briques renforcées qui nécessitent deux coups avant d’être éliminées. Le constructeur initialise ces valeurs selon les paramètres (par exemple, une brique renforcée est créée avec \colorbox{gray!20}{\texttt{secondLife=true}}, une brique indestructible peut être associée au score \colorbox{gray!20}{\texttt{GOLD\_BRICK}}). 
+
+\paragraph{}
+Ses méthodes sont simples et limitées à la gestion de son état : \colorbox{gray!20}{\texttt{destroy()}} marque la brique comme détruite, \colorbox{gray!20}{\texttt{setSecondLife(false)}} supprime la résistance d’une brique renforcée après le premier impact, et des getters permettent d’accéder à ses attributs (score, bonus, état détruit ou non, seconde vie). La classe elle-même reste passive : elle ne prend aucune décision et n’interagit pas directement avec la balle ou les bonus.
+
+\paragraph{}
+C’est le \colorbox{gray!20}{\texttt{GameModel}} qui orchestre la logique de destruction, l’attribution des points, l’éventuelle création d’un bonus, et qui décide de la façon dont l’état de la brique influe sur le déroulement du jeu.
+
+
+% ==================================================================================
+
+
+
+\subsection{Classe \texttt{Bonus et sous-classes de Bonus}}\textbf{}
+
+
+\begin{lstlisting}
+enum class BonusType { NONE, LASER, EXPAND, CATCH, SLOW_DOWN, SPLIT, EXTRA_LIFE };
+
+class Bonus : public Rectangle {
+ public:
+  Bonus(const Point& pos, float w, float h, BonusType type, float fallSpeed);
+  void update();
+  void applyEffect(GameModel& model);
+  bool isActive() const;
+  bool isCollected() const;
+  BonusType getType() const;
+  // ...
+};
+
+class Expand    : public Bonus { public: void applyEffect(GameModel& m) override; /*...*/ };
+class Catch     : public Bonus { public: void applyEffect(GameModel& m) override; /*...*/ };
+class Laser     : public Bonus { public: void applyEffect(GameModel& m) override; /*...*/ };
+class SlowDown  : public Bonus { public: void applyEffect(GameModel& m) override; /*...*/ };
+class Split     : public Bonus { public: void applyEffect(GameModel& m) override; /*...*/ };
+class ExtraLife : public Bonus { public: void applyEffect(GameModel& m) override; /*...*/ };
+
+
+\end{lstlisting}
+
+\newpage
+
+\subsubsection* {Rôle}
+
+
+La classe \colorbox{gray!20}{\texttt{Bonus}} est une classe abstraite qui représente un bonus libéré par une brique et pouvant être ramassé par la raquette. Elle hérite de \colorbox{gray!20}{\texttt{Rectangle}} afin d’être détectée comme un petit objet rectangulaire tombant verticalement et d’interagir avec la raquette par collision. Chaque bonus possède un type, une vitesse de chute et deux états : \colorbox{gray!20}{\texttt{active}} pour indiquer qu’il est en train de tomber et \colorbox{gray!20}{\texttt{collected}} pour signaler qu’il a été ramassé. Sa méthode \colorbox{gray!20}{\texttt{update()}} gère simplement la descente en mettant à jour la position en fonction de la vitesse.
+\paragraph{}
+Les effets sont définis dans les sous-classes, chacune redéfinissant \colorbox{gray!20}{\texttt{applyEffect(GameModel\&)}}. Ainsi, \colorbox{gray!20}{\texttt{Expand}} agrandit la raquette et active un timer, \colorbox{gray!20}{\texttt{Catch}} permet à la balle de se coller à la raquette, \colorbox{gray!20}{\texttt{Laser}} active le mode laser sur la raquette, \colorbox{gray!20}{\texttt{SlowDown}} ralentit fortement la balle avant qu’elle ne retrouve sa vitesse normale, \colorbox{gray!20}{\texttt{Split}} devait dupliquer la balle mais n’est pas réellement implémenté, et \colorbox{gray!20}{\texttt{ExtraLife}} ajoute une vie supplémentaire au joueur.
+\paragraph{}
+Le \colorbox{gray!20}{\texttt{GameModel}} gère l’ensemble du cycle de vie des bonus : il les instancie depuis les données de niveau, les fait tomber à chaque frame, détecte leur collision avec la raquette et applique leur effet en appelant la méthode adéquate. Il conserve aussi en mémoire le bonus actuellement actif pour pouvoir l’annuler ou le remplacer par un nouveau (par exemple rétrécir la raquette après la fin d’un bonus \colorbox{gray!20}{\texttt{EXPAND}}).
+\paragraph{}
+En somme, \colorbox{gray!20}{\texttt{Bonus}} fournit une structure générique pour représenter et faire tomber les bonus, tandis que la logique propre à chaque effet est encapsulée dans les sous-classes spécialisées, et que le \colorbox{gray!20}{\texttt{GameModel}} centralise leur gestion et leur durée de vie.
+
+
+
+
+% ==================================================================================
+\newpage
+
+\subsection{\texttt{Autres classes utilitaire }}
+\begin{itemize}
+    \item  \textbf{InputAction / InputActionType} : énumère les actions utilisateur (clavier, souris, timer, etc.) et associe des données (ex. coordonnées souris). Produites par l’adaptateur d’entrée, consommées par le \colorbox{gray!20}{\texttt{GameController}}.
+
+    \item \textbf{AllegroInputAdapter} : convertit les événements bruts Allegro (clavier, souris, timer, fenêtre) en \colorbox{gray!20}{\texttt{InputAction}} abstraites (ex. touche gauche → \colorbox{gray!20}{\texttt{MoveLeft}}, timer → \colorbox{gray!20}{\texttt{TimerTick}}).
+
+    \item \textbf{AllegroConfig / UIConfig} : regroupent les ressources et paramètres du jeu.
+            \begin{itemize}
+                    \item  \colorbox{gray!20}{\texttt{AllegroConfig}} : bas niveau (display, event queue, timer, images, sons).
+                    \item  \colorbox{gray!20}{\texttt{UIConfig}} : interface (dimensions briques, positions UI, boutons, etc.).
+            \end{itemize}
+    \item \textbf{Shapes} (Circle, Rectangle) : primitives géométriques et collisions AABB. Ball hérite de Circle, Spaceship/Brick de Rectangle.
+
+    \item \textbf{Vector} (Vector.hpp) : utilitaire géométrique pour optimiser la détection de collisions (points d’impact, côtés touchés, rebonds précis).
+    
+\end{itemize}
+
+
+% ==================================================================================
+
+
+\newpage
+\section{Logique du jeu } (du lancement au premier impact de brique)
+
+
+
+\paragraph{}
+Au lancement, main()  construit \colorbox{gray!20}{\texttt{Engine}} puis appelle \colorbox{gray!20}{\texttt{Engine::run()}}. Le constructeur d’\colorbox{gray!20}{\texttt{Engine}} initialise \colorbox{gray!20}{\texttt{AllegroConfig}} (création de la fenêtre, event queue, timer 60 FPS, chargement des bitmaps/samples) et \colorbox{gray!20}{\texttt{UIConfig}} (polices, chemins d’assets), recense la liste des niveaux (par ex. via un scan de  assets/data/level\_*.json ) et lève immédiatement une exception si la liste est vide. L’invariant à ce stade est: « config OK, niveaux non vides, event queue et timer prêts ». 
+
+\paragraph{}
+L’entrée dans \colorbox{gray!20}{\texttt{Engine::run()}} déclenche l’écran d’accueil via \colorbox{gray!20}{\texttt{handleStartMenu()}} qui, à l’aide de \colorbox{gray!20}{\texttt{GameView::menuButton()}}, affiche un fond, du texte et deux boutons Play/Quit. Tant que l’utilisateur n’a pas choisi, la boucle d’attente consomme les événements Allegro et ne progresse pas dans le jeu; au clic sur Quit, \colorbox{gray!20}{\texttt{handleStartMenu()}} retourne \texttt{false} et \colorbox{gray!20}{\texttt{run()}} termine; au clic sur Play, elle retourne \texttt{true}, \texttt{showMenu} passe à \texttt{false} (invariant: on n’affichera plus ce menu pour ce run) et l’index de niveau courant est fixé à \texttt{0}. 
+\paragraph{}
+
+L’\colorbox{gray!20}{\texttt{Engine}} instancie alors le triplet MVC pour le niveau courant: \colorbox{gray!20}{\texttt{GameModel}} reçoit le chemin du JSON de niveau et, dans son initialisation, crée la grille de \colorbox{gray!20}{\texttt{Brick}} (positions mondes et métadonnées score/bonus/second life), initialise \colorbox{gray!20}{\texttt{Spaceship}} (position X centrée en bas, largeur/hauteur selon \colorbox{gray!20}{\texttt{settings.json}}, \texttt{health} initial), et place \colorbox{gray!20}{\texttt{Ball}} juste au-dessus de la raquette, centrée horizontalement, avec \texttt{moving=false}, \texttt{falling=false}, une direction initiale normalisée vers le haut \texttt{INITIAL\_DIRECTION} et une \texttt{speed} nominale. L’invariant critique côté modèle est: « aucun bonus actif, score=0, toutes les briques non détruites, balle attachée à la raquette ». \colorbox{gray!20}{\texttt{GameView}} est construit avec une référence vers le modèle et prépare les ressources d’affichage/son nécessaires; \colorbox{gray!20}{\texttt{GameController}} est construit avec (modèle, vue, liste de niveaux) et réinitialise ses états internes (par ex. \texttt{tempDirection} ← direction initiale de la balle). On entre alors dans \colorbox{gray!20}{\texttt{Engine::runGameLevel()}}: le timer (60 FPS) est démarré, une musique de fond optionnelle est lancée via \colorbox{gray!20}{\texttt{GameView::playSound(..., loop=true)}} et l’\colorbox{gray!20}{\texttt{Engine}} commence une boucle \texttt{while (running)} qui bloque sur \texttt{al\_wait\_for\_event(queue, \&ev)}; chaque événement brut est traduit par \colorbox{gray!20}{\texttt{AllegroInputAdapter}} en \colorbox{gray!20}{\texttt{InputAction}} (par exemple \texttt{TimerTick}, \texttt{MoveLeft}, \texttt{MoveRight}, \texttt{MouseMove}, \texttt{Launch}, \texttt{Reset}, \texttt{Quit}, \texttt{LevelChange}). 
+
+\paragraph{}
+
+Pour chaque action, \colorbox{gray!20}{\texttt{Engine::processAction(action)}} s’exécute: si \texttt{Quit}, on sort proprement (arrêt musique, retour \texttt{false}); si \texttt{TimerTick}, on appelle \colorbox{gray!20}{\texttt{controller.update()}} puis \colorbox{gray!20}{\texttt{view\.render()}}; si c’est une action de contrôle, on appelle \colorbox{gray!20}{\texttt{controller.handleAction(action)}} (effet immédiat sur le modèle, rendu au tick suivant). Après traitement, l’\colorbox{gray!20}{\texttt{Engine}} vérifie les conditions terminales via \colorbox{gray!20}{\texttt{GameModel::win()}} et \colorbox{gray!20}{\texttt{lose()}}; en cas de victoire, la musique est stoppée, un écran de victoire est joué; en cas de défaite, un écran rejouer/quitter apparaît et le score global peut être réinitialisé. Tant que rien n’est terminal, la boucle continue.
+
+
+\paragraph{}
+Dans l’état initial du niveau (balle attachée), tant que \texttt{Launch} n’a pas été reçu, \colorbox{gray!20}{\texttt{controller.update()}} aligne la balle sur la raquette par la surcharge \colorbox{gray!20}{\texttt{Ball::move(spaceshipCenter, spaceshipH)}}: la balle est rendue collée, \texttt{Ball::checkCollisions(...)} ne déclenche rien (pas de mur, pas de raquette — on colle au-dessus), et la direction n’est pas modifiée. Dès que le joueur presse Espace, l’événement clavier est converti en \texttt{InputAction{Launch}}; \colorbox{gray!20}{\texttt{controller.handleAction(Launch)}} appelle \colorbox{gray!20}{\texttt{ball.setMoving(true)}} et ne touche ni à la position ni à la direction (invariant: la direction reste \texttt{INITIAL\_DIRECTION} vers le haut; cela garantit un lancement déterministe). Le tick suivant (provenant du timer) appelle \colorbox{gray!20}{\texttt{controller.update()}}; 
+
+\paragraph{}
+
+L’ordre interne strict est: (1) \colorbox{gray!20}{\texttt{model.checkCollisions()}} sur la scène bricks/balle pour ce pas de temps (ray-cast ou balayage discret le long du vecteur de déplacement théorique du tick), (2) \colorbox{gray!20}{\texttt{model.updateBonuses()}} et \colorbox{gray!20}{\texttt{updateTimerBonuses()}} (à ce stade, aucun effet), (3) détection d’un changement de direction par comparaison \texttt{tempDirection} vs direction courante via \colorbox{gray!20}{\texttt{model.checkDirectionChanged(tempDirection)}} — ici attendu \texttt{false} car pas de rebond encore —, puis (4) déplacement effectif de la balle via la surcharge \colorbox{gray!20}{\texttt{Ball::move(spaceshipCenter, spaceshipW, spaceshipH)}} puisque \texttt{ball.isMoving()==true}. Ce déplacement applique la cinématique \texttt{pos += dir * speed * dt\_tick} avec normalisation de \texttt{dir} garantie, appelle \colorbox{gray!20}{\texttt{Ball::checkCollisions(...)}} pour murs/raquette uniquement, et, dans cette phase initiale, ne rencontre ni mur ni raquette (on vient de quitter la raquette et on est loin du plafond), donc la direction reste inchangée. 
+
+\paragraph{}
+À la fin de \colorbox{gray!20}{\texttt{update()}}, \texttt{tempDirection} est synchronisé sur la direction actuelle pour le tick suivant (invariant de cohérence sonore: “un seul son par changement de direction effectif”). \colorbox{gray!20}{\texttt{view\.render()}} lit l’état du modèle et dessine: briques intactes, raquette, balle un peu plus haut, score encore nul.
+
+
+\paragraph{}
+Ce cycle \texttt{TimerTick → update → render} se répète; la balle progresse verticalement vers la zone de briques. Dès que, pour un tick donné, la distance projetée de déplacement de la balle intercepte la première brique de la grille dans \texttt{dir} (le modèle la trouve par ray-cast ou par itération spatiale ordonnée, peu importe, l’invariant est « la première brique atteinte le long du segment de déplacement de ce tick est sélectionnée de façon déterministe »), \colorbox{gray!20}{\texttt{model.checkCollisions()}} retourne un \texttt{CollisionResult} contenant un pointeur vers la \colorbox{gray!20}{\texttt{Brick}} touchée et un \texttt{hitSide} précis (face haute/basse/gauche/droite, coin possible). 
+
+\paragraph{}
+
+Le modèle appelle alors \colorbox{gray!20}{\texttt{handleBrickHit(brick)}}: si la brique est indestructible (\texttt{score==GOLD\_BRICK}) elle est laissée intacte; si \texttt{secondLife==true}, la résistance est consommée via \colorbox{gray!20}{\texttt{brick.setSecondLife(false)}} sans score ni destruction; sinon, \colorbox{gray!20}{\texttt{brick.destroy()}} est appelée, \texttt{score += brick.score()} est cumulé, et un bonus éventuel est spawné (\texttt{bonusType!=NONE}) et ajouté à \texttt{model.bonuses}. Immédiatement après, \colorbox{gray!20}{\texttt{handleBallRebound(direction, hitSide)}} calcule la nouvelle direction en inversant la composante adéquate ($y$ pour un impact sur face horizontale, $x$ pour une face verticale; double inversion sur coin), avec clamp d’angle si nécessaire (bornes \texttt{BOUNCE\_MIN\_DEG}/\texttt{MAX} pour éviter les trajectoires dégénérées).
+
+
+\paragraph{}
+
+L’invariant post-collision est: « la brique a un état cohérent (détruite ou pas), le score est à jour, la direction de la balle est mise à jour avant tout rendu ». \colorbox{gray!20}{\texttt{model.updateBonuses()}} et \colorbox{gray!20}{\texttt{updateTimerBonuses()}} s’exécutent ensuite; juste après une destruction sans bonus il n’y a rien à faire, sinon un nouvel objet \colorbox{gray!20}{\texttt{Bonus}} actif descend déjà à la frame suivante. Le contrôleur compare alors \texttt{tempDirection} à la nouvelle direction; le changement étant effectif, un son de rebond/casse est déclenché par la vue, puis \colorbox{gray!20}{\texttt{Ball::move(...)}} avance la balle selon la direction post-rebond pour la portion de déplacement de ce tick. 
+
+
+\paragraph{}
+
+Finalement, \colorbox{gray!20}{\texttt{view\.render()}} peint la scène avec la brique désormais non dessinée (ou dessinée en état « cassée » selon choix), la balle proche du point d’impact et le score mis à jour; si un bonus a été spawné, il apparaît à la position de l’ancienne brique avec \texttt{active=true}.
+
+\paragraph{}
+Conclusion: le chemin exact du lancement au premier impact est donc 
+
+\paragraph{}
+
+\textbf{main → Engine::run → handleStartMenu → (MVC init) → runGameLevel → (TimerTick/Inputs)} jusqu’à \textbf{controller.handleAction(Launch) → controller.update()} où, 
+
+\paragraph{}
+au premier tick de collision, \colorbox{gray!20}{\texttt{model.checkCollisions()}} sélectionne la première brique interceptée, \colorbox{gray!20}{\texttt{handleBrickHit}} met à jour score/état/bonus, \colorbox{gray!20}{\texttt{handleBallRebound}} ajuste la direction avec bornes d’angles, \colorbox{gray!20}{\texttt{checkDirectionChanged}} déclenche le son, \colorbox{gray!20}{\texttt{Ball::move}} finalise la position de fin de tick, puis \colorbox{gray!20}{\texttt{view\.render}} reflète visuellement l’ensemble — garantissant des invariants de cohérence (un seul rebond par tick côté modèle, direction normalisée, score monotone, état des briques idempotent).
+
+% ==================================================================================
+
+
+\section{Utilisation du modèle Modèle-Vue-Contrôleur}
+
+Le projet applique clairement le modèle MVC. Le \textbf{modèle} (GameModel, Ball, Spaceship, Brick, Bonus) contient uniquement l’état et la logique du jeu sans dépendre de l’affichage ou des entrées. La \textbf{vue} (GameView, AllegroConfig, UIConfig) se limite au rendu graphique et sonore en lisant l’état du modèle, sans jamais le modifier. Le \textbf{contrôleur} (GameController, orchestré par Engine) relie les entrées utilisateur au modèle, déclenche les mises à jour et demande à la vue de refléter les changements. Cette séparation stricte garantit modularité et clarté du code.
+
+
+
+\end{document}
