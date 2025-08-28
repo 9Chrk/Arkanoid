@@ -14,15 +14,27 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
 
 ---
 
+## Captures d’écran
+
+| Menu principal | Gameplay | Gameplay 2 |
+|----------------|----------|------------|
+| ![Menu principal](assets/screenshots/start_menu.png) | ![Gameplay](assets/screenshots/game_level.png) | ![Gameplay 2](assets/screenshots/game_level_1.png) |
+
+| Restart | Game Over | Victoire |
+|---------|-----------|----------|
+| ![Restart](assets/screenshots/lose_menu.png) | ![Game Over](assets/screenshots/win_level_menu.png) | ![Victoire](assets/screenshots/win_game_menu.png) |
+
+---
+
 ## Sommaire
 
-- [Fonctionnalités principales](#-fonctionnalités-principales)
-- [Prérequis](#-prérequis)
-- [Compilation &amp; Installation](#-compilation--installation)
-- [Lancement et exemples d&#39;utilisation](#-lancement-et-exemples-dutilisation)
-- [Description du Makefile](#-description-du-makefile)
-- [Organisation du projet](#-organisation-du-projet)
-- [Auteurs](#-auteurs)
+- [Fonctionnalités principales](#fonctionnalités-principales)
+- [Prérequis](#prérequis)
+- [Compilation &amp; Installation](#️-compilation--installation)
+- [Lancement et exemples d'utilisation](#lancement-et-exemples-dutilisation)
+- [Description du Makefile](#description-du-makefile)
+- [Organisation du projet](#organisation-du-projet)
+- [Auteurs](#auteurs)
 
 ---
 
