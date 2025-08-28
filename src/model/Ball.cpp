@@ -5,12 +5,12 @@ using namespace std;
 Ball::Ball()
     : Circle({0, 0}, 0), direction(INITIAL_DIRECTION), speed(0),
       originalSpeed(0), moving(false), falling(false),
-      catchActive(false), catchreleaseTimer(0), restoringSpeed(false) {}
+      catchActive(false), catchreleaseTimer(0) {}
 
 Ball::Ball(float radius, float speed)
     : Circle({0, 0}, radius), direction(INITIAL_DIRECTION), speed(speed),
       originalSpeed(speed), moving(false), falling(false),
-      catchActive(false), catchreleaseTimer(0), restoringSpeed(false) {}
+      catchActive(false), catchreleaseTimer(0) {}
 // Movement
 
 void Ball::move(const Point& spaceship, float h) {
@@ -76,11 +76,10 @@ void Ball::updateCatchReleaseTimer() {
 }
 
 void Ball::updateSpeed() {
-    if (restoringSpeed && speed < originalSpeed) {
+    if (speed < originalSpeed) {
         speed += originalSpeed * RESTORE_SPEED_RATE; // gradually restore speed
         if (speed > originalSpeed) {
             speed = originalSpeed;
-            restoringSpeed = false;
         }
     }
 }

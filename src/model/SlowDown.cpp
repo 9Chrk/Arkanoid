@@ -10,5 +10,4 @@ SlowDown::~SlowDown() = default;
 void SlowDown::applyEffect(GameModel& model) {
   Ball& ball = model.getBall();
   ball.setSpeed(ball.getSpeed() * SLOW_DOWN_FACTOR);
-  ball.setRestoringSpeed(true);
 }
