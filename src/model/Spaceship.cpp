@@ -46,7 +46,7 @@ void Spaceship::damage()  { health--; }
 // Méthodes utilitaires
 void Spaceship::updateExpandTimer() {
     if (expandTimer > 0.0f) {
-        expandTimer -= 0.1f;
+        expandTimer -= TIMER_DECREMENT;
         if (expandTimer <= 0.0f) {
             setWidth(originalWidth);
         }
