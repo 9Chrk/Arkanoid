@@ -1,6 +1,5 @@
 #include "model/Bonus/Catch.hpp"
 #include "model/GameModel.hpp"
-#include "core/constants.hpp"
 
 Catch::Catch(const Point& position, float w, float h, float fallSpeed)
      : Bonus(position, w, h, BonusType::CATCH, fallSpeed) {}
