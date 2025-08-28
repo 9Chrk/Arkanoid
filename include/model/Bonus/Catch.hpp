@@ -1,6 +1,7 @@
 #pragma once
 #include "Bonus.hpp"
 
+
 class Catch : public Bonus {
  public:
   Catch(const Point& position, float w, float h, float fallSpeed);

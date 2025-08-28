@@ -24,6 +24,7 @@ class GameModel {
   int score, highscore;                 // Current score and high score
   string levelFile;                     // Level file
 
+  
   /* ############## Game entities ############## */
   Ball                                ball;       // Ball
   Spaceship                           spaceship;  // Spaceship
@@ -31,9 +32,9 @@ class GameModel {
   vector<shared_ptr<Bonus>>           bonuses;    // Active bonuses
   BonusType activeBonus = BonusType::NONE;        // Active bonus type
 
-  /**
-   * @brief Structure used to store collision results
-   */
+  
+  /// @brief Structure used to store collision results
+ 
   struct CollisionResult {
     Brick* hitBrick;    // Hit brick
     int   hitSide;      // Side hit
@@ -41,12 +42,14 @@ class GameModel {
 
     CollisionResult() : hitBrick(nullptr), hitSide(-1), distance(INFINITY) {}
   };
+  
 
   /* ############## Initialization methods ############## */
   void initializeBall();        // Initialize the ball
   void initializeSpaceship();   // Initialize the spaceship
   void initializeBricks();      // Initialize the bricks
 
+  
   /* ############## Utility methods ############## */
   std::pair<std::string, std::string> splitAtSeparator(const std::string& str);
 
@@ -119,6 +122,7 @@ class GameModel {
    */
   GameModel(const string& levelFile, int score);
 
+  
   /* ############## Game management methods ############## */
 
   /**
@@ -127,16 +131,14 @@ class GameModel {
    */
   void checkCollisions();
 
-  /**
-   * @brief Score management
-   */
+  /// @brief Score management
+  
   void saveHighScore();     // Save the best score
   void resetHighScore();    // Reset the best score
   void resetScore();        // Reset the current score
 
-  /**
-   * @brief Bonus management
-   */
+  /// @brief Bonus management
+  
   void updateBonuses();         // Update bonuses state
   void updateTimerBonuses();    // Update bonus timers
   BonusType getActiveBonus() const { return activeBonus; }
@@ -153,6 +155,7 @@ class GameModel {
    */
   bool checkDirectionChanged(Point& tempDirection) const;
 
+  
   /* ############## Accessors ############## */
 
   // Simple getters
@@ -174,3 +177,4 @@ class GameModel {
   bool win()  const;  // Check if the player has won
   bool lose() const;  // Check if the player has lost
 };
+

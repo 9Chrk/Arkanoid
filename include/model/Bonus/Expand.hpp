@@ -1,6 +1,7 @@
 #pragma once
 #include "Bonus.hpp"
 
+
 class Expand : public Bonus {
  public:
   Expand(const Point& position, float w, float h, float fallSpeed);

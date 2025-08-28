@@ -18,16 +18,13 @@ class Ball : public Circle {
   float originalSpeed;    // Original speed (for restoration)
 
   // Ball states
-  bool  moving;           // In motion or stationary
-  bool  falling;          // Falling out of the screen
-  bool  catchActive;      // Catch mode enabled
+  bool  moving;            // In motion or stationary
+  bool  falling;           // Falling out of the screen
+  bool  catchActive;       // Catch mode enabled
   float catchreleaseTimer; // Timer to release the ball
-  bool  restoringSpeed;   // Restoring speed
+  bool  restoringSpeed;    // Restoring speed
 
  public:
-  /**
-   * @brief Constructors
-   */
   Ball();
   Ball(float radius, float speed);
 
@@ -60,14 +57,14 @@ class Ball : public Circle {
   /// @brief Reset direction and movement.
   void reset();
 
-  /**
-   * @brief Timer and special effects management
-   */
+  /// @brief Timer and special effects management
+
   void updateCatchReleaseTimer();  // Update the ball release timer
   void updateSpeed();              // Gradually update speed
   void startRestoreSpeed();        // Begin speed restoration
   void stopRestoreSpeed();         // Stop speed restoration
 
+  
   /* ############## Accessors ############## */
 
   // Getters
@@ -85,5 +82,5 @@ class Ball : public Circle {
   void setSpeed(float newSpeed);
   void setCatchActive(bool active);
   void setCatchReleaseTimer(float time);
-  void setOriginalSpeed(float origSpeed);
+  void setOriginalSpeed();
 };

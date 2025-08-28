@@ -1,6 +1,7 @@
 #pragma once
 #include "core/utils.hpp"
 
+
 /**
  * @brief Class representing the player's spaceship
  *
@@ -20,12 +21,10 @@ class Spaceship : public Rectangle {
   float expandTimer;    // Timer for the expansion effect
 
  public:
-  /**
-   * @brief Constructors
-   */
   Spaceship();
   Spaceship(const Point& position, float w, float h, float speed, int health);
 
+  
   /* ############## Movement functions ############## */
 
   /**
@@ -40,6 +39,7 @@ class Spaceship : public Rectangle {
    */
   void move(const Point& mousePosition);
 
+  
   /* ############## State modification ############## */
 
   /**
@@ -79,6 +79,7 @@ class Spaceship : public Rectangle {
    */
   void updateExpandTimer();
 
+  
   /* ############## Accessors ############## */
 
   // Getters

@@ -117,14 +117,19 @@ void Ball::updateSpeed() {
     }
 }
 
-/* ############## Accessors ############## */
+// TODO
+void Ball::startRestoreSpeed() {}
+void Ball::stopRestoreSpeed() {}
+
+
+/* ############## Accesseurs ############## */
 
 // Getters
-[[gnu::pure]] Point Ball::getDirection() const { return direction; }
-[[gnu::pure]] float Ball::getSpeed()     const { return speed;     }
-[[gnu::pure]] bool  Ball::isMoving()     const { return moving;    }
-[[gnu::pure]] bool  Ball::isFalling()    const { return falling;   }
-[[gnu::pure]] bool  Ball::isCatchActive() const { return catchActive; }
+[[gnu::pure]] Point Ball::getDirection()     const { return direction; }
+[[gnu::pure]] float Ball::getSpeed()         const { return speed;     }
+[[gnu::pure]] bool  Ball::isMoving()         const { return moving;    }
+[[gnu::pure]] bool  Ball::isFalling()        const { return falling;   }
+[[gnu::pure]] bool  Ball::isCatchActive()    const { return catchActive; }
 [[gnu::pure]] float Ball::getOriginalSpeed() const { return originalSpeed; }
 
 // Setters
@@ -134,3 +139,4 @@ void Ball::setDirection(const Point& newDirection) { direction = newDirection; }
 void Ball::setSpeed(float newSpeed) { speed = newSpeed; }
 void Ball::setCatchActive(bool isActive) { catchActive = isActive;}
 void Ball::setCatchReleaseTimer(float time) { catchreleaseTimer = time; }
+void Ball::setOriginalSpeed() { speed = originalSpeed; };
