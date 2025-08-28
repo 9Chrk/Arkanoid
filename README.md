@@ -6,7 +6,7 @@
 
 ---
 
-## Description
+## 📖 Description
 
 Arkanoid est une réimplémentation moderne du célèbre jeu de casse-briques **Arkanoid**, développée en **C++20** avec la bibliothèque multimédia **Allegro 5**.
 Le joueur contrôle une raquette (Spaceship) pour renvoyer une balle et détruire toutes les briques à l’écran.
@@ -14,14 +14,14 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
 
 ---
 
-## Captures d’écran
+## 📸 Captures d’écran
 
-| Menu principal | Gameplay | Gameplay 2 |
-|----------------|----------|------------|
+| Menu principal                                     | Gameplay                                     | Gameplay 2                                       |
+| -------------------------------------------------- | -------------------------------------------- | ------------------------------------------------ |
 | ![Menu principal](assets/screenshots/start_menu.png) | ![Gameplay](assets/screenshots/game_level.png) | ![Gameplay 2](assets/screenshots/game_level_1.png) |
 
-| Restart | Game Over | Victoire |
-|---------|-----------|----------|
+| Restart                                    | Game Over                                         | Victoire                                        |
+| ------------------------------------------ | ------------------------------------------------- | ----------------------------------------------- |
 | ![Restart](assets/screenshots/lose_menu.png) | ![Game Over](assets/screenshots/win_level_menu.png) | ![Victoire](assets/screenshots/win_game_menu.png) |
 
 ---
@@ -31,14 +31,14 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
 - [Fonctionnalités principales](#fonctionnalités-principales)
 - [Prérequis](#prérequis)
 - [Compilation &amp; Installation](#️-compilation--installation)
-- [Lancement et exemples d'utilisation](#lancement-et-exemples-dutilisation)
+- [Lancement et exemples d&#39;utilisation](#lancement-et-exemples-dutilisation)
 - [Description du Makefile](#description-du-makefile)
 - [Organisation du projet](#organisation-du-projet)
 - [Auteurs](#auteurs)
 
 ---
 
-## Fonctionnalités principales
+## ⚡ Fonctionnalités principales
 
 - **Niveaux multiples** : 5 niveaux par défaut (0 à 4), définis en JSON.
 - **Briques variées** :
@@ -63,7 +63,7 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
 
 ---
 
-## Prérequis
+## 🛠️ Prérequis
 
 - Compilateur **C++20** (g++ ≥ 10 ou clang++ équivalent).
 - **Allegro 5** + modules :
@@ -94,7 +94,7 @@ Aucune installation supplémentaire n’est nécessaire.
 
 ---
 
-## Lancement et exemples d'utilisation
+## 🎮 Lancement et exemples d'utilisation
 
 ```bash
 ./Arkanoid
@@ -116,7 +116,7 @@ Aucune installation supplémentaire n’est nécessaire.
 
 ---
 
-## Description du Makefile
+## 📂 Description du Makefile
 
 - **all** (par défaut) → nettoyage + compilation (`pkg-config`).
 - **clean** → supprime `obj/` + exécutable.
@@ -130,7 +130,7 @@ Aucune installation supplémentaire n’est nécessaire.
 
 ---
 
-## Organisation du projet
+## 🗂️ Organisation du projet
 
 ```text
 Arkanoid/
@@ -244,10 +244,10 @@ Arkanoid/
 
 ---
 
-## Auteurs
+## 👤 Auteurs
 
 - **Cherkaoui Jawad (576517)**
 
 ---
 
-✨ Projet académique – ULB
+ Projet académique – ULB
