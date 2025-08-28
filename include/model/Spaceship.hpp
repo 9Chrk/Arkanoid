@@ -2,90 +2,90 @@
 #include "core/utils.hpp"
 
 /**
- * @brief Classe représentant le vaisseau contrôlé par le joueur
+ * @brief Class representing the player's spaceship
  *
- * Le vaisseau se déplace horizontalement en bas de l'écran et permet
- * de faire rebondir la balle. Il peut recevoir divers bonus modifiant
- * ses caractéristiques (taille, laser, etc.).
+ * The spaceship moves horizontally at the bottom of the screen and
+ * allows the ball to bounce off it. It can receive various bonuses
+ * that modify its properties (size, laser, etc.).
  */
 class Spaceship : public Rectangle {
  private:
-  // Propriétés du vaisseau
-  int health;            // Points de vie
-  float speed;           // Vitesse de déplacement
+  // Spaceship properties
+  int   health;         // Hit points
+  float speed;          // Movement speed
 
-  // États et bonus
-  bool laserActive;      // Mode laser activé
-  float originalWidth;   // Largeur d'origine (pour restauration)
-  float expandTimer;     // Minuteur pour l'effet d'agrandissement
+  // States and bonuses
+  bool  laserActive;    // Laser mode enabled
+  float originalWidth;  // Original width (for restoration)
+  float expandTimer;    // Timer for the expansion effect
 
  public:
   /**
-   * @brief Constructeurs
+   * @brief Constructors
    */
   Spaceship();
   Spaceship(const Point& position, float w, float h, float speed, int health);
 
-  /* ############## Fonctions de mouvement ############## */
+  /* ############## Movement functions ############## */
 
   /**
-   * @brief Déplace le vaisseau dans la direction indiquée
-   * @param dir Direction du mouvement (gauche ou droite)
+   * @brief Move the spaceship in the given direction
+   * @param dir Movement direction (left or right)
    */
   void move(Direction dir);
 
   /**
-   * @brief Déplace le vaisseau à la position de la souris
-   * @param mousePosition Position actuelle de la souris
+   * @brief Move the spaceship to the mouse position
+   * @param mousePosition Current mouse position
    */
   void move(const Point& mousePosition);
 
-  /* ############## Modification d'état ############## */
+  /* ############## State modification ############## */
 
   /**
-   * @brief Définit la largeur du vaisseau
-   * @param newWidth Nouvelle largeur
+   * @brief Set the spaceship width
+   * @param newWidth New width
    */
   void setWidth(float newWidth);
 
   /**
-   * @brief Active ou désactive le mode laser
-   * @param enabled État du laser
+   * @brief Enable or disable laser mode
+   * @param enabled Laser state
    */
   void setLaser(bool enabled);
 
   /**
-   * @brief Définit le minuteur d'agrandissement
-   * @param time Durée en secondes
+   * @brief Set the expansion timer
+   * @param time Duration in seconds
    */
   void setExpandTimer(float time);
-  
+
   /**
-   * @brief Vérifie si la position est valide (dans les limites de l'écran)
-   * @param position Position à vérifier
-   * @return true si la position est valide
+   * @brief Check whether a position is valid (within screen bounds)
+   * @param position Position to check
+   * @return true if the position is valid
    */
   bool validPosition(const Point& position) const;
 
   /**
-   * @brief Gestion de la vie du vaisseau
+   * @brief Manage spaceship health
    */
-  void damage();    // Inflige un point de dégât
-  void addLife();   // Ajoute un point de vie
+  void damage();    // Inflict one point of damage
+  void addLife();   // Add one life
 
   /**
-   * @brief Met à jour le minuteur d'agrandissement
-   * Restaure la taille d'origine quand le temps est écoulé
+   * @brief Update the expansion timer
+   * Restore the original size when the time runs out
    */
   void updateExpandTimer();
 
-  /* ############## Accesseurs ############## */
+  /* ############## Accessors ############## */
 
   // Getters
-  int getHealth() const;           // Nombre de vies restantes
-  bool isDeath()  const;           // Vérifie si le vaisseau est détruit
-  bool hasLaser() const;           // Vérifie si le laser est actif
-  float getSpeed() const;          // Vitesse de déplacement
-  float getExpandTimer() const;    // Temps restant d'agrandissement
-  float getoriginalWidth() const;  // Largeur d'origine
+  int getHealth() const;           // Remaining lives
+  bool isDeath()  const;           // Whether the spaceship is destroyed
+  bool hasLaser() const;           // Whether the laser is active
+  float getSpeed() const;          // Movement speed
+  float getExpandTimer() const;    // Remaining expansion time
+  float getoriginalWidth() const;  // Original width
 };

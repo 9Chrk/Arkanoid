@@ -4,35 +4,35 @@
 
 
 /**
- * @brief Ball handling movement and collisions.
+ * @brief Ball handling movement and collisions
  *
- * Représente la balle dans le jeu Arkanoid qui rebondit sur les murs,
- * la raquette et les briques. Gère également les effets spéciaux comme
- * la capture par la raquette.
+ * Represents the ball in the Arkanoid game that bounces off walls,
+ * the paddle, and the bricks. It also manages special effects such as
+ * being caught by the paddle.
  */
 class Ball : public Circle {
  private:
-  // Propriétés de mouvement
-  Point direction;       // Direction de déplacement (vecteur normalisé)
-  float speed;           // Vitesse actuelle
-  float originalSpeed;   // Vitesse d'origine (pour restauration)
+  // Movement properties
+  Point direction;        // Movement direction (normalized vector)
+  float speed;            // Current speed
+  float originalSpeed;    // Original speed (for restoration)
 
-  // États de la balle
-  bool moving;           // En mouvement ou statique
-  bool falling;          // Tombe hors de l'écran
-  bool catchActive;      // Mode capture activé
-  float catchreleaseTimer; // Minuteur pour relâcher la balle
-  bool restoringSpeed;   // En cours de restauration de vitesse
+  // Ball states
+  bool  moving;           // In motion or stationary
+  bool  falling;          // Falling out of the screen
+  bool  catchActive;      // Catch mode enabled
+  float catchreleaseTimer; // Timer to release the ball
+  bool  restoringSpeed;   // Restoring speed
 
  public:
   /**
-   * @brief Constructeurs
+   * @brief Constructors
    */
   Ball();
   Ball(float radius, float speed);
 
 
-  /* ############## Fonctions de mouvement ############## */
+  /* ############## Movement functions ############## */
 
   /// @brief Place the ball above the spaceship.
   /// @param spaceship Spaceship center.
@@ -46,7 +46,7 @@ class Ball : public Circle {
   void move(const Point& spaceship, float w, float h);
 
 
-  /* ######## Gestion des collisions et états ######## */
+  /* ######## Collision and state handling ######## */
 
   /// @brief Bounce off walls and the spaceship.
   /// @param spaceship Spaceship center.
@@ -61,14 +61,14 @@ class Ball : public Circle {
   void reset();
 
   /**
-   * @brief Gestion des timers et effets spéciaux
+   * @brief Timer and special effects management
    */
-  void updateCatchReleaseTimer();  // Met à jour le timer de relâchement de la balle
-  void updateSpeed();              // Met à jour la vitesse progressivement
-  void startRestoreSpeed();        // Commence la restauration de vitesse
-  void stopRestoreSpeed();         // Arrête la restauration de vitesse
+  void updateCatchReleaseTimer();  // Update the ball release timer
+  void updateSpeed();              // Gradually update speed
+  void startRestoreSpeed();        // Begin speed restoration
+  void stopRestoreSpeed();         // Stop speed restoration
 
-  /* ############## Accesseurs ############## */
+  /* ############## Accessors ############## */
 
   // Getters
   Point getDirection() const;

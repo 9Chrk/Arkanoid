@@ -8,11 +8,11 @@ using namespace std;
 #include "model/Bonus/ExtraLife.hpp"
 
 
-/* ############## Constructeur et initialisation ############## */
+/* ############## Constructor and initialization ############## */
 
 /**
- * @brief Constructeur principal du modèle de jeu
- * Initialise les composants du jeu depuis les fichiers de configuration
+ * @brief Main constructor of the game model
+ * Initializes the game components from configuration files
  */
 GameModel::GameModel(const string& levelFile, int score)
          : settings(loadSettings()), score(score), highscore(settings["highscore"].get<int>()),
@@ -23,7 +23,7 @@ GameModel::GameModel(const string& levelFile, int score)
 }
 
 /**
- * @brief Initialise la balle avec les paramètres du fichier de configuration
+ * @brief Initialize the ball with parameters from the configuration file
  */
 void GameModel::initializeBall()
 {
@@ -34,7 +34,7 @@ void GameModel::initializeBall()
 }
 
 /**
- * @brief Initialise le vaisseau avec les paramètres du fichier de configuration
+ * @brief Initialize the spaceship with parameters from the configuration file
  */
 void GameModel::initializeSpaceship()
 {
@@ -49,8 +49,8 @@ void GameModel::initializeSpaceship()
 }
 
 /**
- * @brief Initialise les briques à partir du fichier de niveau
- * Crée la disposition des briques avec leurs attributs (points, bonus)
+ * @brief Initialize bricks from the level file
+ * Create the layout of bricks with their attributes (points, bonus)
  */
 void GameModel::initializeBricks()
 {
@@ -63,14 +63,17 @@ void GameModel::initializeBricks()
   const int _offset_start_x     = settings["display_offset"]["offset_start_x"].get<int>();
   const int _offset_start_y     = settings["display_offset"]["offset_start_y"].get<int>();
 
-  // Calcul des positions
-  const float offset_x          = static_cast<float>(width + margin);
-  const float offset_y          = static_cast<float>(height + margin);
-  const float total_width       = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
-  const float offset_start_x    = (_offset_start_x > 0) ? static_cast<float>(_offset_start_x) : (GAME_WIDTH - total_width)/2.0f; // center the grid if no offset
-  const float offset_start_y    = static_cast<float>(_offset_start_y);
+  // Compute positions
+    const float offset_x       = static_cast<float>(width + margin);
+    const float offset_y       = static_cast<float>(height + margin);
+    const float total_width    = static_cast<float>(dim_x * width + (dim_x - 1) * margin);
+    // Center the grid if no offset
+    const float offset_start_x =
+        (_offset_start_x > 0) ? static_cast<float>(_offset_start_x)
+                              : (GAME_WIDTH - total_width) / 2.0f;
+    const float offset_start_y = static_cast<float>(_offset_start_y);
 
-  // Création des briques
+    // Create bricks
   for (size_t index = 0; index < bricks_data.size(); ++index) {
     size_t i = index / static_cast<size_t>(dim_x);
     size_t j = index % static_cast<size_t>(dim_x);
@@ -90,8 +93,8 @@ void GameModel::initializeBricks()
 }
 
 /**
- * @brief Divise une chaîne au niveau du séparateur '|'
- * Utilisé pour extraire le score et le type de bonus des briques
+ * @brief Split a string at the '|' separator
+ * Used to extract the score and bonus type from bricks
  */
 pair<string, string> GameModel::splitAtSeparator(const string& str) {
   const size_t pos = str.find('|');
@@ -99,34 +102,34 @@ pair<string, string> GameModel::splitAtSeparator(const string& str) {
   return {str.substr(0, pos), str.substr(pos + 1)};
 }
 
-/* ############## Système de collision ############## */
+/* ############## Collision system ############## */
 
 /**
- * @brief Détecte et gère les collisions de la balle avec les briques
- * Cette fonction centrale trouve la première brique touchée et applique les effets
+ * @brief Detect and handle ball collisions with bricks
+ * This central function finds the first brick hit and applies the effects
  */
 void GameModel::checkCollisions() {
   Point pos = ball.getPosition();
   float speed = ball.getSpeed();
   Point direction = Vector::normalize(ball.getDirection());
   
-  // Optimisation: évite la recherche si pas de collision possible
+  // Optimization: skip search if no collision is possible
   if (shouldSkipCollisionCheck(pos, speed)) return;
 
-  // Trouve la première collision sur le trajet de la balle
+  // Find the first collision along the ball's path
   CollisionResult collision = findClosestCollision(pos, direction, speed);
 
-  // Aucune collision détectée
+  // No collision detected
   if (!collision.hitBrick) return;
 
-  // Gestion de l'impact
-  handleBrickHit(collision.hitBrick);       // Score et destruction
-  handleBallRebound(direction, collision.hitSide);  // Rebond
+  // Handle the impact
+  handleBrickHit(collision.hitBrick);       // Score and destruction
+  handleBallRebound(direction, collision.hitSide);  // Bounce
 }
 
 /**
- * @brief Vérifie si on peut éviter la recherche de collision
- * Optimisation qui évite les calculs inutiles quand la balle est trop basse
+ * @brief Check whether collision search can be skipped
+ * Optimization that avoids unnecessary calculations when the ball is too low
  */
 bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) const {
   const Brick &last = bricks.back();
@@ -134,14 +137,17 @@ bool GameModel::shouldSkipCollisionCheck(const Point& pos, float speed) const {
 }
 
 /**
- * @brief Trouve la collision la plus proche sur la trajectoire de la balle
- * Parcourt toutes les briques actives pour trouver le premier impact
+ * @brief Find the closest collision along the ball's trajectory
+ * Iterates through all active bricks to find the first impact
  */
-GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, const Point& direction, float speed) {
+GameModel::CollisionResult GameModel::findClosestCollision(
+    const Point& pos,
+    const Point& direction,
+    float speed) {
   const vector<Point> collisionPoints = _collisionPoints(pos);
   CollisionResult result;
   
-  // Test de collision pour chaque brique
+  // Test collision for each brick
   for (Brick &brick : bricks) {
     if (brick.isDestroyed()) continue;
     
@@ -154,22 +160,26 @@ GameModel::CollisionResult GameModel::findClosestCollision(const Point& pos, con
 }
 
 /**
- * @brief Teste la collision entre une brique et la trajectoire de la balle
- * Utilise plusieurs points de test autour de la balle pour une détection précise
+ * @brief Test collision between a brick and the ball's trajectory
+ * Uses multiple test points around the ball for precise detection
  */
-GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) const {
+GameModel::CollisionResult GameModel::checkBrickCollision(
+    Brick& brick,
+    const vector<Point>& collisionPoints,
+    const Point& direction,
+    float speed) const {
   CollisionResult result;
   
-  // Teste chaque point de collision
+  // Test each collision point
   for (const Point &p : collisionPoints) {
     Point nextP = {p.x + direction.x * speed, p.y + direction.y * speed};
     pair<Point, int> intersectionResult = brick.getVector().intersection({p, nextP});
     int side = intersectionResult.second;
     
-    // Pas d'intersection
+    // No intersection
     if (side == -1) continue;
     
-    // Trouve la collision la plus proche
+    // Find the closest collision
     float distance = Vector::distance(p, intersectionResult.first);
     if (distance < result.distance) {
       result.hitSide = side;
@@ -181,11 +191,11 @@ GameModel::CollisionResult GameModel::checkBrickCollision(Brick& brick, const ve
 }
 
 /**
- * @brief Gère l'impact avec une brique
- * Met à jour le score et détruit la brique si nécessaire
+ * @brief Handle the impact with a brick
+ * Update the score and destroy the brick if needed
  */
 void GameModel::handleBrickHit(Brick* hitBrick) {
-  // Traitement selon le type de brique
+  // Process according to brick type
   if (hitBrick->getScore() != SECOND_LIFE || !hitBrick->getSecondLife()) {
     if (hitBrick->getScore() != GOLD_BRICK) {
       hitBrick->destroy();
@@ -198,37 +208,37 @@ void GameModel::handleBrickHit(Brick* hitBrick) {
 }
 
 /**
- * @brief Modifie la direction de la balle selon le côté touché
- * Différents rebonds selon que la balle touche un côté horizontal, vertical ou un coin
+ * @brief Modify the ball's direction based on the side hit
+ * Different bounces depending on whether the ball hits a horizontal side, vertical side, or a corner
  */
 void GameModel::handleBallRebound(Point& direction, int hitSide) {
   if (hitSide == 1) {
-    direction.x *= -1;      // Rebond sur côté vertical
+    direction.x *= -1;      // Bounce on vertical side
   } else if (hitSide == 0) {
-    direction.y *= -1;      // Rebond sur côté horizontal
+    direction.y *= -1;      // Bounce on horizontal side
   } else {
-    direction.x *= -1;      // Rebond sur coin (inverse les deux directions)
+    direction.x *= -1;      // Bounce on corner (invert both directions)
     direction.y *= -1;
   }
   ball.setDirection(direction);
 }
 
 /**
- * @brief Crée un bonus quand une brique est détruite
- * Le type de bonus dépend de l'attribut de la brique
+ * @brief Create a bonus when a brick is destroyed
+ * The bonus type depends on the brick attribute
  */
 void GameModel::spawnBonus(const Brick& brick) {
   BonusType type = brick.getBonus();
   if (type == BonusType::NONE) return;
 
-  // Paramètres du bonus
+  // Bonus parameters
   json bonusSettings = settings["bonus"];
   float width  = bonusSettings["width"].get<float>();
   float height = bonusSettings["height"].get<float>();
   float speed  = bonusSettings["speed"].get<float>();
   Point position = brick.getPosition();
 
-  // Création du bonus selon son type
+  // Create the bonus according to its type
   shared_ptr<Bonus> bonus;
   switch (type) {
     case BonusType::LASER:      bonus = make_shared<Laser>(position, width, height, speed); break;
@@ -240,15 +250,15 @@ void GameModel::spawnBonus(const Brick& brick) {
     default: return;
   }
 
-  // Activation et ajout du bonus
+  // Activate and add the bonus
   bonus->setActive(true);
   bonuses.push_back(bonus);
 }
 
-/* ############## Gestion des bonus ############## */
+/* ############## Bonus management ############## */
 
 /**
- * @brief Met à jour tous les bonus actifs et vérifie les collisions avec le vaisseau
+ * @brief Update all active bonuses and check collisions with the spaceship
  */
 void GameModel::updateBonuses() {
     for (auto it = bonuses.begin(); it != bonuses.end(); ) {
@@ -256,14 +266,14 @@ void GameModel::updateBonuses() {
         if (bonus->isActive()) {
             bonus->update();
             if (bonus->intersects(spaceship)) {
-                // Désactiver le bonus précédent avant d'appliquer le nouveau
+                // Disable the previous bonus before applying the new one
                 clearActiveBonus();
 
-                // Appliquer le nouveau bonus
+                // Apply the new bonus
                 bonus->setCollected(true);
                 bonus->applyEffect(*this);
 
-                // Définir ce bonus comme actif
+                // Set this bonus as active
                 setActiveBonus(bonus->getType());
 
                 it = bonuses.erase(it);
@@ -275,7 +285,7 @@ void GameModel::updateBonuses() {
 }
 
 /**
- * @brief Met à jour les minuteurs des bonus actifs
+ * @brief Update timers of active bonuses
  */
 void GameModel::updateTimerBonuses() {
   spaceship.updateExpandTimer();
@@ -284,7 +294,7 @@ void GameModel::updateTimerBonuses() {
 }
 
 /**
- * @brief Désactive le bonus actuel et restaure l'état normal
+ * @brief Disable the current bonus and restore the normal state
  */
 void GameModel::clearActiveBonus() {
     switch (activeBonus) {
@@ -299,33 +309,37 @@ void GameModel::clearActiveBonus() {
         case BonusType::SLOW_DOWN:
             ball.setSpeed(ball.getOriginalSpeed());
             break;
-            // Ajouter les autres types de bonus...
+            // Add the other bonus types...
         default:
             break;
     }
     activeBonus = BonusType::NONE;
 }
 
-/* ############## Méthodes utilitaires ############## */
+/* ############## Utility methods ############## */
 
 /**
- * @brief Génère des points autour de la balle pour la détection de collision
- * Permet une détection plus précise en testant plusieurs points (centre et bords)
+ * @brief Generate points around the ball for collision detection
+ * Allows more precise detection by testing several points (center and edges)
  */
 [[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) const {
   vector<Point> collisionPoints = {
     {pos.x, pos.y},
-    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Top-Right
-    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bottom-Left
-    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)), static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bottom-Right
-    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)), static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}  // Top-Left
+    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)),
+     static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}, // Top-Right
+    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)),
+     static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bottom-Left
+    {static_cast<float>(pos.x + ball.getRadius() / sqrt(2)),
+     static_cast<float>(pos.y + ball.getRadius() / sqrt(2))}, // Bottom-Right
+    {static_cast<float>(pos.x - ball.getRadius() / sqrt(2)),
+     static_cast<float>(pos.y - ball.getRadius() / sqrt(2))}  // Top-Left
   };
   return collisionPoints;
 }
 
 /**
- * @brief Vérifie si la direction de la balle a changé
- * Utilisé pour optimiser les rendus graphiques
+ * @brief Check whether the ball's direction has changed
+ * Used to optimize graphical rendering
  */
 bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   const Point& currentDirection = ball.getDirection();
@@ -338,10 +352,10 @@ bool GameModel::checkDirectionChanged(Point& tempDirection) const {
   return false;
 }
 
-/* ############## Gestion du score ############## */
+/* ############## Score management ############## */
 
 /**
- * @brief Sauvegarde le meilleur score si le score actuel est plus élevé
+ * @brief Save the high score if the current score is higher
  */
 void GameModel::saveHighScore() {
   if (score >= highscore) {
@@ -351,7 +365,7 @@ void GameModel::saveHighScore() {
 }
 
 /**
- * @brief Réinitialise le meilleur score
+ * @brief Reset the high score
  */
 void GameModel::resetHighScore() {
   highscore = 0;
@@ -359,20 +373,20 @@ void GameModel::resetHighScore() {
 }
 
 /**
- * @brief Réinitialise le score actuel
+ * @brief Reset the current score
  */
 void GameModel::resetScore() {
   score = 0; 
 }
 
-/* ############## Accesseurs ############## */
+/* ############## Accessors ############## */
 
-// Getters simples
+// Simple getters
 [[gnu::pure]] int GameModel::getScore()           const { return score; }
 [[gnu::pure]] int GameModel::getHighScore()       const { return highscore; }
 [[gnu::pure]] Point GameModel::getBallDirection() const { return ball.getDirection(); }
 
-// Accès aux entités
+// Entity access
 [[gnu::pure]] const Ball& GameModel::getBall()           const { return ball; }
 [[gnu::pure]] const Spaceship& GameModel::getSpaceship() const { return spaceship; }
 
@@ -382,7 +396,7 @@ void GameModel::resetScore() {
 [[gnu::pure]] const vector<Brick>& GameModel::getBricks()  const { return bricks;  }
 [[gnu::pure]] const vector<shared_ptr<Bonus>>& GameModel::getBonuses() const { return bonuses; }
 
-// État du jeu
+// Game state
 [[gnu::pure]] bool GameModel::lose() const { return spaceship.isDeath(); }
 
 [[gnu::pure]] bool GameModel::win()  const {

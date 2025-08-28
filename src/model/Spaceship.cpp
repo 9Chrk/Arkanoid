@@ -1,7 +1,7 @@
 using namespace std;
 #include "model/Spaceship.hpp"
 
-/* ############## Constructeurs ############## */
+/* ############## Constructors ############## */
 
 Spaceship::Spaceship()
     : Rectangle({0.0f, 0.0f}, 0, 0), health(0), speed(0), laserActive(false),
@@ -11,7 +11,7 @@ Spaceship::Spaceship(const Point& position, float w, float h, float speed, int h
     : Rectangle(position, w, h), health(health), speed(speed), laserActive(false),
       originalWidth(w), expandTimer(0) {}
 
-/* ############## Accesseurs ############## */
+/* ############## Accessors ############## */
 
 // Getters
 [[gnu::pure]] int   Spaceship::getHealth()   const { return health; }
@@ -23,7 +23,7 @@ Spaceship::Spaceship(const Point& position, float w, float h, float speed, int h
 
 // Setters
 /**
- * @brief Modifie la largeur en s'assurant que le vaisseau reste dans les limites
+ * @brief Change width while ensuring the spaceship stays within bounds
  */
 void Spaceship::setWidth(float newWidth) {
     w = newWidth;
@@ -33,11 +33,11 @@ void Spaceship::setWidth(float newWidth) {
 void Spaceship::setExpandTimer(float time) { expandTimer = time; }
 void Spaceship::setLaser(bool enabled)     { laserActive = enabled; }
 
-/* ############## Fonctions de mouvement ############## */
+/* ############## Movement functions ############## */
 
 /**
- * @brief Déplace le vaisseau à gauche ou à droite
- * Empêche le vaisseau de sortir des limites de l'écran
+ * @brief Move the spaceship left or right
+ * Prevent the spaceship from leaving the screen bounds
  */
 void Spaceship::move(Direction dir) {
     Point newPos = position;
@@ -46,8 +46,8 @@ void Spaceship::move(Direction dir) {
 }
 
 /**
- * @brief Déplace le vaisseau à la position de la souris
- * Vérifie que la position est valide et dans la zone jouable
+ * @brief Move the spaceship to the mouse position
+ * Ensure the position is valid and inside the playable area
  */
 void Spaceship::move(const Point& mousePosition) {
     Point newPos = position;
@@ -57,21 +57,21 @@ void Spaceship::move(const Point& mousePosition) {
     }
 }
 
-/* ############## Gestion de l'état ############## */
+/* ############## State management ############## */
 
 /**
- * @brief Ajoute une vie au vaisseau
+ * @brief Add a life to the spaceship
  */
 void Spaceship::addLife() { health++; }
 
 /**
- * @brief Diminue la vie du vaisseau
+ * @brief Decrease the spaceship's life
  */
 void Spaceship::damage()  { health--; }
 
 /**
- * @brief Met à jour le minuteur d'agrandissement
- * Restaure la taille d'origine quand le temps est écoulé
+ * @brief Update the expansion timer
+ * Restore the original size when the time has elapsed
  */
 void Spaceship::updateExpandTimer() {
     if (expandTimer > 0.0f) {
@@ -83,7 +83,7 @@ void Spaceship::updateExpandTimer() {
 }
 
 /**
- * @brief Vérifie si la position est valide (dans les limites de l'écran)
+ * @brief Check if the position is valid (within screen bounds)
  */
 [[gnu::pure]] bool Spaceship::validPosition(const Point& newPos) const {
     return (newPos.x - w/2 >= 0) && (newPos.x + w/2 <= GAME_WIDTH);
