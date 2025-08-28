@@ -73,6 +73,15 @@ void Ball::updateCatchReleaseTimer() {
         }
     }
 }
+
+void Ball::updateSpeed() {
+    if (speed < originalSpeed) {
+        speed += originalSpeed * RESTORE_SPEED_RATE; // gradually restore speed
+        if (speed > originalSpeed) {
+            speed = originalSpeed;
+        }
+    }
+}
 // Getters
 
 [[gnu::pure]] Point Ball::getDirection() const { return direction; }

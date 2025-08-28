@@ -30,6 +30,7 @@ inline constexpr float CATCH_RELEASE_DURATION  = 10.0f;
 inline constexpr float TIMER_DECREMENT         = 0.1f;
 inline constexpr float SLOW_DOWN_FACTOR        = 0.2f;
 inline constexpr float BONUS_TEXT_VERTICAL_OFFSET = 2.0f;
+inline constexpr float RESTORE_SPEED_RATE    = 0.05f;
 
 inline constexpr Point INITIAL_DIRECTION = {0, -1};
 enum class Direction { Left = -1, Right = 1 };

@@ -202,6 +202,7 @@ void GameModel::updateBonuses() {
 void GameModel::updateTimerBonuses() {
   spaceship.updateExpandTimer();
   ball.updateCatchReleaseTimer();
+  ball.updateSpeed();
 }
 
 // Utility methods
