@@ -232,7 +232,7 @@ Arkanoid/
 
 ---
 
-## 👤 Auteurs
+## Auteurs
 
 - **Cherkaoui Jawad (576517)**
 
