@@ -1,4 +1,4 @@
-# Arkanoid 🎮
+# Arkanoid
 
 ![C++](https://img.shields.io/badge/C++-20-blue)
 ![Allegro](https://img.shields.io/badge/Library-Allegro%205-orange)
@@ -6,7 +6,7 @@
 
 ---
 
-## 📖 Description
+## Description
 
 Arkanoid est une réimplémentation moderne du célèbre jeu de casse-briques **Arkanoid**, développée en **C++20** avec la bibliothèque multimédia **Allegro 5**.
 Le joueur contrôle une raquette (Spaceship) pour renvoyer une balle et détruire toutes les briques à l’écran.
@@ -14,7 +14,7 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
 
 ---
 
-## 📑 Sommaire
+## Sommaire
 
 - [Fonctionnalités principales](#-fonctionnalités-principales)
 - [Prérequis](#-prérequis)
@@ -26,32 +26,32 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
 
 ---
 
-## 🚀 Fonctionnalités principales
+## Fonctionnalités principales
 
-- 🎯 **Niveaux multiples** : 5 niveaux par défaut (0 à 4), définis en JSON.
-- 🧱 **Briques variées** :
+- **Niveaux multiples** : 5 niveaux par défaut (0 à 4), définis en JSON.
+- **Briques variées** :
   - Standard (1 coup)
   - Renforcées (2 coups)
   - Indestructibles
-- 🎁 **Bonus spéciaux** :
+-  **Bonus spéciaux** :
   - `EXPAND` : agrandir la raquette
   - `CATCH` : attraper la balle
   - `LASER` : tirer des projectiles
   - `SLOW_DOWN` : ralentir la balle
   - `SPLIT` : dupliquer la balle
   - `EXTRA_LIFE` : vie supplémentaire
-- 🎮 **Contrôles intuitifs** :
+-  **Contrôles intuitifs** :
   - Clavier : ← → / Q D
   - Souris : déplacement horizontal
   - `Espace` : lancer balle
   - `R` : reset
   - `Échap` : quitter
-- ❤️ **Système de vies et score** (high score sauvegardé en JSON).
-- 🎨 **Interface graphique + audio** via **Allegro 5**.
+-  **Système de vies et score** (high score sauvegardé en JSON).
+-  **Interface graphique + audio** via **Allegro 5**.
 
 ---
 
-## 📦 Prérequis
+## Prérequis
 
 - Compilateur **C++20** (g++ ≥ 10 ou clang++ équivalent).
 - **Allegro 5** + modules :
@@ -77,12 +77,12 @@ cd Arkanoid
 make
 ```
 
-👉 L’exécutable **Arkanoid** est généré à la racine.
+L’exécutable **Arkanoid** est généré à la racine.
 Aucune installation supplémentaire n’est nécessaire.
 
 ---
 
-## 🕹️ Lancement et exemples d'utilisation
+## Lancement et exemples d'utilisation
 
 ```bash
 ./Arkanoid
@@ -104,7 +104,7 @@ Aucune installation supplémentaire n’est nécessaire.
 
 ---
 
-## 🛠️ Description du Makefile
+## Description du Makefile
 
 - **all** (par défaut) → nettoyage + compilation (`pkg-config`).
 - **clean** → supprime `obj/` + exécutable.
@@ -118,7 +118,7 @@ Aucune installation supplémentaire n’est nécessaire.
 
 ---
 
-## 📂 Organisation du projet
+## Organisation du projet
 
 ```text
 Arkanoid/
