@@ -15,6 +15,8 @@ Spaceship::Spaceship(const Point& position, float w, float h, float speed, int h
 [[gnu::pure]] bool  Spaceship::isDeath()     const { return health <= 0; }
 [[gnu::pure]] bool  Spaceship::hasLaser()    const { return laserActive; }
 [[gnu::pure]] float Spaceship::getSpeed()    const { return speed; }
+[[gnu::pure]] float Spaceship::getExpandTimer() const { return expandTimer; }
+[[gnu::pure]] float Spaceship::getoriginalWidth() const { return originalWidth; }
 
 // Setters
 void Spaceship::setWidth(float newWidth) {

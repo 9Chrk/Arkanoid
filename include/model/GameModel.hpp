@@ -18,6 +18,7 @@ class GameModel {
   Spaceship                           spaceship;
   vector<Brick>                       bricks;
   vector<shared_ptr<Bonus>>           bonuses;
+  BonusType activeBonus = BonusType::NONE;
 
   struct CollisionResult {
     Brick* hitBrick;
@@ -92,6 +93,9 @@ class GameModel {
 
   void updateBonuses();
   void updateTimerBonuses();
+  BonusType getActiveBonus() const { return activeBonus; }
+  void setActiveBonus(BonusType type) { activeBonus = type; }
+  void clearActiveBonus();
 
    
   /* ############## Utility methods ############## */

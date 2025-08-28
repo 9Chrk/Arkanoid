@@ -184,25 +184,53 @@ void GameModel::spawnBonus(const Brick& brick) {
 }
 
 void GameModel::updateBonuses() {
-  for (auto it = bonuses.begin(); it != bonuses.end(); ) {
-    shared_ptr<Bonus> bonus = *it;
-    if (bonus->isActive()) {
-      bonus->update();
-      if (bonus->intersects(spaceship)) {
-        bonus->setCollected(true);
-        bonus->applyEffect(*this);
-        it = bonuses.erase(it);
-        continue;
-      }
+    for (auto it = bonuses.begin(); it != bonuses.end(); ) {
+        shared_ptr<Bonus> bonus = *it;
+        if (bonus->isActive()) {
+            bonus->update();
+            if (bonus->intersects(spaceship)) {
+                // Désactiver le bonus précédent avant d'appliquer le nouveau
+                clearActiveBonus();
+
+                // Appliquer le nouveau bonus
+                bonus->setCollected(true);
+                bonus->applyEffect(*this);
+
+                // Définir ce bonus comme actif
+                setActiveBonus(bonus->getType());
+
+                it = bonuses.erase(it);
+                continue;
+            }
+        }
+        ++it;
     }
-    ++it;
-  }
 }
 
 void GameModel::updateTimerBonuses() {
   spaceship.updateExpandTimer();
   ball.updateCatchReleaseTimer();
   ball.updateSpeed();
+}
+
+void GameModel::clearActiveBonus() {
+    switch (activeBonus) {
+        case BonusType::EXPAND:
+            spaceship.setWidth(spaceship.getoriginalWidth());
+            spaceship.setExpandTimer(0);
+            break;
+        case BonusType::CATCH:
+            ball.setCatchActive(false);
+            ball.setCatchReleaseTimer(0);
+            break;
+        case BonusType::SLOW_DOWN:
+            ball.setSpeed(ball.getOriginalSpeed());
+            break;
+            // Ajouter les autres types de bonus...
+        default:
+            break;
+    }
+    activeBonus = BonusType::NONE;
 }
 
 // Utility methods

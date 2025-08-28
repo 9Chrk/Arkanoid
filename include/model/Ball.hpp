@@ -57,6 +57,7 @@ class Ball : public Circle {
   bool isMoving()  const;
   bool isFalling() const;
   bool isCatchActive() const;
+  float getOriginalSpeed() const;
 
   // Setters
   void setMoving(bool isMoving);

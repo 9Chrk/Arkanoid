@@ -90,6 +90,7 @@ void Ball::updateSpeed() {
 [[gnu::pure]] bool  Ball::isMoving()     const { return moving;    }
 [[gnu::pure]] bool  Ball::isFalling()    const { return falling;   }
 [[gnu::pure]] bool  Ball::isCatchActive() const { return catchActive; }
+[[gnu::pure]] float Ball::getOriginalSpeed() const { return originalSpeed; }
 
 // Setters
 
