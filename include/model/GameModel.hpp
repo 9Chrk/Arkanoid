@@ -91,6 +91,7 @@ class GameModel {
   void resetScore();
 
   void updateBonuses();
+  void updateSpaceship();
 
    
   /* ############## Utility methods ############## */

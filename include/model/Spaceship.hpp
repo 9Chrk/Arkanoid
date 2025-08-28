@@ -7,6 +7,8 @@ class Spaceship : public Rectangle {
   int health;
   float speed;
   bool laserActive;
+  float originalWidth;
+  float expandTimer;
 
  public:
   Spaceship();
@@ -17,15 +19,19 @@ class Spaceship : public Rectangle {
   void move(const Point& mousePosition);
 
   void setWidth(float newWidth);
-  void addLife();
   void setLaser(bool enabled);
+  void setExpandTimer(float time);
   
   bool validPosition(const Point& position) const;
   void damage();
+  void addLife();
+  void updateExpandTimer();
 
   // Getters
   int getHealth() const;
   bool isDeath()  const;
   bool hasLaser() const;
   float getSpeed() const;
+  float getExpandTimer() const;
+  float getoriginalWidth() const;
 };

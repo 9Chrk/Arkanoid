@@ -9,4 +9,5 @@ Expand::~Expand() = default;
 void Expand::applyEffect(GameModel& model) {
   Spaceship& ship = model.getSpaceship();
   ship.setWidth(ship.getWidth() * 1.5f);
+  ship.setExpandTimer(50.0f); // Expand for 10 seconds
 }

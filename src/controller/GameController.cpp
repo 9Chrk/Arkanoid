@@ -94,6 +94,7 @@ void GameController::update() {
 
   model->checkCollisions();
   model->updateBonuses();
+  model->updateSpaceship();
 
   if (ball.isFalling()) {  // ball missed the paddle
     resetTempDirection();  // prepare for next launch

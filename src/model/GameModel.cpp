@@ -199,6 +199,10 @@ void GameModel::updateBonuses() {
   }
 }
 
+void GameModel::updateSpaceship() {
+  spaceship.updateExpandTimer();
+}
+
 // Utility methods
 
 [[gnu::pure]] vector<Point> GameModel::_collisionPoints(const Point& pos) const {
