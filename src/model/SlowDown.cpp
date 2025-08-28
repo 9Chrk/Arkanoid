@@ -8,6 +8,7 @@ SlowDown::SlowDown(const Point& position, float w, float h, float fallSpeed)
 SlowDown::~SlowDown() = default;
 
 void SlowDown::applyEffect(GameModel& model) {
-  Ball& ball = model.getBall();
-  ball.setSpeed(ball.getSpeed() * SLOW_DOWN_FACTOR);
+    Ball& ball = model.getBall();
+    // D'abord ralentir la balle
+    ball.setSpeed(ball.getSpeed() * SLOW_DOWN_FACTOR);
 }

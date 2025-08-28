@@ -12,6 +12,7 @@ class Ball : public Circle {
   bool moving, falling;
   bool catchActive = false;
   float catchreleaseTimer;
+  bool restoringSpeed = false;
 
  public:
   Ball();
@@ -47,6 +48,8 @@ class Ball : public Circle {
   void reset();
   void updateCatchReleaseTimer();
   void updateSpeed();
+  void startRestoreSpeed();
+  void stopRestoreSpeed();
 
   // Getters
   Point getDirection() const;
@@ -62,4 +65,5 @@ class Ball : public Circle {
   void setSpeed(float newSpeed);
   void setCatchActive(bool active);
   void setCatchReleaseTimer(float time);
+  void setOriginalSpeed(float origSpeed);
 };
