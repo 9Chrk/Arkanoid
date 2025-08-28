@@ -34,6 +34,13 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
     newPos.y + radius <= spaceship.y - h/2 + speed &&
     newPos.x >= spaceship.x - w/2 - radius &&
     newPos.x <= spaceship.x + w/2 + radius) {
+
+      if (catchActive) {
+          position = newPos;
+          setMoving(false);
+          setCatchActive(false);
+          return;
+      }
       
       float x_rel = (newPos.x - spaceship.x) / (w/2); // relative position on the spaceship
       x_rel = clamp(x_rel, -1.0f, 1.0f);
@@ -65,6 +72,7 @@ void Ball::reset() {
 [[gnu::pure]] float Ball::getSpeed()     const { return speed;     }
 [[gnu::pure]] bool  Ball::isMoving()     const { return moving;    }
 [[gnu::pure]] bool  Ball::isFalling()    const { return falling;   }
+[[gnu::pure]] bool  Ball::isCatchActive() const { return catchActive; }
 
 // Setters
 
@@ -72,3 +80,4 @@ void Ball::setMoving(bool isMoving)   { moving = isMoving;   }
 void Ball::setFalling(bool isFalling) { falling = isFalling; }
 void Ball::setDirection(const Point& newDirection) { direction = newDirection; }
 void Ball::setSpeed(float newSpeed) { speed = newSpeed; }
+void Ball::setCatchActive(bool isActive) { catchActive = isActive;}

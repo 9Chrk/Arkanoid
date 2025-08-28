@@ -35,13 +35,13 @@ void Bonus::update() {
 
 // Getters
 
-[[gnu::pure]] bool      Bonus::isActive()    const { return active;    }
-[[gnu::pure]] bool      Bonus::isCollected() const { return collected; }
-[[gnu::pure]] float     Bonus::getSpeed()    const { return fallSpeed; }
-[[gnu::pure]] BonusType Bonus::getType()     const { return type;      }
+[[gnu::pure]] bool      Bonus::isActive()      const { return active;    }
+[[gnu::pure]] bool      Bonus::isCollected()   const { return collected; }
+[[gnu::pure]] float     Bonus::getSpeed()      const { return fallSpeed; }
+[[gnu::pure]] BonusType Bonus::getType()       const { return type;      }
 
 // Setters
 
-void Bonus::setActive(bool isActive)     { active = isActive;     }
-void Bonus::setCollected(bool hasBonus)  { collected = hasBonus;  }
-void Bonus::setFallSpeed(float speed)    { fallSpeed = speed;     }
+void Bonus::setActive(bool isActive)      { active = isActive;     }
+void Bonus::setCollected(bool hasBonus)   { collected = hasBonus;  }
+void Bonus::setFallSpeed(float speed)     { fallSpeed = speed;     }

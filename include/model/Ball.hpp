@@ -9,6 +9,7 @@ class Ball : public Circle {
   Point direction;
   float speed;
   bool moving, falling;
+  bool catchActive = false;
 
  public:
   Ball();
@@ -46,13 +47,14 @@ class Ball : public Circle {
   // Getters
   Point getDirection() const;
   float getSpeed()     const;
-
   bool isMoving()  const;
   bool isFalling() const;
+  bool isCatchActive() const;
 
   // Setters
   void setMoving(bool isMoving);
   void setFalling(bool isFalling);
   void setDirection(const Point& newDirection);
   void setSpeed(float newSpeed);
+  void setCatchActive(bool active);
 };

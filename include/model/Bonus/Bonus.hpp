@@ -18,8 +18,7 @@ class Bonus : public Rectangle {
  protected:
   BonusType type;
   bool active;
-  bool collected;
-  float fallSpeed;
+  bool collected;float fallSpeed;
 
  public:
   Bonus(const Point& position, float w, float h, BonusType type, float fallSpeed);
