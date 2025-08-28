@@ -38,7 +38,6 @@ void Ball::checkCollisions(const Point& spaceship, float w, float h) {
       if (catchActive) {
           position = newPos;
           setMoving(false);
-          setCatchActive(false);
           return;
       }
       
@@ -65,7 +64,15 @@ void Ball::reset() {
   direction = INITIAL_DIRECTION;
   moving = false;
 }
-
+void Ball::updateCatchReleaseTimer() {
+    if (catchActive && !moving && catchreleaseTimer > 0.0f) {
+        catchreleaseTimer -= 0.1f;
+        if (catchreleaseTimer <= 0.0f) {
+            setMoving(true);
+            setCatchActive(false);
+        }
+    }
+}
 // Getters
 
 [[gnu::pure]] Point Ball::getDirection() const { return direction; }
@@ -81,3 +88,4 @@ void Ball::setFalling(bool isFalling) { falling = isFalling; }
 void Ball::setDirection(const Point& newDirection) { direction = newDirection; }
 void Ball::setSpeed(float newSpeed) { speed = newSpeed; }
 void Ball::setCatchActive(bool isActive) { catchActive = isActive;}
+void Ball::setCatchReleaseTimer(float time) { catchreleaseTimer = time; }
