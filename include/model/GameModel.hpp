@@ -7,109 +7,157 @@ using namespace std;
 #include "Spaceship.hpp"
 
 
-/// @brief Model containing game state and collision logic.
+/**
+ * @brief Modèle principal contenant l'état du jeu et la logique de collision.
+ *
+ * Cette classe centralise la logique du jeu Arkanoid en gérant:
+ * - La balle et son mouvement
+ * - Le vaisseau contrôlé par le joueur
+ * - Les briques et leurs états
+ * - Les bonus et leurs effets
+ * - Le score et le système de collision
+ */
 class GameModel {
  private:
-  json settings;
-  int score, highscore;
-  string levelFile;
+  /* ############## Données du jeu ############## */
+  json settings;                        // Paramètres du jeu
+  int score, highscore;                 // Score actuel et meilleur score
+  string levelFile;                     // Fichier de niveau
 
-  Ball                                ball;
-  Spaceship                           spaceship;
-  vector<Brick>                       bricks;
-  vector<shared_ptr<Bonus>>           bonuses;
-  BonusType activeBonus = BonusType::NONE;
+  /* ############## Entités du jeu ############## */
+  Ball                                ball;       // Balle
+  Spaceship                           spaceship;  // Vaisseau
+  vector<Brick>                       bricks;     // Briques
+  vector<shared_ptr<Bonus>>           bonuses;    // Bonus actifs
+  BonusType activeBonus = BonusType::NONE;        // Type de bonus actif
 
+  /**
+   * @brief Structure pour stocker les résultats de collision
+   */
   struct CollisionResult {
-    Brick* hitBrick;
-    int hitSide;
-    float distance;
-  
+    Brick* hitBrick;    // Brique touchée
+    int hitSide;        // Côté touché
+    float distance;     // Distance de collision
+
     CollisionResult() : hitBrick(nullptr), hitSide(-1), distance(INFINITY) {}
   };
   
-  // Initialization methods
-  void initializeBall();
-  void initializeSpaceship();
-  void initializeBricks();
+  /* ############## Méthodes d'initialisation ############## */
+  void initializeBall();        // Initialise la balle
+  void initializeSpaceship();   // Initialise le vaisseau
+  void initializeBricks();      // Initialise les briques
 
-  // Helpers
+  /* ############## Méthodes utilitaires ############## */
   std::pair<std::string, std::string> splitAtSeparator(const std::string& str);
 
   
-  /* ############## Utility methods ############## */
-
-  /// @brief Generate test points around the ball.
-  /// @param pos Ball center position.
-  /// @return List of points to check.
+  /**
+   * @brief Génère des points de test autour de la balle pour la détection de collision
+   * @param pos Position centrale de la balle
+   * @return Liste de points à vérifier
+   */
   vector<Point> _collisionPoints(const Point& pos) const;
 
 
-  /* ############## Collision detection ############## */
+  /* ############## Détection de collision ############## */
 
-  /// @brief Skip search if the ball is outside the useful area.
-  /// @param pos Current ball position.
-  /// @param speed Movement speed.
-  /// @return true if no collision is possible.
+  /**
+   * @brief Vérifie si on peut ignorer la recherche de collision
+   * @param pos Position actuelle de la balle
+   * @param speed Vitesse de déplacement
+   * @return true si aucune collision n'est possible
+   */
   bool shouldSkipCollisionCheck(const Point& pos, float speed) const;
 
-  /// @brief Find the first collision along the path.
-  /// @param pos Current position.
-  /// @param direction Normalized direction.
-  /// @param speed Ball speed.
-  /// @return Nearest collision.
-  /// @complexity O(N) over the number of bricks.
+  /**
+   * @brief Trouve la première collision sur le chemin
+   * @param pos Position actuelle
+   * @param direction Direction normalisée
+   * @param speed Vitesse de la balle
+   * @return Collision la plus proche
+   * @complexity O(N) sur le nombre de briques
+   */
   CollisionResult findClosestCollision(const Point& pos, const Point& direction, float speed);
 
-  /// @brief Test intersection between a brick and the trajectory.
-  /// @param brick Brick to test.
-  /// @param collisionPoints Sampling points.
-  /// @param direction Normalized direction.
-  /// @param speed Ball speed.
-  /// @return Potential collision with this brick.
+  /**
+   * @brief Teste l'intersection entre une brique et la trajectoire
+   * @param brick Brique à tester
+   * @param collisionPoints Points d'échantillonnage
+   * @param direction Direction normalisée
+   * @param speed Vitesse de la balle
+   * @return Collision potentielle avec cette brique
+   */
   CollisionResult checkBrickCollision(Brick& brick, const vector<Point>& collisionPoints, const Point& direction, float speed) const;
 
-  /// @brief Update score and brick state upon hit.
-  /// @param hitBrick Brick impacted.
+  /**
+   * @brief Met à jour le score et l'état de la brique lors d'un impact
+   * @param hitBrick Brique touchée
+   */
   void handleBrickHit(Brick* hitBrick);
+
+  /**
+   * @brief Crée un bonus quand une brique est détruite
+   * @param brick Brique détruite
+   */
   void spawnBonus(const Brick& brick);
 
-  /// @brief Apply rebound based on the side hit.
-  /// @param direction Ball direction to modify.
-  /// @param hitSide Brick side (0 horizontal, 1 vertical, else corner).
+  /**
+   * @brief Applique le rebond en fonction du côté touché
+   * @param direction Direction de la balle à modifier
+   * @param hitSide Côté de la brique (0 horizontal, 1 vertical, sinon coin)
+   */
   void handleBallRebound(Point& direction, int hitSide);
 
  public:
+  /**
+   * @brief Constructeur
+   * @param levelFile Fichier de niveau
+   * @param score Score initial
+   */
   GameModel(const string& levelFile, int score);
 
-  // Methods
-  /// @brief Detect and handle the ball's current collision.
-  /// @complexity O(N) over the number of active bricks.
+  /* ############## Méthodes de gestion du jeu ############## */
+
+  /**
+   * @brief Détecte et gère les collisions actuelles de la balle
+   * @complexity O(N) sur le nombre de briques actives
+   */
   void checkCollisions();
 
-  void saveHighScore();
-  void resetHighScore();
-  void resetScore();
+  /**
+   * @brief Gestion du score
+   */
+  void saveHighScore();     // Sauvegarde le meilleur score
+  void resetHighScore();    // Réinitialise le meilleur score
+  void resetScore();        // Réinitialise le score actuel
 
-  void updateBonuses();
-  void updateTimerBonuses();
+  /**
+   * @brief Gestion des bonus
+   */
+  void updateBonuses();         // Met à jour l'état des bonus
+  void updateTimerBonuses();    // Met à jour les minuteurs des bonus
   BonusType getActiveBonus() const { return activeBonus; }
   void setActiveBonus(BonusType type) { activeBonus = type; }
-  void clearActiveBonus();
+  void clearActiveBonus();      // Supprime l'effet du bonus actif
 
    
-  /* ############## Utility methods ############## */
+  /* ############## Méthodes utilitaires ############## */
 
-  /// @brief Indicate if the ball's direction has changed.
-  /// @param tempDirection Previous direction, updated on output.
-  /// @return true if a change occurred.
+  /**
+   * @brief Indique si la direction de la balle a changé
+   * @param tempDirection Direction précédente, mise à jour en sortie
+   * @return true si un changement est survenu
+   */
   bool checkDirectionChanged(Point& tempDirection) const;
 
-  // Getters
+  /* ############## Accesseurs ############## */
+
+  // Getters simples
   int getScore()           const;
   int getHighScore()       const;
   Point getBallDirection() const;
 
+  // Accès aux entités
   Ball& getBall();
   const Ball& getBall() const;
 
@@ -119,6 +167,7 @@ class GameModel {
   const std::vector<Brick>&              getBricks()   const;
   const std::vector<shared_ptr<Bonus>>&  getBonuses() const;
 
-  bool win()  const;
-  bool lose() const;
+  // État du jeu
+  bool win()  const;  // Vérifie si le joueur a gagné
+  bool lose() const;  // Vérifie si le joueur a perdu
 };

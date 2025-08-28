@@ -3,24 +3,37 @@
 #include "core/Circle.hpp"
 
 
-/// @brief Ball handling movement and collisions.
+/**
+ * @brief Ball handling movement and collisions.
+ *
+ * Représente la balle dans le jeu Arkanoid qui rebondit sur les murs,
+ * la raquette et les briques. Gère également les effets spéciaux comme
+ * la capture par la raquette.
+ */
 class Ball : public Circle {
  private:
-  Point direction;
-  float speed;
-  float originalSpeed;
-  bool moving, falling;
-  bool catchActive = false;
-  float catchreleaseTimer;
-  bool restoringSpeed = false;
+  // Propriétés de mouvement
+  Point direction;       // Direction de déplacement (vecteur normalisé)
+  float speed;           // Vitesse actuelle
+  float originalSpeed;   // Vitesse d'origine (pour restauration)
+
+  // États de la balle
+  bool moving;           // En mouvement ou statique
+  bool falling;          // Tombe hors de l'écran
+  bool catchActive;      // Mode capture activé
+  float catchreleaseTimer; // Minuteur pour relâcher la balle
+  bool restoringSpeed;   // En cours de restauration de vitesse
 
  public:
+  /**
+   * @brief Constructeurs
+   */
   Ball();
   Ball(float radius, float speed);
 
 
-  /* ############## Movement ############## */
-  
+  /* ############## Fonctions de mouvement ############## */
+
   /// @brief Place the ball above the spaceship.
   /// @param spaceship Spaceship center.
   /// @param h Spaceship height.
@@ -33,8 +46,8 @@ class Ball : public Circle {
   void move(const Point& spaceship, float w, float h);
 
 
-  /* ######## Collision and state management ######## */
-  
+  /* ######## Gestion des collisions et états ######## */
+
   /// @brief Bounce off walls and the spaceship.
   /// @param spaceship Spaceship center.
   /// @param w Spaceship width.
@@ -46,10 +59,16 @@ class Ball : public Circle {
 
   /// @brief Reset direction and movement.
   void reset();
-  void updateCatchReleaseTimer();
-  void updateSpeed();
-  void startRestoreSpeed();
-  void stopRestoreSpeed();
+
+  /**
+   * @brief Gestion des timers et effets spéciaux
+   */
+  void updateCatchReleaseTimer();  // Met à jour le timer de relâchement de la balle
+  void updateSpeed();              // Met à jour la vitesse progressivement
+  void startRestoreSpeed();        // Commence la restauration de vitesse
+  void stopRestoreSpeed();         // Arrête la restauration de vitesse
+
+  /* ############## Accesseurs ############## */
 
   // Getters
   Point getDirection() const;
