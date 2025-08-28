@@ -33,21 +33,21 @@ Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un 
   - Standard (1 coup)
   - Renforcées (2 coups)
   - Indestructibles
--  **Bonus spéciaux** :
+- **Bonus spéciaux** :
   - `EXPAND` : agrandir la raquette
   - `CATCH` : attraper la balle
   - `LASER` : tirer des projectiles
   - `SLOW_DOWN` : ralentir la balle
   - `SPLIT` : dupliquer la balle
   - `EXTRA_LIFE` : vie supplémentaire
--  **Contrôles intuitifs** :
+- **Contrôles intuitifs** :
   - Clavier : ← → / Q D
   - Souris : déplacement horizontal
   - `Espace` : lancer balle
   - `R` : reset
   - `Échap` : quitter
--  **Système de vies et score** (high score sauvegardé en JSON).
--  **Interface graphique + audio** via **Allegro 5**.
+- **Système de vies et score** (high score sauvegardé en JSON).
+- **Interface graphique + audio** via **Allegro 5**.
 
 ---
 
