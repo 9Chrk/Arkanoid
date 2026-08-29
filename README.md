@@ -1,253 +1,108 @@
 # Arkanoid
 
-![C++](https://img.shields.io/badge/C++-20-blue)
-![Allegro](https://img.shields.io/badge/Library-Allegro%205-orange)
-![License](https://img.shields.io/badge/license-MIT-green)
+![C++20](https://img.shields.io/badge/C%2B%2B-20-blue)
+![Allegro 5](https://img.shields.io/badge/Allegro-5-orange)
+![Licence MIT](https://img.shields.io/badge/Licence-MIT-green)
 
----
+Jeu de casse-briques inspiré d'Arkanoid, développé en C++20 avec Allegro 5. Le joueur déplace une raquette afin de renvoyer la balle, détruire les briques et progresser à travers les niveaux.
 
-## 📖 Description
+Projet réalisé dans le cadre du cours **Langages de programmation 2 — INFO-F-202** à l'Université libre de Bruxelles, durant l'année académique 2024-2025.
 
-Arkanoid est une réimplémentation moderne du célèbre jeu de casse-briques **Arkanoid**, développée en **C++20** avec la bibliothèque multimédia **Allegro 5**.
-Le joueur contrôle une raquette (Spaceship) pour renvoyer une balle et détruire toutes les briques à l’écran.
-Le jeu propose plusieurs niveaux, des briques variées, des bonus spéciaux, un système de score et de vies, ainsi que des **effets sonores et musiques d’ambiance**.
+## Aperçu
 
----
+| Menu principal | Partie |
+| --- | --- |
+| ![Menu principal](assets/screenshots/start_menu.png) | ![Partie](assets/screenshots/game_level.png) |
 
-## 📸 Captures d’écran
-
-| Menu principal                                     | Gameplay                                     | Gameplay 2                                       |
-| -------------------------------------------------- | -------------------------------------------- | ------------------------------------------------ |
-| ![Menu principal](assets/screenshots/start_menu.png) | ![Gameplay](assets/screenshots/game_level.png) | ![Gameplay 2](assets/screenshots/game_level_1.png) |
-
-| Restart                                    | Game Over                                         | Victoire                                        |
-| ------------------------------------------ | ------------------------------------------------- | ----------------------------------------------- |
-| ![Restart](assets/screenshots/lose_menu.png) | ![Game Over](assets/screenshots/win_level_menu.png) | ![Victoire](assets/screenshots/win_game_menu.png) |
-
----
+| Écran de défaite | Écran de victoire |
+| --- | --- |
+| ![Défaite](assets/screenshots/lose_menu.png) | ![Victoire](assets/screenshots/win_game_menu.png) |
 
 ## Sommaire
 
-- [Fonctionnalités principales](#fonctionnalités-principales)
+- [Fonctionnalités](#fonctionnalités)
 - [Prérequis](#prérequis)
-- [Compilation &amp; Installation](#️-compilation--installation)
-- [Lancement et exemples d&#39;utilisation](#lancement-et-exemples-dutilisation)
-- [Description du Makefile](#description-du-makefile)
+- [Installation et compilation](#installation-et-compilation)
+- [Lancement et commandes](#lancement-et-commandes)
+- [Données et configuration](#données-et-configuration)
 - [Organisation du projet](#organisation-du-projet)
-- [Auteurs](#auteurs)
+- [Documentation et licence](#documentation-et-licence)
 
----
+## Fonctionnalités
 
-## ⚡ Fonctionnalités principales
+- Neuf niveaux chargés depuis les fichiers `assets/data/level_0.json` à `assets/data/level_8.json`.
+- Score, meilleur score et trois vies initiales.
+- Briques standard, briques nécessitant deux impacts et briques indestructibles.
+- Bonus d'agrandissement de la raquette, d'attrape de la balle, de ralentissement et de vie supplémentaire.
+- Déplacement au clavier ou à la souris, avec menus graphiques et effets sonores.
+- Architecture Modèle–Vue–Contrôleur, répartie entre `model`, `view` et `controller`.
 
-- **Niveaux multiples** : 5 niveaux par défaut (0 à 4), définis en JSON.
-- **Briques variées** :
-  - Standard (1 coup)
-  - Renforcées (2 coups)
-  - Indestructibles
-- **Bonus spéciaux** :
-  - `EXPAND` : agrandir la raquette
-  - `CATCH` : attraper la balle
-  - `LASER` : tirer des projectiles
-  - `SLOW_DOWN` : ralentir la balle
-  - `SPLIT` : dupliquer la balle
-  - `EXTRA_LIFE` : vie supplémentaire
-- **Contrôles intuitifs** :
-  - Clavier : ← → / Q D
-  - Souris : déplacement horizontal
-  - `Espace` : lancer balle
-  - `R` : reset
-  - `Échap` : quitter
-- **Système de vies et score** (high score sauvegardé en JSON).
-- **Interface graphique + audio** via **Allegro 5**.
+## Prérequis
 
----
+- Un compilateur `g++` compatible C++20 ;
+- GNU Make ;
+- `pkg-config` ;
+- Allegro 5 et les modules `allegro_primitives`, `allegro_font`, `allegro_image`, `allegro_ttf`, `allegro_audio` et `allegro_acodec`.
 
-## 🛠️ Prérequis
+La dépendance JSON est incluse sous la forme de l'en-tête `libs/json.hpp`.
 
-- Compilateur **C++20** (g++ ≥ 10 ou clang++ équivalent).
-- **Allegro 5** + modules :
-  - allegro_primitives
-  - allegro_font
-  - allegro_image
-  - allegro_ttf
-  - allegro_audio
-  - allegro_acodec
-- **pkg-config**
-- **Make** (GNU)
-- **json.hpp** (Nlohmann) inclus dans `libs/`.
+## Installation et compilation
 
----
-
-## ⚙️ Compilation & Installation
+Clonez le dépôt puis lancez la cible par défaut du `Makefile` :
 
 ```bash
-git clone https://github.com/9Jawad/Arkanoid.git
+git clone https://github.com/9Chrk/Arkanoid.git
 cd Arkanoid
-
-# Compilation du jeu
 make
 ```
 
-L’exécutable **Arkanoid** est généré à la racine.
-Aucune installation supplémentaire n’est nécessaire.
+La compilation produit l'exécutable `Arkanoid` à la racine du dépôt. La commande `make clean` supprime cet exécutable et le répertoire `obj/`.
 
----
+## Lancement et commandes
 
-## 🎮 Lancement et exemples d'utilisation
+Depuis la racine du projet :
 
 ```bash
 ./Arkanoid
 ```
 
-### Contrôles
+| Action | Commande |
+| --- | --- |
+| Déplacer la raquette à gauche | `←`, `A` ou `Q` |
+| Déplacer la raquette à droite | `→`, `D` ou `P` |
+| Déplacer la raquette | Mouvement horizontal de la souris |
+| Lancer la balle | `Espace` |
+| Réinitialiser la partie en cours | `R` |
+| Accéder à un niveau | `0` à `8` |
+| Quitter | `Échap` ou fermeture de la fenêtre |
 
-- Déplacement : souris ou clavier (← →, Q/D)
-- Lancer balle : `Espace`
-- Reset balle + score : `R`
-- Quitter : `Échap`
+## Données et configuration
 
-### Gameplay
+Les paramètres de jeu et le meilleur score sont enregistrés dans `assets/data/settings.json`. Les niveaux sont définis dans `assets/data/level_*.json` et les ressources graphiques, sonores et typographiques se trouvent dans `assets/`.
 
-- Objectif : détruire toutes les briques destructibles.
-- Passage automatique au niveau suivant.
-- Game Over après perte de toutes les vies.
-- Raccourcis : touches `0–8` pour sauter à un niveau.
+Le jeu écrit le meilleur score dans `assets/data/settings.json` à la fin d'un niveau ; exécuter le programme peut donc modifier ce fichier suivi par Git.
 
----
-
-## 📂 Description du Makefile
-
-- **all** (par défaut) → nettoyage + compilation (`pkg-config`).
-- **clean** → supprime `obj/` + exécutable.
-
-🔧 Options :
-
-- g++ en **C++20**
-- Flags : `-Wall -Wextra -pedantic`
-- Includes : `include/`, `libs/`
-- Link automatique avec **Allegro**.
-
----
-
-## 🗂️ Organisation du projet
+## Organisation du projet
 
 ```text
-Arkanoid/
-├── assets/                         # Ressources multimédia
-│   ├── data/                       # Données de jeu (définition des niveaux, paramètres)
-│   │   ├── level_0.json
-│   │   ├── level_1.json
-│   │   ├── ... (jusqu'à level_8.json)
-│   │   └── settings.json
-│   ├── fonts/                      # Polices utilisées
-│   │   ├── Distant_galaxy.ttf
-│   │   └── Pixeled.ttf
-│   ├── images/                     # Images (sprites, fonds, UI)
-│   │   ├── 1heart.png
-│   │   ├── 2heart.png
-│   │   ├── 3heart.png
-│   │   ├── background.png
-│   │   ├── finish.png
-│   │   ├── high_score.png
-│   │   ├── lose.png
-│   │   ├── score.png
-│   │   ├── spaceship.png
-│   │   ├── start.png
-│   │   └── win.png
-│   └── sounds/                     # Effets sonores et musiques
-│       ├── bip.wav
-│       ├── bonus.wav
-│       ├── button.wav
-│       ├── fall.wav
-│       ├── finish.wav
-│       ├── lose.wav
-│       ├── menu.wav
-│       ├── street_Fighter.wav
-│       └── win.wav
-│
-├── docs/                           # Documentation et énoncé du projet
-│   └── enonce-project-2024.pdf
-│
-├── include/                        # Fichiers d'en-tête (architecture MVC + moteur de jeu)
-│   ├── controller/                  # Contrôleur du jeu
-│   │   └── GameController.hpp
-│   ├── core/                        # Structures et entités de base
-│   │   ├── Circle.hpp
-│   │   ├── Rectangle.hpp
-│   │   ├── Vector.hpp
-│   │   ├── constants.hpp
-│   │   └── utils.hpp
-│   ├── engine/                      # Moteur principal
-│   │   └── Engine.hpp
-│   ├── input/                       # Gestion des entrées utilisateur
-│   │   └── InputAction.hpp
-│   ├── model/                       # Modèle du jeu (logique, entités)
-│   │   ├── Bonus/
-│   │   │   ├── Bonus.hpp
-│   │   │   ├── Catch.hpp
-│   │   │   ├── Expand.hpp
-│   │   │   ├── ExtraLife.hpp
-│   │   │   ├── Laser.hpp
-│   │   │   ├── SlowDown.hpp
-│   │   │   └── Split.hpp
-│   │   ├── Ball.hpp
-│   │   ├── Brick.hpp
-│   │   ├── GameModel.hpp
-│   │   └── Spaceship.hpp
-│   └── view/                        # Vue (interface graphique avec Allegro5)
-│       ├── AllegroConfig.hpp
-│       ├── AllegroInputAdapter.hpp
-│       ├── GameView.hpp
-│       ├── UIConfig.hpp
-│       └── utils.hpp
-│
-├── libs/                           # Bibliothèques tierces intégrées
-│   └── json.hpp                     # Nlohmann JSON (header-only)
-│
-├── src/                            # Implémentations C++
-│   ├── controller/                  # Contrôleur
-│   │   └── GameController.cpp
-│   ├── core/                        # Structures de base
-│   │   ├── Circle.cpp
-│   │   ├── Rectangle.cpp
-│   │   └── utils.cpp
-│   ├── engine/                      # Moteur du jeu
-│   │   └── Engine.cpp
-│   ├── model/                       # Logique métier et entités
-│   │   ├── Bonus/
-│   │   │   ├── Bonus.cpp
-│   │   │   ├── Catch.cpp
-│   │   │   ├── Expand.cpp
-│   │   │   ├── ExtraLife.cpp
-│   │   │   ├── Laser.cpp
-│   │   │   ├── SlowDown.cpp
-│   │   │   └── Split.cpp
-│   │   ├── Ball.cpp
-│   │   ├── Brick.cpp
-│   │   ├── GameModel.cpp
-│   │   └── Spaceship.cpp
-│   ├── view/                        # Vue (Allegro)
-│   │   ├── AllegroConfig.cpp
-│   │   ├── AllegroInputAdapter.cpp
-│   │   ├── GameView.cpp
-│   │   ├── UIConfig.cpp
-│   │   └── utils.cpp
-│   └── main.cpp                     # Point d’entrée du jeu
-│
-├── .gitignore
-├── LICENSE
-├── Makefile                         # Script de compilation
+.
+├── assets/                 ressources, niveaux JSON et captures d'écran
+├── docs/                   énoncé et rapport du projet
+├── include/                interfaces C++
+│   ├── controller/         contrôleur
+│   ├── engine/             boucle de jeu
+│   ├── model/              logique et entités
+│   └── view/               affichage et entrées Allegro
+├── libs/                   dépendance JSON incluse
+├── src/                    implémentations C++
+├── Makefile                règles de compilation
 └── README.md
-
 ```
 
----
+## Documentation et licence
 
-## 👤 Auteurs
+- [Énoncé du projet](docs/enonce-project-2024.pdf)
+- [Rapport](docs/rapport.pdf)
+- [Licence MIT](LICENSE)
 
-- **Cherkaoui Jawad (576517)**
-
----
-
- Projet académique – ULB
+Le projet a été réalisé par Jawad Cherkaoui et Rayan Rabeh.
