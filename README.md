@@ -255,5 +255,3 @@ Cette erreur est levée si aucun fichier `level_*.json` n’est trouvé dans `as
 ## 📜 Licence
 
 Ce projet est distribué sous licence [MIT](LICENSE).
-
-Développé par Jawad Cherkaoui et Rayan Rabeh.
