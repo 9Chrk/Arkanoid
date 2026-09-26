@@ -8,7 +8,7 @@ Arkanoid est un jeu de **casse-briques en C++20 avec Allegro 5**. Dirigez la raq
 
 Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvegarde du meilleur score. Les niveaux et les paramètres de jeu sont définis dans des fichiers JSON.
 
-> Projet académique ULB — INFO-F202.
+> Projet académique ULB — INFO-F202
 > Langages de programmation 2 · 2024–2025
 
 <a id="captures-decran"></a>
