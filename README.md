@@ -11,8 +11,6 @@ Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvega
 > Projet académique ULB — INFO-F202.
 > Langages de programmation 2 · 2024–2025
 
----
-
 <a id="captures-decran"></a>
 
 ## 📸 Captures d’écran
@@ -44,8 +42,6 @@ Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvega
 - [Documentation](#documentation)
 - [Licence](#licence)
 
----
-
 <a id="fonctionnalites"></a>
 
 ## ✨ Fonctionnalités
@@ -56,8 +52,6 @@ Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvega
 - **Bonus jouables** : certaines briques libèrent un bonus qui agrandit temporairement la raquette, immobilise temporairement la balle sur la raquette, ralentit la balle ou ajoute une vie.
 - **Contrôles clavier et souris** : la raquette se déplace horizontalement avec le clavier ou avec la souris ; une touche lance la balle et permet de redémarrer la partie.
 - **Interface et audio Allegro** : les écrans de démarrage, victoire et défaite, le HUD, les bitmaps, les polices et les sons sont chargés depuis `assets/`.
-
----
 
 <a id="prerequis"></a>
 
@@ -70,8 +64,6 @@ Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvega
 
 La bibliothèque JSON est incluse dans le dépôt sous la forme de l’en-tête `libs/json.hpp` : aucune installation séparée n’est prévue pour elle.
 
----
-
 <a id="configuration"></a>
 
 ## ⚙️ Configuration
@@ -79,8 +71,6 @@ La bibliothèque JSON est incluse dans le dépôt sous la forme de l’en-tête 
 Le jeu ne requiert aucune variable d’environnement. Ses paramètres sont centralisés dans `assets/data/settings.json`, notamment la taille et la vitesse de la balle, les dimensions de la raquette, le nombre de vies, la géométrie des briques, les couleurs et les positions de l’interface.
 
 Les fichiers `assets/data/level_0.json` à `assets/data/level_8.json` décrivent les grilles de briques. Chaque entrée associe une valeur de score à une éventuelle abréviation de bonus, par exemple `1|EX`.
-
----
 
 <a id="installation"></a>
 
@@ -100,8 +90,6 @@ La compilation crée l’exécutable `Arkanoid` à la racine et les fichiers obj
 make clean
 ```
 
----
-
 <a id="lancement"></a>
 
 ## ▶️ Lancement
@@ -113,8 +101,6 @@ Depuis la racine du projet, après compilation :
 ```
 
 Le programme doit être lancé depuis cette racine : les niveaux et les ressources sont chargés avec des chemins relatifs vers `assets/`.
-
----
 
 <a id="utilisation"></a>
 
@@ -134,8 +120,6 @@ Au menu principal, utilisez la souris pour choisir de jouer ou de quitter. Penda
 
 Après la victoire d’un niveau ou à la fin de la partie, le jeu attend une touche avant de poursuivre ou de fermer la fenêtre.
 
----
-
 <a id="donnees-et-persistance"></a>
 
 ## 🗃️ Données et persistance
@@ -148,8 +132,6 @@ Après la victoire d’un niveau ou à la fin de la partie, le jeu attend une to
 
 À la fin d’une tentative de niveau, `GameModel::saveHighScore()` peut réécrire la clé `highscore` de `assets/data/settings.json`. La touche `R` peut aussi la remettre à zéro ; exécuter le jeu est donc susceptible de modifier ce fichier suivi par Git.
 
----
-
 <a id="architecture"></a>
 
 ## 🧱 Architecture
@@ -161,8 +143,6 @@ Le projet suit une organisation **Modèle–Vue–Contrôleur**. `GameModel` dan
 La logique de collision est centralisée dans `GameModel::checkCollisions()`. Elle échantillonne plusieurs points autour de la balle, cherche l’impact le plus proche le long de sa trajectoire parmi les briques actives, applique le rebond suivant le côté touché, puis met à jour le score, l’état de la brique et un éventuel bonus. La collision avec les bordures et la raquette est gérée par `Ball` ; l’angle de rebond dépend de la position d’impact sur la raquette.
 
 Les fichiers JSON sont lus par les utilitaires de `src/core/utils.cpp`. Ils alimentent l’initialisation de `GameModel` et de `UIConfig`; seul le meilleur score est écrit en retour dans `settings.json`.
-
----
 
 <a id="flux-general"></a>
 
@@ -180,8 +160,6 @@ src/main.cpp
           → GameView (rendu et sons)
       → sauvegarde éventuelle du meilleur score
 ```
-
----
 
 <a id="structure-du-projet"></a>
 
@@ -212,15 +190,11 @@ Arkanoid/
 
 Les en-têtes de `include/` définissent les contrats utilisés par les implémentations de `src/`. Les sous-dossiers `model/`, `view/` et `controller/` communiquent par l’intermédiaire de `GameModel`, `GameView` et `GameController`, tandis que `engine/` coordonne leur cycle de vie.
 
----
-
 <a id="tests"></a>
 
 ## 🧪 Tests
 
 Le `Makefile` ne définit pas de cible de test automatisé. Il fournit les cibles `all` (utilisée par `make`) et `clean`.
-
----
 
 <a id="problemes-frequents"></a>
 
@@ -238,16 +212,12 @@ L’exécutable utilise des chemins relatifs tels que `./assets/data` et `./asse
 
 Cette erreur est levée si aucun fichier `level_*.json` n’est trouvé dans `assets/data/`. Vérifiez la présence des fichiers de niveau et le répertoire courant de lancement.
 
----
-
 <a id="documentation"></a>
 
 ## 📄 Documentation
 
 - [Énoncé du projet](docs/enonce-project-2024.pdf)
 - [Rapport du projet](docs/rapport.pdf)
-
----
 
 <a id="licence"></a>
 
