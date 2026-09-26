@@ -1,14 +1,15 @@
 # Arkanoid
 
-![C++20](https://img.shields.io/badge/C%2B%2B-20-blue)
-![Allegro 5](https://img.shields.io/badge/Allegro-5-orange)
-![Licence MIT](https://img.shields.io/badge/Licence-MIT-green)
+![C++20](https://img.shields.io/badge/C%2B%2B-20-blue?style=flat-square)
+![Allegro 5](https://img.shields.io/badge/Allegro-5-orange?style=flat-square)
+![Licence MIT](https://img.shields.io/badge/Licence-MIT-green?style=flat-square)
 
-Arkanoid est un jeu de casse-briques inspiré d’*Arkanoid*, développé en **C++20** avec la bibliothèque graphique **Allegro 5**. Le joueur dirige une raquette, renvoie la balle, détruit les briques et enchaîne les niveaux tout en conservant son score.
+Arkanoid est un jeu de **casse-briques en C++20 avec Allegro 5**. Dirigez la raquette, renvoyez la balle et détruisez les briques pour terminer les neuf niveaux.
 
-Le jeu propose des menus graphiques, des effets sonores, un affichage du score et du meilleur score, ainsi que des bonus déclenchés par certaines briques. Les paramètres de jeu et les niveaux sont fournis sous forme de fichiers JSON dans `assets/data/`.
+Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvegarde du meilleur score. Les niveaux et les paramètres de jeu sont définis dans des fichiers JSON.
 
-Projet réalisé dans le cadre du cours **Langages de programmation 2 — INFO-F-202** à l’Université libre de Bruxelles, durant l’année académique 2024-2025.
+> Projet académique ULB — INFO-F202.
+> Langages de programmation 2 · 2024–2025
 
 ---
 
@@ -26,8 +27,6 @@ Projet réalisé dans le cadre du cours **Langages de programmation 2 — INFO-F
 
 ---
 
-<a id="sommaire"></a>
-
 ## 📖 Sommaire
 
 - [Fonctionnalités](#fonctionnalites)
@@ -41,8 +40,8 @@ Projet réalisé dans le cadre du cours **Langages de programmation 2 — INFO-F
 - [Flux général](#flux-general)
 - [Structure du projet](#structure-du-projet)
 - [Tests](#tests)
-- [Documentation](#documentation)
 - [Problèmes fréquents](#problemes-frequents)
+- [Documentation](#documentation)
 - [Licence](#licence)
 
 ---
@@ -223,15 +222,6 @@ Le `Makefile` ne définit pas de cible de test automatisé. Il fournit les cible
 
 ---
 
-<a id="documentation"></a>
-
-## 📄 Documentation
-
-- [Énoncé du projet](docs/enonce-project-2024.pdf)
-- [Rapport du projet](docs/rapport.pdf)
-
----
-
 <a id="problemes-frequents"></a>
 
 ## ❗ Problèmes fréquents
@@ -247,6 +237,15 @@ L’exécutable utilise des chemins relatifs tels que `./assets/data` et `./asse
 ### `No level files found.`
 
 Cette erreur est levée si aucun fichier `level_*.json` n’est trouvé dans `assets/data/`. Vérifiez la présence des fichiers de niveau et le répertoire courant de lancement.
+
+---
+
+<a id="documentation"></a>
+
+## 📄 Documentation
+
+- [Énoncé du projet](docs/enonce-project-2024.pdf)
+- [Rapport du projet](docs/rapport.pdf)
 
 ---
 
