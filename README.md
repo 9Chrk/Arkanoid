@@ -15,6 +15,8 @@ Le jeu propose des bonus, des effets sonores, des menus graphiques et la sauvega
 
 ## 📸 Captures d’écran
 
+![Partie](assets/screenshots/game_level.png)
+
 | Menu principal | Niveau en cours | Autre niveau |
 | --- | --- | --- |
 | ![Menu principal](assets/screenshots/start_menu.png) | ![Partie](assets/screenshots/game_level.png) | ![Partie sur un autre niveau](assets/screenshots/game_level_1.png) |
